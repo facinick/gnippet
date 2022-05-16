@@ -38,7 +38,7 @@ model Snippet {
   authorId  Int
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  pageId    Int
+  pageId    Int?
   // prisma relations
   savedBy   User[]     @relation("saved")
   author    User       @relation("author", fields: [authorId], references: [id])
@@ -46,7 +46,7 @@ model Snippet {
   tags      Tag[]
   comments  Comment[]
   votes     Vote[]
-  page      Page       @relation(fields: [pageId], references: [id])
+  page      Page?      @relation(fields: [pageId], references: [id])
 }
 
 model Page {
