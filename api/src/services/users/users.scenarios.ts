@@ -2,20 +2,22 @@ import type { Prisma } from '@prisma/client'
 
 export const standard = defineScenario<Prisma.UserCreateArgs>({
   user: {
-    one: {
+    nick: {
       data: {
-        username: 'String9116748',
-        hashedPassword: 'String',
-        salt: 'String',
-        updatedAt: '2022-05-16T12:04:12Z',
+        username: 'facinick',
+        hashedPassword: 'password',
+        salt: 'password',
+        isBanned: false,
+        roles: 'admin'
       },
     },
-    two: {
+    bob: {
       data: {
-        username: 'String4740905',
-        hashedPassword: 'String',
-        salt: 'String',
-        updatedAt: '2022-05-16T12:04:12Z',
+        username: 'bob11',
+        hashedPassword: 'password',
+        salt: 'password',
+        isBanned: false,
+        roles: 'user'
       },
     },
   },

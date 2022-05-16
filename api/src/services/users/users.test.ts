@@ -15,39 +15,49 @@ describe('users', () => {
   })
 
   scenario('returns a single user', async (scenario: StandardScenario) => {
-    const result = await user({ id: scenario.user.one.id })
+    const result = await user({ id: scenario.user.nick.id })
 
-    expect(result).toEqual(scenario.user.one)
+    expect(result).toEqual(scenario.user.nick)
   })
 
   scenario('creates a user', async () => {
     const result = await createUser({
       input: {
-        username: 'String7477778',
-        hashedPassword: 'String',
-        salt: 'String',
-        updatedAt: '2022-05-16T12:04:12Z',
+        username: 'mancmaur',
+        hashedPassword: 'password',
+        salt: 'salt',
+        isBanned: false,
+        roles: 'admin'
       },
     })
 
-    expect(result.username).toEqual('String7477778')
-    expect(result.hashedPassword).toEqual('String')
-    expect(result.salt).toEqual('String')
-    expect(result.updatedAt).toEqual('2022-05-16T12:04:12Z')
+    expect(result.username).toEqual('mancmaur')
+    expect(result.hashedPassword).toEqual('password')
+    expect(result.salt).toEqual('salt')
   })
 
   scenario('updates a user', async (scenario: StandardScenario) => {
-    const original = await user({ id: scenario.user.one.id })
-    const result = await updateUser({
-      id: original.id,
-      input: { username: 'String92000992' },
+
+    mockCurrentUser({
+      id: 1,
+      username: 'facinick',
+      hashedPassword: 'password',
+      salt: 'pasword',
+      isBanned: false,
+      roles: 'admin'
     })
 
-    expect(result.username).toEqual('String92000992')
+    const original = await user({ id: scenario.user.bob.id })
+    const result = await updateUser({
+      id: original.id,
+      input: { username: 'tamarand' },
+    })
+
+    expect(result.username).toEqual('tamarand')
   })
 
   scenario('deletes a user', async (scenario: StandardScenario) => {
-    const original = await deleteUser({ id: scenario.user.one.id })
+    const original = await deleteUser({ id: scenario.user.nick.id })
     const result = await user({ id: original.id })
 
     expect(result).toEqual(null)
