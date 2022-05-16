@@ -6,9 +6,12 @@ export const schema = gql`
     updatedAt: DateTime!
     authorId: Int!
     snippetId: Int!
+    parentCommentId: Int
     votes: [Vote]!
     author: User!
     snippet: Snippet!
+    parent: Comment
+    children: [Comment]!
   }
 
   input CommentOrderByInput {
@@ -19,6 +22,11 @@ export const schema = gql`
   enum CommentSort {
     asc
     desc
+  }
+
+  enum ParentEntityType {
+    comment
+    post
   }
   input CommentQueryFilterAndPagination {
     filter: String
@@ -36,6 +44,7 @@ export const schema = gql`
     body: String!
     authorId: Int!
     snippetId: Int!
+    parentCommentId: Int
   }
 
   input UpdateCommentInput {
