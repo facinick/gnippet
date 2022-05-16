@@ -1,3 +1,5 @@
+import { ForbiddenError } from '@redwoodjs/graphql-server'
+import { requireAuth } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 import type {
   QueryResolvers,
@@ -5,42 +7,59 @@ import type {
   CommentResolvers,
 } from 'types/graphql'
 
+// no auth restriction
+// no access restriction
 export const comments: QueryResolvers['comments'] = () => {
   return db.comment.findMany()
 }
 
+// no auth restriction
+// no access restriction
 export const comment: QueryResolvers['comment'] = ({ id }) => {
   return db.comment.findUnique({
     where: { id },
   })
 }
 
+// auth restriction
+// no access restriction
 export const createComment: MutationResolvers['createComment'] = ({
   input,
 }) => {
+  requireAuth({})
   return db.comment.create({
     data: input,
   })
 }
 
-export const updateComment: MutationResolvers['updateComment'] = ({
+// auth restriction
+// access restriction: commentOwner
+export const updateComment: MutationResolvers['updateComment'] = async ({
   id,
   input,
 }) => {
+  requireAuth({})
+  await requireCommentOwner({id})
   return db.comment.update({
     data: input,
     where: { id },
   })
 }
 
-export const deleteComment: MutationResolvers['deleteComment'] = ({ id }) => {
+// auth restriction
+// access restriction: commentOwner
+export const deleteComment: MutationResolvers['deleteComment'] = async ({ id }) => {
+  requireAuth({})
+  await requireCommentOwner({id})
   return db.comment.delete({
     where: { id },
   })
 }
 
+// auth restriction
+// no access restriction
 export const upvoteComment = async ({ id }) => {
-
+  requireAuth({})
   const userId: number = context.currentUser?.id;
   const commentId: number = id;
 
@@ -144,8 +163,10 @@ export const upvoteComment = async ({ id }) => {
   return newVote;
 }
 
+// auth restriction
+// no access restriction
 export const downvoteComment = async ({ id }) => {
-
+  requireAuth({})
   const userId: number = context.currentUser?.id;
   const commentId: number = id;
 
@@ -248,10 +269,30 @@ export const downvoteComment = async ({ id }) => {
 }
 
 export const Comment: CommentResolvers = {
+  // no auth restriction
+  // no access restriction
   votes: (_obj, { root }) =>
     db.comment.findUnique({ where: { id: root.id } }).votes(),
+  // no auth restriction
+  // no access restriction
   author: (_obj, { root }) =>
     db.comment.findUnique({ where: { id: root.id } }).author(),
+  // no auth restriction
+  // no access restriction
   snippet: (_obj, { root }) =>
     db.comment.findUnique({ where: { id: root.id } }).snippet(),
+}
+
+export const requireCommentOwner = async ({id}: {id: number}) => {
+  const userId: number = context.currentUser?.id;
+  const comment = await db.snippet.findMany({
+    where: {
+      id,
+      authorId: userId,
+    },
+  });
+
+  if(!comment) {
+    throw new ForbiddenError("You don't have access to do that.")
+  }
 }

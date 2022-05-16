@@ -11,8 +11,8 @@ export const schema = gql`
   }
 
   type Query {
-    pages: [Page!]! @requireAuth
-    page(id: Int!): Page @requireAuth
+    pages: [Page!]! @skipAuth
+    page(id: Int!): Page @skipAuth
   }
 
   input CreatePageInput {

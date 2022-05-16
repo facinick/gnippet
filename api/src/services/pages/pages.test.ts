@@ -24,7 +24,6 @@ describe('pages', () => {
     const result = await createPage({
       input: {
         name: 'String3411552',
-        updatedAt: '2022-05-16T12:01:26Z',
         creatorId: scenario.page.two.creatorId,
       },
     })

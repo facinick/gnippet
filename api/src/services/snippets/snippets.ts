@@ -1,3 +1,4 @@
+import { requireAuth } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 import type {
   QueryResolvers,
@@ -18,6 +19,7 @@ export const snippet: QueryResolvers['snippet'] = ({ id }) => {
 export const createSnippet: MutationResolvers['createSnippet'] = ({
   input,
 }) => {
+  requireAuth({})
   return db.snippet.create({
     data: input,
   })
@@ -27,6 +29,8 @@ export const updateSnippet: MutationResolvers['updateSnippet'] = ({
   id,
   input,
 }) => {
+  requireAuth({})
+  requireSnippetOwner({id});
   return db.snippet.update({
     data: input,
     where: { id },
@@ -34,13 +38,15 @@ export const updateSnippet: MutationResolvers['updateSnippet'] = ({
 }
 
 export const deleteSnippet: MutationResolvers['deleteSnippet'] = ({ id }) => {
+  requireAuth({})
+  requireSnippetOwner({id});
   return db.snippet.delete({
     where: { id },
   })
 }
 
 export const upvoteSnippet = async ({ id }) => {
-
+  requireAuth({})
   const userId: number = context.currentUser?.id;
   const snippetId: number = id;
 
@@ -145,7 +151,7 @@ export const upvoteSnippet = async ({ id }) => {
 }
 
 export const downvoteSnippet = async ({ id }) => {
-
+  requireAuth({})
   const userId: number = context.currentUser?.id;
   const snippetId: number = id;
 
@@ -248,7 +254,7 @@ export const downvoteSnippet = async ({ id }) => {
 }
 
 export const saveSnippet = async ({ id }) => {
-
+  requireAuth({})
   const userId: number = context.currentUser?.id;
   const snippetId: number = id;
 
@@ -279,7 +285,7 @@ export const saveSnippet = async ({ id }) => {
 }
 
 export const unsaveSnippet = async ({ id }) => {
-
+  requireAuth({})
   const userId: number = context.currentUser?.id;
   const snippetId: number = id;
 
@@ -310,8 +316,8 @@ export const unsaveSnippet = async ({ id }) => {
 }
 
 export const Snippet: SnippetResolvers = {
-  savedBy: (_obj, { root }) =>
-    db.snippet.findUnique({ where: { id: root.id } }).savedBy(),
+  // savedBy: (_obj, { root }) =>
+  //   db.snippet.findUnique({ where: { id: root.id } }).savedBy(),
   author: (_obj, { root }) =>
     db.snippet.findUnique({ where: { id: root.id } }).author(),
   languages: (_obj, { root }) =>
@@ -324,4 +330,20 @@ export const Snippet: SnippetResolvers = {
     db.snippet.findUnique({ where: { id: root.id } }).votes(),
   page: (_obj, { root }) =>
     db.snippet.findUnique({ where: { id: root.id } }).page(),
+}
+
+export const requireSnippetOwner = async ({id}: {id: number}): Promise<boolean> => {
+  const userId: number = context.currentUser?.id;
+  const snippet = await db.snippet.findMany({
+    where: {
+      id,
+      authorId: userId,
+    },
+  });
+
+  if(snippet) {
+    return true;
+  } else {
+    return false;
+  }
 }

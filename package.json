@@ -8,9 +8,12 @@
     ]
   },
   "scripts": {
-    "setup-db-auth": "yarn rw setup auth dbAuth",
+    "setup-db-auth": "rw setup auth dbAuth",
+    "setup-frontend-auth": "rw generate dbAuth",
+    "gen-secret": "rw generate secret",
     "migrate": "rw prisma migrate dev",
     "types": "rw generate types",
+    "dev": "rw dev",
     "studio": "rw prisma studio",
     "db-console": "rw console"
   },

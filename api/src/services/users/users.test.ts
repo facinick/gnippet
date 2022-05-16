@@ -1,3 +1,4 @@
+import { requireAuth } from 'src/lib/auth'
 import { users, user, createUser, updateUser, deleteUser } from './users'
 import type { StandardScenario } from './users.scenarios'
 
@@ -39,10 +40,8 @@ describe('users', () => {
   scenario('updates a user', async (scenario: StandardScenario) => {
 
     mockCurrentUser({
-      id: 1,
-      username: 'facinick',
-      hashedPassword: 'password',
-      salt: 'pasword',
+      id: scenario.user.bob.id,
+      username: scenario.user.bob.username,
       isBanned: false,
       roles: 'admin'
     })
@@ -57,6 +56,14 @@ describe('users', () => {
   })
 
   scenario('deletes a user', async (scenario: StandardScenario) => {
+
+    mockCurrentUser({
+      id: scenario.user.nick.id,
+      username: scenario.user.nick.username,
+      isBanned: false,
+      roles: 'admin'
+    })
+
     const original = await deleteUser({ id: scenario.user.nick.id })
     const result = await user({ id: original.id })
 

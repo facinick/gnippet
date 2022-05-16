@@ -8,13 +8,13 @@ export const schema = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     pageId: Int!
-    savedBy: [User]!
+    # savedBy: [User]!
     author: User!
     languages: [Language]!
     tags: [Tag]!
     comments: [Comment]!
     votes: [Vote]!
-    page: Page!
+    page: Page
   }
 
   type Query {
@@ -27,7 +27,7 @@ export const schema = gql`
     body: String!
     score: Int!
     authorId: Int!
-    pageId: Int!
+    pageId: Int
   }
 
   input UpdateSnippetInput {

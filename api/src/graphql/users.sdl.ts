@@ -2,16 +2,18 @@ export const schema = gql`
   type User {
     id: Int!
     username: String!
-    hashedPassword: String!
-    salt: String!
-    resetToken: String
-    resetTokenExpiresAt: DateTime
+    # unwanted data ------------------
+    # hashedPassword: String!
+    # salt: String!
+    # resetToken: String
+    # resetTokenExpiresAt: DateTime
     roles: String!
     createdAt: DateTime!
     updatedAt: DateTime!
     isBanned: Boolean!
     bio: String
     avatarUrl: String
+    # private data ------------------
     snippets: [Snippet]!
     votes: [Vote]!
     comments: [Comment]!
@@ -21,8 +23,8 @@ export const schema = gql`
   }
 
   type Query {
-    users: [User!]! @requireAuth
-    user(id: Int!): User @requireAuth
+    users: [User!]! @skipAuth
+    user(id: Int!): User @skipAuth
   }
 
   input CreateUserInput {
