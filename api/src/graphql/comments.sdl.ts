@@ -2,6 +2,8 @@ export const schema = gql`
   type Comment {
     id: Int!
     body: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
     authorId: Int!
     snippetId: Int!
     votes: [Vote]!
@@ -9,8 +11,24 @@ export const schema = gql`
     snippet: Snippet!
   }
 
+  input CommentOrderByInput {
+    createdAt: CommentSort
+    updatedAt: CommentSort
+  }
+
+  enum CommentSort {
+    asc
+    desc
+  }
+  input CommentQueryFilterAndPagination {
+    filter: String
+    skip: Int
+    take: Int
+    orderBy: CommentOrderByInput
+  }
+
   type Query {
-    comments: [Comment!]! @skipAuth
+    comments(input: CommentQueryFilterAndPagination): [Comment!]! @skipAuth
     comment(id: Int!): Comment @skipAuth
   }
 

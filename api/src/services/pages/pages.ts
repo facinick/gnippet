@@ -9,8 +9,15 @@ import type {
 
 // no auth restriction
 // no access restriction
-export const pages: QueryResolvers['pages'] = () => {
-  return db.page.findMany()
+export const pages: QueryResolvers['pages'] = ({ input }) => {
+  const where = input.filter
+    ? {
+      OR: [
+        { name: { contains: input.filter } },
+      ],
+    }
+    : {}
+  return db.page.findMany({ where, skip: input.skip, take: input.take, orderBy: input.orderBy, })
 }
 
 // no auth restriction
@@ -52,6 +59,10 @@ export const deletePage: MutationResolvers['deletePage'] = async ({ id }) => {
 }
 
 export const Page: PageResolvers = {
+  // no auth restriction
+  // no access restriction
+  population: (_obj, { root }) =>
+    db.page.count({ where: { id: root.id } }),
   // no auth restriction
   // no access restriction
   createdBy: (_obj, { root }) =>

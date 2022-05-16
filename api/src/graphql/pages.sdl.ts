@@ -8,10 +8,30 @@ export const schema = gql`
     createdBy: User!
     snippets: [Snippet]!
     joinedUsers: [User]!
+    population: Int!
+  }
+
+  input PageOrderByInput {
+    createdAt: PageSort
+    updatedAt: PageSort
+    name: PageSort
+    population: PageSort
+  }
+
+  enum PageSort {
+    asc
+    desc
+  }
+
+  input PageQueryFilterAndPagination {
+    filter: String
+    skip: Int
+    take: Int
+    orderBy: PageOrderByInput
   }
 
   type Query {
-    pages: [Page!]! @skipAuth
+    pages(input: PageQueryFilterAndPagination): [Page!]! @skipAuth
     page(id: Int!): Page @skipAuth
   }
 

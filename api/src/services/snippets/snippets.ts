@@ -6,8 +6,16 @@ import type {
   SnippetResolvers,
 } from 'types/graphql'
 
-export const snippets: QueryResolvers['snippets'] = () => {
-  return db.snippet.findMany()
+export const snippets: QueryResolvers['snippets'] = ({ input }) => {
+  const where = input.filter
+    ? {
+      OR: [
+        { title: { contains: input.filter } },
+        { body: { contains: input.filter } },
+      ],
+    }
+    : {}
+  return db.snippet.findMany({ where, skip: input.skip, take: input.take, orderBy: input.orderBy, })
 }
 
 export const snippet: QueryResolvers['snippet'] = ({ id }) => {

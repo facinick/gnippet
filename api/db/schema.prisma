@@ -76,15 +76,17 @@ model Vote {
 }
 
 model Comment {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   body      String
   authorId  Int
-  score     Int     @default(0)
+  score     Int      @default(0)
   snippetId Int
   // prisma relations
   votes     Vote[]
-  author    User    @relation(fields: [authorId], references: [id])
-  snippet   Snippet @relation(fields: [snippetId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id])
+  snippet   Snippet  @relation(fields: [snippetId], references: [id])
 }
 
 model Language {

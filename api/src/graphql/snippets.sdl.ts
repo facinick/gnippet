@@ -17,8 +17,25 @@ export const schema = gql`
     page: Page
   }
 
+  input SnippetOrderByInput {
+    createdAt: SnippetSort
+    updatedAt: SnippetSort
+  }
+
+  enum SnippetSort {
+    asc
+    desc
+  }
+
+  input SnippetQueryFilterAndPagination {
+    filter: String
+    skip: Int
+    take: Int
+    orderBy: SnippetOrderByInput
+  }
+
   type Query {
-    snippets: [Snippet!]! @skipAuth
+    snippets(input: SnippetQueryFilterAndPagination): [Snippet!]! @skipAuth
     snippet(id: Int!): Snippet @skipAuth
   }
 
