@@ -7,6 +7,11 @@
       "packages/*"
     ]
   },
+  "scripts": {
+    "setup-db-auth": "yarn rw setup auth dbAuth",
+    "migrate": "rw prisma migrate dev",
+    "types": "rw generate types"
+  },
   "devDependencies": {
     "@redwoodjs/core": "1.4.0"
   },
