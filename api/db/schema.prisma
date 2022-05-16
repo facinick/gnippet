@@ -1,6 +1,6 @@
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "postgres"
+  url      = env("TEST_DATABASE_URL")
 }
 
 generator client {
@@ -8,11 +8,108 @@ generator client {
   binaryTargets = "native"
 }
 
-// Define your own datamodels here and run `yarn redwood prisma migrate dev`
-// to create migrations for them and apply to your dev DB.
-// TODO: Please remove the following example:
-model UserExample {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model User {
+  id                  Int       @id @default(autoincrement())
+  username            String    @unique
+  hashedPassword      String
+  salt                String
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  roles               String    @default("user")
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  isBanned            Boolean   @default(false)
+  bio                 String?
+  avatarUrl           String?
+  // prisma relations
+  snippets            Snippet[] @relation("author")
+  votes               Vote[]
+  comments            Comment[]
+  pages               Page[]    @relation("created")
+  savedSnippets       Snippet[] @relation("saved")
+  joinedPages         Page[]
+}
+
+model Snippet {
+  id        Int        @id @default(autoincrement())
+  title     String
+  body      String
+  score     Int        @default(0)
+  authorId  Int
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  pageId    Int
+  // prisma relations
+  savedBy   User[]     @relation("saved")
+  author    User       @relation("author", fields: [authorId], references: [id])
+  languages Language[]
+  tags      Tag[]
+  comments  Comment[]
+  votes     Vote[]
+  page      Page       @relation(fields: [pageId], references: [id])
+}
+
+model Page {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  creatorId   Int
+  createdBy   User      @relation("created", fields: [creatorId], references: [id])
+  snippets    Snippet[]
+  joinedUsers User[]
+}
+
+model Vote {
+  id         Int        @id @default(autoincrement())
+  type       VoteType
+  entityType EntityType
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  userId     Int
+  snippetId  Int?
+  commentId  Int?
+  // prisma relations
+  user       User       @relation(fields: [userId], references: [id])
+  snippet    Snippet?   @relation(fields: [snippetId], references: [id])
+  comment    Comment?   @relation(fields: [commentId], references: [id])
+}
+
+model Comment {
+  id        Int     @id @default(autoincrement())
+  body      String
+  authorId  Int
+  snippetId Int
+  // prisma relations
+  votes     Vote[]
+  author    User    @relation(fields: [authorId], references: [id])
+  snippet   Snippet @relation(fields: [snippetId], references: [id])
+}
+
+model Language {
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  // prisma relations
+  snippets  Snippet[]
+}
+
+model Tag {
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  // prisma relations
+  snippets  Snippet[]
+}
+
+enum EntityType {
+  COMMENT
+  SNIPPET
+}
+
+enum VoteType {
+  UPVOTE
+  DOWNVOTE
 }
