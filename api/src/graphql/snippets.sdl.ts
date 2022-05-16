@@ -18,8 +18,8 @@ export const schema = gql`
   }
 
   type Query {
-    snippets: [Snippet!]! @requireAuth
-    snippet(id: Int!): Snippet @requireAuth
+    snippets: [Snippet!]! @skipAuth
+    snippet(id: Int!): Snippet @skipAuth
   }
 
   input CreateSnippetInput {
@@ -44,5 +44,7 @@ export const schema = gql`
     deleteSnippet(id: Int!): Snippet! @requireAuth
     upvoteSnippet(id: Int!): Snippet! @requireAuth
     downvoteSnippet(id: Int!): Snippet! @requireAuth
+    saveSnippet(id: Int!): Snippet! @requireAuth
+    unsaveSnippet(id: Int!): Snippet! @requireAuth
   }
 `

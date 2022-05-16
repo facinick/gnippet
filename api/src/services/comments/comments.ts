@@ -39,6 +39,214 @@ export const deleteComment: MutationResolvers['deleteComment'] = ({ id }) => {
   })
 }
 
+export const upvoteComment = async ({ id }) => {
+
+  const userId: number = context.currentUser?.id;
+  const commentId: number = id;
+
+  const votes = await db.vote.findMany({
+    where: {
+      userId,
+      commentId,
+      entityType: 'COMMENT',
+    },
+  });
+
+  const commentToVote = await db.comment.findUnique({
+    where: {
+      id
+    },
+  });
+
+  // no such comment exists, ERROR
+  if(!commentToVote) {
+    throw new Error("No Such Comment Exists to Upvote")
+  }
+
+  const hasVoted = votes.find((vote) => vote.commentId === commentId);
+  let newVote;
+
+  // vote exists
+  if(hasVoted) {
+
+    // was upvoted
+    // set comment score = score - 1
+    // delete vote
+    if(hasVoted.type === 'UPVOTE') {
+      newVote = await db.comment.update({
+        where: {
+          id: commentId
+        },
+        data: {
+          score: {
+            decrement: 1
+          },
+          votes: {
+            delete: {
+              id: hasVoted.id
+            }
+          }
+        },
+      })
+    }
+
+    // was downvoted
+    // set comment score = score + 2
+    // change vote type
+    else {
+      newVote = await db.comment.update({
+        where: {
+          id: commentId
+        },
+        data: {
+          score: {
+            increment: 2
+          },
+          votes: {
+            update: {
+              where: {
+                id: hasVoted.id
+              },
+              data: {
+                type: 'UPVOTE'
+              }
+            }
+          }
+        },
+      })
+    }
+  }
+
+  // was not voted
+  // set comment score = score + 1
+  // set vote type and entity type
+  else {
+    newVote = await db.comment.update({
+      where: {
+        id: commentId
+      },
+      data: {
+        score: {
+          increment: 1
+        },
+        votes: {
+          // it's comment id should be set and comment id should be not set
+          create: {
+            type: 'UPVOTE',
+            userId: userId,
+            entityType: 'COMMENT',
+          }
+        }
+      },
+    })
+  }
+
+  return newVote;
+}
+
+export const downvoteComment = async ({ id }) => {
+
+  const userId: number = context.currentUser?.id;
+  const commentId: number = id;
+
+  const votes = await db.vote.findMany({
+    where: {
+      userId,
+      commentId,
+      entityType: 'COMMENT',
+    },
+  });
+
+  const commentToVote = await db.comment.findUnique({
+    where: {
+      id
+    },
+  });
+
+  // no such comment exists, ERROR
+  if(!commentToVote) {
+    throw new Error("No Such Comment Exists to Upvote")
+  }
+
+  const hasVoted = votes.find((vote) => vote.commentId === commentId);
+  let newVote;
+
+  // vote exists
+  if(hasVoted) {
+
+    // was downvoted
+    // set comment score = score + 1
+    // delete vote
+    if(hasVoted.type === 'DOWNVOTE') {
+      newVote = await db.comment.update({
+        where: {
+          id: commentId
+        },
+        data: {
+          score: {
+            increment: 1
+          },
+          votes: {
+            delete: {
+              id: hasVoted.id
+            }
+          }
+        },
+      })
+    }
+
+    // was upvoted
+    // set comment score = score - 2
+    // change vote type
+    else {
+      newVote = await db.comment.update({
+        where: {
+          id: commentId
+        },
+        data: {
+          score: {
+            decrement: 2
+          },
+          votes: {
+            update: {
+              where: {
+                id: hasVoted.id
+              },
+              data: {
+                type: 'DOWNVOTE'
+              }
+            }
+          }
+        },
+      })
+    }
+  }
+
+  // was not voted
+  // set comment score = score - 1
+  // set vote type and entity type
+  else {
+    newVote = await db.comment.update({
+      where: {
+        id: commentId
+      },
+      data: {
+        score: {
+          decrement: 1
+        },
+        votes: {
+          // it's comment id should be set and comment id should be not set
+          create: {
+            type: 'DOWNVOTE',
+            userId: userId,
+            entityType: 'COMMENT',
+          }
+        }
+      },
+    })
+  }
+}
+
 export const Comment: CommentResolvers = {
   votes: (_obj, { root }) =>
     db.comment.findUnique({ where: { id: root.id } }).votes(),

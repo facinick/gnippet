@@ -23,29 +23,6 @@ export const schema = gql`
   }
 
   type Query {
-    votes: [Vote!]! @requireAuth
     vote(id: Int!): Vote @requireAuth
-  }
-
-  input CreateVoteInput {
-    type: VoteType!
-    entityType: EntityType!
-    userId: Int!
-    snippetId: Int
-    commentId: Int
-  }
-
-  input UpdateVoteInput {
-    type: VoteType
-    entityType: EntityType
-    userId: Int
-    snippetId: Int
-    commentId: Int
-  }
-
-  type Mutation {
-    createVote(input: CreateVoteInput!): Vote! @requireAuth
-    updateVote(id: Int!, input: UpdateVoteInput!): Vote! @requireAuth
-    deleteVote(id: Int!): Vote! @requireAuth
   }
 `

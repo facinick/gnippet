@@ -39,7 +39,7 @@ export const deleteSnippet: MutationResolvers['deleteSnippet'] = ({ id }) => {
   })
 }
 
-export const upvote = async ({ id }) => {
+export const upvoteSnippet = async ({ id }) => {
 
   const userId: number = context.currentUser?.id;
   const snippetId: number = id;
@@ -144,7 +144,7 @@ export const upvote = async ({ id }) => {
   return newVote;
 }
 
-export const downvote = async ({ id }) => {
+export const downvoteSnippet = async ({ id }) => {
 
   const userId: number = context.currentUser?.id;
   const snippetId: number = id;
@@ -245,6 +245,68 @@ export const downvote = async ({ id }) => {
       },
     })
   }
+}
+
+export const saveSnippet = async ({ id }) => {
+
+  const userId: number = context.currentUser?.id;
+  const snippetId: number = id;
+
+  const snippetToSave = await db.snippet.findUnique({
+    where: {
+      id: snippetId
+    }
+  })
+
+  if(!snippetToSave) {
+    throw new Error("Can't save snippet that doesn't exist")
+  }
+
+  await db.user.update({
+    where: {
+      id: userId
+    },
+    data: {
+      savedSnippets: {
+        connect: {
+          id: snippetId
+        }
+      }
+    }
+  });
+
+  return snippetToSave;
+}
+
+export const unsaveSnippet = async ({ id }) => {
+
+  const userId: number = context.currentUser?.id;
+  const snippetId: number = id;
+
+  const snippetToSave = await db.snippet.findUnique({
+    where: {
+      id: snippetId
+    }
+  })
+
+  if(!snippetToSave) {
+    throw new Error("Can't un save snippet that doesn't exist")
+  }
+
+  await db.user.update({
+    where: {
+      id: userId
+    },
+    data: {
+      savedSnippets: {
+        disconnect: {
+          id: snippetId
+        }
+      }
+    }
+  });
+
+  return snippetToSave;
 }
 
 export const Snippet: SnippetResolvers = {
