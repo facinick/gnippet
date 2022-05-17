@@ -1,5 +1,6 @@
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
+import Search from 'src/components/Search/Search'
 
 type HomeLayoutProps = {
   children?: React.ReactNode
@@ -13,6 +14,7 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
     <>
       <header>
         <h1>Home Layout</h1>
+        <Search />
         {isAuthenticated && (
             <div>
               <span>Logged in as {currentUser?.username}</span>{' '}

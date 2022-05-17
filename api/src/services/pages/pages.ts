@@ -17,7 +17,7 @@ export const pages: QueryResolvers['pages'] = ({ input }) => {
       ],
     }
     : {}
-  return db.page.findMany({ where, skip: input?.skip, take: input?.take, orderBy: input.orderBy, })
+  return db.page.findMany({ where, skip: input?.skip, take: input?.take, orderBy: input?.orderBy, })
 }
 
 // no auth restriction

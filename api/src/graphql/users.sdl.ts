@@ -17,13 +17,31 @@ export const schema = gql`
     snippets(input: SnippetQueryFilterAndPagination): [Snippet!]!
     votes: [Vote]!
     comments(input: CommentQueryFilterAndPagination): [Comment!]!
-    pages: [Page]!
+    pages(input: PageQueryFilterAndPagination): [Page!]!
     savedSnippets(input: SnippetQueryFilterAndPagination): [Snippet!]!
-    joinedPages: [Page]!
+    joinedPages(input: PageQueryFilterAndPagination): [Page!]!
+  }
+
+  input UserOrderByInput {
+    createdAt: UserSort
+    updatedAt: UserSort
+    username: UserSort
+  }
+
+  enum UserSort {
+    asc
+    desc
+  }
+
+  input UserQueryFilterAndPagination {
+    filter: String
+    skip: Int
+    take: Int
+    orderBy: UserOrderByInput
   }
 
   type Query {
-    users: [User!]! @skipAuth
+    users(input: UserQueryFilterAndPagination): [User!]! @skipAuth
     user(id: Int!): User @skipAuth
     userByUsername(username: String!): User @skipAuth
   }

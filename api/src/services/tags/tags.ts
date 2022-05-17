@@ -6,15 +6,24 @@ import type {
   TagResolvers,
 } from 'types/graphql'
 
-export const tags: QueryResolvers['tags'] = () => {
-  return db.tag.findMany()
+export const tags: QueryResolvers['tags'] = ({ input }) => {
+
+  const where = input?.filter
+    ? {
+      OR: [
+        { name: { contains: input?.filter } },
+      ],
+    }
+    : {}
+
+  return db.tag.findMany({ where, skip: input?.skip, take: input?.take, orderBy: input?.orderBy })
 }
 
-export const tag: QueryResolvers['tag'] = ({ id }) => {
-  return db.tag.findUnique({
-    where: { id },
-  })
-}
+// export const tag: QueryResolvers['tag'] = ({ id }) => {
+//   return db.tag.findUnique({
+//     where: { id },
+//   })
+// }
 
 export const createTag: MutationResolvers['createTag'] = ({ input }) => {
   requireAuth({})
@@ -23,13 +32,13 @@ export const createTag: MutationResolvers['createTag'] = ({ input }) => {
   })
 }
 
-export const updateTag: MutationResolvers['updateTag'] = ({ id, input }) => {
-  requireAuth({})
-  return db.tag.update({
-    data: input,
-    where: { id },
-  })
-}
+// export const updateTag: MutationResolvers['updateTag'] = ({ id, input }) => {
+//   requireAuth({})
+//   return db.tag.update({
+//     data: input,
+//     where: { id },
+//   })
+// }
 
 export const deleteTag: MutationResolvers['deleteTag'] = ({ id }) => {
   requireAuth({})

@@ -33,6 +33,7 @@ export const snippets: QueryResolvers['snippets'] = ({ input }) => {
       ],
     }
     : {}
+  //@ts-ignore
   return db.snippet.findMany({ where, skip: input?.skip, take: input?.take, orderBy})
 }
 

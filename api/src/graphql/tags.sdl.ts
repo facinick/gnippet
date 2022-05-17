@@ -7,8 +7,23 @@ export const schema = gql`
     snippets: [Snippet]!
   }
 
+  input TagOrderByInput {
+    name: TagSort
+  }
+
+  enum TagSort {
+    asc
+    desc
+  }
+
+  input TagQueryFilterAndPagination {
+    filter: String
+    skip: Int
+    take: Int
+    orderBy: TagOrderByInput
+  }
   type Query {
-    tags: [Tag!]! @skipAuth
+    tags(input: TagQueryFilterAndPagination): [Tag!]! @skipAuth
     # tag(id: Int!): Tag @requireAuth
   }
 

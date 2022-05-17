@@ -8,8 +8,16 @@ import type {
 } from 'types/graphql'
 
 // Public Route
-export const users: QueryResolvers['users'] = () => {
-  return db.user.findMany({})
+export const users: QueryResolvers['users'] = ({ input }) => {
+  const where = input?.filter
+    ? {
+      OR: [
+        { username: { contains: input?.filter } },
+      ],
+    }
+    : {}
+
+  return db.user.findMany({ where, skip: input?.skip, take: input?.take, orderBy: input?.orderBy })
 }
 
 // Public Route
@@ -72,7 +80,16 @@ export const User: UserResolvers = {
   snippets: (_obj, { root }) => {
     // requireAuth({})
     // requireOwnerAccess({id: root.id})
-    return db.user.findUnique({ where: { id: root.id } }).snippets();
+    const where = _obj.input?.filter
+    ? {
+      OR: [
+        { title: { contains: _obj.input?.filter } },
+        { body: { contains: _obj.input?.filter } },
+      ],
+    }
+    : {}
+
+    return db.user.findUnique({ where: { id: root.id } }).snippets({ where, orderBy: _obj.input?.orderBy, skip: _obj.input?.skip, take: _obj.input?.take })
   },
   votes: (_obj, { root }) => {
     requireAuth({})
@@ -82,22 +99,58 @@ export const User: UserResolvers = {
   comments: (_obj, { root }) =>{
     // requireAuth({})
     // requireOwnerAccess({id: root.id})
-    return db.user.findUnique({ where: { id: root.id } }).comments();
+    const where = _obj.input?.filter
+    ? {
+      OR: [
+        { title: { contains: _obj.input?.filter } },
+        { body: { contains: _obj.input?.filter } },
+      ],
+    }
+    : {}
+
+    return db.user.findUnique({ where: { id: root.id } }).comments({ where, orderBy: _obj.input?.orderBy, skip: _obj.input?.skip, take: _obj.input?.take })
   },
   pages: (_obj, { root }) => {
     // requireAuth({})
     // requireOwnerAccess({id: root.id})
-    return db.user.findUnique({ where: { id: root.id } }).pages()
+    const where = _obj.input?.filter
+    ? {
+      OR: [
+        { name: { contains: _obj.input?.filter } },
+      ],
+    }
+    : {}
+
+    return db.user.findUnique({ where: { id: root.id } }).pages({ where, orderBy: _obj.input?.orderBy, skip: _obj.input?.skip, take: _obj.input?.take })
   },
   savedSnippets: (_obj, { root }) =>{
     requireAuth({})
     requireOwnerAccess({id: root.id})
-    return db.user.findUnique({ where: { id: root.id } }).savedSnippets()
+
+    const where = _obj.input?.filter
+    ? {
+      OR: [
+        { title: { contains: _obj.input?.filter } },
+        { body: { contains: _obj.input?.filter } },
+      ],
+    }
+    : {}
+
+    return db.user.findUnique({ where: { id: root.id } }).savedSnippets({ where, orderBy: _obj.input?.orderBy, skip: _obj.input?.skip, take: _obj.input?.take })
   },
   joinedPages: (_obj, { root }) =>{
     requireAuth({})
     requireOwnerAccess({id: root.id})
-    return db.user.findUnique({ where: { id: root.id } }).joinedPages()
+
+    const where = _obj.input?.filter
+    ? {
+      OR: [
+        { name: { contains: _obj.input?.filter } },
+      ],
+    }
+    : {}
+
+    return db.user.findUnique({ where: { id: root.id } }).joinedPages({ where, orderBy: _obj.input?.orderBy, skip: _obj.input?.skip, take: _obj.input?.take })
   }
 }
 
