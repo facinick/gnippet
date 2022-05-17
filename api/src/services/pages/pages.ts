@@ -10,14 +10,14 @@ import type {
 // no auth restriction
 // no access restriction
 export const pages: QueryResolvers['pages'] = ({ input }) => {
-  const where = input.filter
+  const where = input?.filter
     ? {
       OR: [
-        { name: { contains: input.filter } },
+        { name: { contains: input?.filter } },
       ],
     }
     : {}
-  return db.page.findMany({ where, skip: input.skip, take: input.take, orderBy: input.orderBy, })
+  return db.page.findMany({ where, skip: input?.skip, take: input?.take, orderBy: input.orderBy, })
 }
 
 // no auth restriction

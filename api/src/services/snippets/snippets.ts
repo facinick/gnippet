@@ -7,15 +7,33 @@ import type {
 } from 'types/graphql'
 
 export const snippets: QueryResolvers['snippets'] = ({ input }) => {
-  const where = input.filter
+
+  let orderByActivity: false | string = false;
+
+  // is a custom aggregation field
+  if(input.orderBy.activity) {
+    orderByActivity = input.orderBy.activity;
+    delete input.orderBy['activity']
+  }
+
+  const orderBy = orderByActivity
+    ? [{
+        comments: {
+          _count: orderByActivity
+        }
+      }]
+      :
+      [input.orderBy]
+
+  const where = input?.filter
     ? {
       OR: [
-        { title: { contains: input.filter } },
-        { body: { contains: input.filter } },
+        { title: { contains: input?.filter } },
+        { body: { contains: input?.filter } },
       ],
     }
     : {}
-  return db.snippet.findMany({ where, skip: input.skip, take: input.take, orderBy: input.orderBy, })
+  return db.snippet.findMany({ where, skip: input?.skip, take: input?.take, orderBy})
 }
 
 export const snippet: QueryResolvers['snippet'] = ({ id }) => {
@@ -328,6 +346,8 @@ export const Snippet: SnippetResolvers = {
   //   db.snippet.findUnique({ where: { id: root.id } }).savedBy(),
   author: (_obj, { root }) =>
     db.snippet.findUnique({ where: { id: root.id } }).author(),
+  activity: async (_obj, { root }) =>
+    db.comment.count({ where: { snippetId: root.id }}),
   languages: (_obj, { root }) =>
     db.snippet.findUnique({ where: { id: root.id } }).languages(),
   tags: (_obj, { root }) =>

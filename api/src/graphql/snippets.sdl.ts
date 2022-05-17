@@ -15,11 +15,13 @@ export const schema = gql`
     comments: [Comment]!
     votes: [Vote]!
     page: Page
+    activity: Int!
   }
 
   input SnippetOrderByInput {
     createdAt: SnippetSort
     updatedAt: SnippetSort
+    activity: SnippetSort
   }
 
   enum SnippetSort {

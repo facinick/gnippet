@@ -13,6 +13,9 @@
     ]
   },
   "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/material": "^5.7.0",
     "@redwoodjs/auth": "1.4.0",
     "@redwoodjs/forms": "1.4.0",
     "@redwoodjs/router": "1.4.0",

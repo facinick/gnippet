@@ -10,14 +10,14 @@ import type {
 // no auth restriction
 // no access restriction
 export const comments: QueryResolvers['comments'] = ({ input }) => {
-  const where = input.filter
+  const where = input?.filter
     ? {
       OR: [
-        { body: { contains: input.filter } },
+        { body: { contains: input?.filter } },
       ],
     }
     : {}
-  return db.comment.findMany({ where, skip: input.skip, take: input.take, orderBy: input.orderBy, })
+  return db.comment.findMany({ where, skip: input?.skip, take: input?.take, orderBy: input.orderBy, })
 }
 
 // no auth restriction
