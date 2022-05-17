@@ -13,6 +13,13 @@ export const users: QueryResolvers['users'] = () => {
 }
 
 // Public Route
+export const userByUsername = ({ username }: {username: string}) => {
+  return db.user.findUnique({
+    where: { username }
+  })
+}
+
+// Public Route
 export const user: QueryResolvers['user'] = ({ id }) => {
   return db.user.findUnique({
     where: { id }
@@ -63,8 +70,8 @@ export const User: UserResolvers = {
     return  (await db.user.findUnique({ where: { id: root.id } })).roles
   },
   snippets: (_obj, { root }) => {
-    requireAuth({})
-    requireOwnerAccess({id: root.id})
+    // requireAuth({})
+    // requireOwnerAccess({id: root.id})
     return db.user.findUnique({ where: { id: root.id } }).snippets();
   },
   votes: (_obj, { root }) => {
@@ -73,13 +80,13 @@ export const User: UserResolvers = {
     return db.user.findUnique({ where: { id: root.id } }).votes();
   },
   comments: (_obj, { root }) =>{
-    requireAuth({})
-    requireOwnerAccess({id: root.id})
+    // requireAuth({})
+    // requireOwnerAccess({id: root.id})
     return db.user.findUnique({ where: { id: root.id } }).comments();
   },
   pages: (_obj, { root }) => {
-    requireAuth({})
-    requireOwnerAccess({id: root.id})
+    // requireAuth({})
+    // requireOwnerAccess({id: root.id})
     return db.user.findUnique({ where: { id: root.id } }).pages()
   },
   savedSnippets: (_obj, { root }) =>{

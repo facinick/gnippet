@@ -14,17 +14,18 @@ export const schema = gql`
     bio: String
     avatarUrl: String
     # private data ------------------
-    snippets: [Snippet]!
+    snippets(input: SnippetQueryFilterAndPagination): [Snippet!]!
     votes: [Vote]!
-    comments: [Comment]!
+    comments(input: CommentQueryFilterAndPagination): [Comment!]!
     pages: [Page]!
-    savedSnippets: [Snippet]!
+    savedSnippets(input: SnippetQueryFilterAndPagination): [Snippet!]!
     joinedPages: [Page]!
   }
 
   type Query {
     users: [User!]! @skipAuth
     user(id: Int!): User @skipAuth
+    userByUsername(username: String!): User @skipAuth
   }
 
   input CreateUserInput {
