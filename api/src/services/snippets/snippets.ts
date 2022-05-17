@@ -352,8 +352,21 @@ export const Snippet: SnippetResolvers = {
     db.snippet.findUnique({ where: { id: root.id } }).languages(),
   tags: (_obj, { root }) =>
     db.snippet.findUnique({ where: { id: root.id } }).tags(),
-  comments: (_obj, { root }) =>
-    db.snippet.findUnique({ where: { id: root.id } }).comments(),
+  comments: (_obj, { root }) => {
+
+    const where = _obj.input?.filter
+    ? {
+      OR: [
+        { title: { contains: _obj.input?.filter } },
+        { body: { contains: _obj.input?.filter } },
+      ],
+    }
+    : {}
+
+    where['parentCommentId'] = _obj.input?.ignoreChildComments ? null : undefined
+
+    return db.snippet.findUnique({ where: { id: root.id } }).comments({ where, orderBy: _obj.input?.orderBy, skip: _obj.input?.skip, take: _obj.input?.take })
+  },
   votes: (_obj, { root }) =>
     db.snippet.findUnique({ where: { id: root.id } }).votes(),
   page: (_obj, { root }) =>

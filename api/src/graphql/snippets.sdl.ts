@@ -12,7 +12,7 @@ export const schema = gql`
     author: User!
     languages: [Language]!
     tags: [Tag]!
-    comments: [Comment]!
+    comments(input: CommentQueryFilterAndPagination): [Comment!]! @skipAuth
     votes: [Vote]!
     page: Page
     activity: Int!
@@ -22,6 +22,7 @@ export const schema = gql`
     createdAt: SnippetSort
     updatedAt: SnippetSort
     activity: SnippetSort
+    score: SnippetSort
   }
 
   enum SnippetSort {

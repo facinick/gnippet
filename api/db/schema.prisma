@@ -89,7 +89,7 @@ model Comment {
   snippet         Snippet   @relation(fields: [snippetId], references: [id])
   parentCommentId Int?
   parent          Comment?  @relation("parentChildComment", fields: [parentCommentId], references: [id])
-  children        Comment[] @relation("parentChildComment")
+  comments        Comment[] @relation("parentChildComment")
 }
 
 model Language {

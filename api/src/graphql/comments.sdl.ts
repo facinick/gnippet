@@ -6,17 +6,19 @@ export const schema = gql`
     updatedAt: DateTime!
     authorId: Int!
     snippetId: Int!
+    score: Int!
     parentCommentId: Int
     votes: [Vote]!
     author: User!
     snippet: Snippet!
     parent: Comment
-    children: [Comment]!
+    comments(input: CommentQueryFilterAndPagination): [Comment]!
   }
 
   input CommentOrderByInput {
     createdAt: CommentSort
     updatedAt: CommentSort
+    score: CommentSort
   }
 
   enum CommentSort {
@@ -33,10 +35,11 @@ export const schema = gql`
     skip: Int
     take: Int
     orderBy: CommentOrderByInput
+    ignoreChildComments: Boolean
   }
 
   type Query {
-    comments(input: CommentQueryFilterAndPagination): [Comment!]! @skipAuth
+    # comments(input: CommentQueryFilterAndPagination): [Comment!]! @skipAuth
     comment(id: Int!): Comment @skipAuth
   }
 

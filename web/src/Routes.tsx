@@ -12,9 +12,8 @@ import { Private, Router, Route, Set } from '@redwoodjs/router'
 const Routes = () => {
   return (
     <Router>
-      <Private unauthenticated="home">
-
-
+      <Private unauthenticated="login">
+        <Route path="/profile" page={ProfilePage} name="profile" />
       </Private>
 
       <Route path="/login" page={LoginPage} name="login" />
@@ -25,6 +24,8 @@ const Routes = () => {
       <Set wrap={HomeLayout}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
+        <Route path="/s/{id:Int}" page={SnippetPage} name="snippet" />
+        <Route path="/u/{username:String}" page={UserPage} name="user" />
       </Set>
 
       <Route notfound page={NotFoundPage} />
