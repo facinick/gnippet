@@ -7,6 +7,7 @@
 // 'src/pages/HomePage/HomePage.js'         -> HomePage
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 import HomeLayout from 'src/layouts/HomeLayout'
+import AuthLayout from 'src/layouts/AuthLayout'
 import { Private, Router, Route, Set } from '@redwoodjs/router'
 
 const Routes = () => {
@@ -16,10 +17,12 @@ const Routes = () => {
         <Route path="/profile" page={ProfilePage} name="profile" />
       </Private>
 
-      <Route path="/login" page={LoginPage} name="login" />
-      <Route path="/signup" page={SignupPage} name="signup" />
-      <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
-      <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
+      <Set wrap={AuthLayout}>
+        <Route path="/login" page={LoginPage} name="login" />
+        <Route path="/signup" page={SignupPage} name="signup" />
+        <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
+        <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
+      </Set>
 
       <Set wrap={HomeLayout}>
         <Route path="/" page={HomePage} name="home" />

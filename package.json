@@ -15,7 +15,8 @@
     "types": "rw generate types",
     "dev": "rw dev",
     "studio": "rw prisma studio",
-    "db-console": "rw console"
+    "db-console": "rw console",
+    "storybook": "rw storybook"
   },
   "devDependencies": {
     "@redwoodjs/core": "1.4.0"
@@ -31,5 +32,8 @@
   "prisma": {
     "seed": "yarn rw exec seed"
   },
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.0",
+  "dependencies": {
+    "@mui/icons-material": "^5.8.0"
+  }
 }

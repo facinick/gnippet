@@ -23,7 +23,7 @@ export const schema = gql`
     orderBy: TagOrderByInput
   }
   type Query {
-    tags(input: TagQueryFilterAndPagination): [Tag!]! @skipAuth
+    tags(input: TagQueryFilterAndPagination): [Tag]! @skipAuth
     # tag(id: Int!): Tag @requireAuth
   }
 

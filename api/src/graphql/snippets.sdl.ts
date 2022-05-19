@@ -7,12 +7,12 @@ export const schema = gql`
     authorId: Int!
     createdAt: DateTime!
     updatedAt: DateTime!
-    pageId: Int!
+    pageId: Int
     # savedBy: [User]!
     author: User!
     languages: [Language]!
     tags: [Tag]!
-    comments(input: CommentQueryFilterAndPagination): [Comment!]! @skipAuth
+    comments(input: CommentQueryFilterAndPagination): [Comment]!
     votes: [Vote]!
     page: Page
     activity: Int!
@@ -45,7 +45,6 @@ export const schema = gql`
   input CreateSnippetInput {
     title: String!
     body: String!
-    score: Int!
     authorId: Int!
     pageId: Int
   }

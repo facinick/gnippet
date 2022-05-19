@@ -7,12 +7,14 @@ export const schema = gql`
     authorId: Int!
     snippetId: Int!
     score: Int!
+    # this could be either null (parent is snippet) or int (parent is another comment)
     parentCommentId: Int
     votes: [Vote]!
     author: User!
     snippet: Snippet!
     parent: Comment
     comments(input: CommentQueryFilterAndPagination): [Comment]!
+    activity: Int!
   }
 
   input CommentOrderByInput {

@@ -8,7 +8,7 @@ export const schema = gql`
   }
 
   type Query {
-    languages: [Language!]! @requireAuth
+    languages: [Language]! @requireAuth
     language(id: Int!): Language @requireAuth
   }
 

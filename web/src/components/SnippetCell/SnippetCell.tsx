@@ -6,21 +6,13 @@ export const QUERY = gql`
   query FindSnippetQuery($id: Int!) {
     snippet(id: $id) {
       id
-      score
       title
       body
       createdAt
+      activity
+      score
       author {
         username
-      }
-      comments {
-        id
-        createdAt
-        body
-        author {
-          username
-        }
-        parentCommentId
       }
     }
   }
@@ -42,7 +34,7 @@ export const Success = ({
 
   return (
     <>
-       <Snippet key={snippet.id} snippet={snippet}></Snippet>
+       <Snippet truncate={false} key={snippet.id} snippet={snippet} />
     </>
   )
 }

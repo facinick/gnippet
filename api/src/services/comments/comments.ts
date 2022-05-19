@@ -278,6 +278,11 @@ export const downvoteComment = async ({ id }) => {
 }
 
 export const Comment: CommentResolvers = {
+
+   // no auth restriction
+  // no access restriction
+  activity: async (_obj, { root }) =>
+    db.comment.count({ where: { parentCommentId: root.id }}),
   // no auth restriction
   // no access restriction
   votes: (_obj, { root }) =>

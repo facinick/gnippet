@@ -1,6 +1,8 @@
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 import Search from 'src/components/Search/Search'
+import { Toaster } from '@redwoodjs/web/toast'
+import ThemeSwitch from 'src/components/ThemeSwitch/ThemeSwitch'
 
 type HomeLayoutProps = {
   children?: React.ReactNode
@@ -12,8 +14,8 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
 
   return (
     <>
+      <Toaster />
       <header>
-        <h1>Home Layout</h1>
         <Search />
         {isAuthenticated && (
             <div>
@@ -26,7 +28,7 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
         }
 
         <nav>
-          <ul>
+          <ul style={{listStyle: 'none', padding: 0}}>
             <li>
               <Link to={routes.home()}>Home</Link>
             </li>
@@ -45,6 +47,8 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
             }
           </ul>
         </nav>
+
+        <ThemeSwitch />
       </header>
       <main>{children}</main>
     </>

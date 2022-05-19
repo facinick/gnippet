@@ -14,6 +14,13 @@ export const failure = () => {
 }
 
 export const success = () => {
+
+  mockCurrentUser({
+    id: 1,
+    username: "facinick",
+    isBanned: false
+  })
+
   return Success ? <Success {...standard()} /> : null
 }
 

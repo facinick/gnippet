@@ -1,27 +1,19 @@
 import type { SnippetsQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
-import Snippet from '../Snippet/Snippet'
+import Snippet from 'src/components/Snippet/Snippet'
 
 export const QUERY = gql`
   query SnippetsQuery {
-    snippets(input: { orderBy: { createdAt: asc }}) {
+    snippets(input: { orderBy: { createdAt: desc }}) {
       id
       title
       body
-      author {
-        username
-      }
-      comments(input: { skip: 0, take: 1, ignoreChildComments: true }) {
-        id
-        author {
-          username
-        }
-        body
-        parentCommentId
-      }
       createdAt
       activity
       score
+      author {
+        username
+      }
     }
   }
 `
@@ -38,7 +30,13 @@ export const Success = ({ snippets }: CellSuccessProps<SnippetsQuery>) => {
 
   return (
     <>
-      {snippets.map(snippet => <Snippet key={snippet.id} snippet={snippet} />)}
+      {snippets.map(snippet =>
+        <Snippet
+          key={snippet.id}
+          snippet={snippet}
+          truncate={true}
+        />)
+      }
     </>
   )
 }

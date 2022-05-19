@@ -31,7 +31,7 @@ export const schema = gql`
   }
 
   type Query {
-    pages(input: PageQueryFilterAndPagination): [Page!]! @skipAuth
+    pages(input: PageQueryFilterAndPagination): [Page]! @skipAuth
     page(id: Int!): Page @skipAuth
   }
 

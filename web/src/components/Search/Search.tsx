@@ -3,10 +3,7 @@ import React, { useState } from 'react';
 import { useLazyQuery, gql } from '@apollo/client';
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
-import Grid from '@mui/material/Grid'
-import Typography from '@mui/material/Typography'
 import throttle from 'lodash.throttle'
-import parse from 'autosuggest-highlight/parse'
 import { formatPages, formatTags, formatUsers } from 'src/utils/searchResultsUtils';
 
 export const SearchQuery = gql`
@@ -33,11 +30,10 @@ type SearchObject = {
 
 const Search = () => {
 
-  const [value, setValue] = React.useState<SearchObject | null>(null)
   const [inputValue, setInputValue] = React.useState('')
   const [options, setOptions] = React.useState<readonly SearchObject[]>([])
 
-  const [executeSearch, { data }] = useLazyQuery(
+  const [executeSearch, { data, loading, error }] = useLazyQuery(
     SearchQuery,
     {
       fetchPolicy: 'network-only'
@@ -67,7 +63,8 @@ const Search = () => {
       return
     }
 
-    console.log(`got data`)
+    console.log(data)
+
     const options = [...formatUsers(data.users), ...formatPages(data.pages), ...formatTags(data.tags)]
     console.log(`setting options: ${options}`)
     setOptions(options)
@@ -77,12 +74,13 @@ const Search = () => {
   React.useEffect(() => {
 
     if (inputValue === '') {
-      setOptions(value ? [value] : [])
+      setOptions([])
       return undefined
     }
 
     fetch({ input: inputValue })
-  }, [value, inputValue, fetch])
+  }, [inputValue, fetch])
+
 
   return (
       <Autocomplete
@@ -94,14 +92,25 @@ const Search = () => {
           typeof option === 'string' ? option : option.label
         }
 
+        noOptionsText={'No results found'}
+
+        groupBy={(option) => option.type}
         options={options}
         autoComplete
-        includeInputInList
-        filterSelectedOptions
+        // includeInputInList
+        // filterSelectedOptions
 
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);
         }}
+
+        onChange={(event: any, newValue: SearchObject | null) => {
+          console.log(newValue)
+        }}
+
+        loading={loading}
+
+        disableClearable={true}
 
         renderInput={(params) => (
           <TextField

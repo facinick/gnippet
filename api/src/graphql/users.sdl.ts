@@ -11,15 +11,15 @@ export const schema = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     isBanned: Boolean!
-    bio: String
-    avatarUrl: String
+    bio: String # could be null
+    avatarUrl: String # could be null
     # private data ------------------
-    snippets(input: SnippetQueryFilterAndPagination): [Snippet!]!
+    snippets(input: SnippetQueryFilterAndPagination): [Snippet]!
     votes: [Vote]!
-    comments(input: CommentQueryFilterAndPagination): [Comment!]!
+    comments(input: CommentQueryFilterAndPagination): [Comment]!
     pages(input: PageQueryFilterAndPagination): [Page!]!
-    savedSnippets(input: SnippetQueryFilterAndPagination): [Snippet!]!
-    joinedPages(input: PageQueryFilterAndPagination): [Page!]!
+    savedSnippets(input: SnippetQueryFilterAndPagination): [Snippet]!
+    joinedPages(input: PageQueryFilterAndPagination): [Page]!
   }
 
   input UserOrderByInput {
