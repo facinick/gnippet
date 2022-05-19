@@ -1,33 +1,25 @@
-import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import Typography from '@mui/material/Typography';
+import Downvote from '../Downvote/Downvote';
+import Upvote from '../Upvote/Upvote';
 
 interface Props {
   votes: number;
-  onUpvote: () => void
-  onDownvote: () => void
   vote: 1 | -1 | 0
-  loading: boolean
+  snippetId: number
 }
 
-const Voting = ({ vote, votes, onUpvote, onDownvote, loading }: Props) => {
+  const Voting = ({ snippetId, vote, votes, disabled }: Props) => {
   return (
     <>
     <Stack alignItems={'center'} direction="row" spacing={1}>
-      <IconButton disabled={loading} onClick={onUpvote} aria-label="upvote">
-        <ArrowUpwardIcon color={vote === 1 ? 'success' : 'inherit'} />
-      </IconButton>
+      <Upvote vote={vote} snippetId={snippetId}/>
 
       <Typography>
         { votes }
       </Typography>
 
-      <IconButton disabled={loading} onClick={onDownvote} aria-label="downvote">
-        <ArrowDownwardIcon color={vote === -1 ? 'error' : 'inherit'} />
-      </IconButton>
+      <Downvote vote={vote} snippetId={snippetId}/>
     </Stack>
     </>
   )

@@ -21,7 +21,18 @@ import { db } from './db'
 export const getCurrentUser = async (session) => {
   return await db.user.findUnique({
     where: { id: session.id },
-    select: { id: true, roles: true, username: true, isBanned: true },
+    select: {
+      id: true,
+      roles: true,
+      username: true,
+      isBanned: true ,
+      createdAt: true,
+      updatedAt: true,
+      bio: true,
+      avatarUrl: true,
+      snippets: true,
+      votes: true,
+    },
   })
 }
 

@@ -1,6 +1,7 @@
-import type { SnippetsQuery } from 'types/graphql'
+import type { SnippetsQuery, Vote } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import Snippet from 'src/components/Snippet/Snippet'
+import { _Vote } from 'src/gql_objects/gqlObjects';
 
 export const QUERY = gql`
   query SnippetsQuery {
@@ -26,7 +27,7 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ snippets }: CellSuccessProps<SnippetsQuery>) => {
+export const Success = ({ snippets}: CellSuccessProps<SnippetsQuery> ) => {
 
   return (
     <>

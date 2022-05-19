@@ -1,6 +1,7 @@
 import type { FindUserQuery, FindUserQueryVariables } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import Snippet from '../Snippet/Snippet'
+import { xDaysAgo } from 'src/utils/stringUtils'
 
 export const QUERY = gql`
   query FindUserQuery($username: String!) {
@@ -54,15 +55,13 @@ export const Success = ({
   user,
 }: CellSuccessProps<FindUserQuery, FindUserQueryVariables>) => {
 
-  const {username, bio, snippets} = user
-
-  console.log(snippets);
+  const {username, bio, snippets, createdAt, avatarUrl} = user
 
   return (
     <>
-      <h4>@{username}</h4>
+      <p>joined {xDaysAgo(new Date(createdAt).getTime())}</p>
       <p>{bio}</p>
-      { snippets.map((snippet) => <Snippet key={snippet.id} snippet={snippet} />) }
+      { snippets.map((snippet) => <Snippet truncate={true} key={snippet.id} snippet={snippet} />) }
     </>
   )
 }

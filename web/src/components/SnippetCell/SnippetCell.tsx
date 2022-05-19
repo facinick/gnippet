@@ -1,6 +1,7 @@
 import type { FindSnippetQuery, FindSnippetQueryVariables } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import Snippet from '../Snippet/Snippet'
+import { _Vote } from 'src/gql_objects/gqlObjects'
 
 export const QUERY = gql`
   query FindSnippetQuery($id: Int!) {
@@ -29,7 +30,7 @@ export const Failure = ({
 )
 
 export const Success = ({
-  snippet,
+  snippet
 }: CellSuccessProps<FindSnippetQuery, FindSnippetQueryVariables>) => {
 
   return (

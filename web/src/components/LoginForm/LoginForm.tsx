@@ -2,7 +2,6 @@ import Stack from '@mui/material/Stack'
 import { useAuth } from '@redwoodjs/auth'
 import {
   Form,
-  FormError,
   TextField,
   Label,
   Submit,
@@ -14,6 +13,52 @@ import { Link, navigate, routes } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/toast'
 import { useEffect, useRef } from 'react'
 
+const UserDataQuery = gql`
+  query currentuserdata($input: Int!) {
+    user(id: $input) {
+      id,
+      username
+      avatarUrl
+      isBanned
+      roles
+      createdAt
+      bio
+      votes {
+        snippetId
+        commentId
+        type
+        id
+      }
+      snippets {
+        id
+        title
+        body
+        createdAt
+        activity
+        score
+        author {
+          username
+        }
+      }
+      comments {
+        id
+        body
+        createdAt
+        activity
+        score
+        author {
+          username
+        }
+      }
+      pages {
+        id
+        name
+        createdAt
+        population
+      }
+    }
+  }
+`
 interface FormValues {
   username: string
   password: string

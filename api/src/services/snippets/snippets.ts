@@ -119,7 +119,14 @@ export const upvoteSnippet = async ({ id }) => {
               id: hasVoted.id
             }
           }
-        },
+        },include: {
+          votes:  {
+            where: {
+              userId,
+              snippetId
+            }
+          }
+        }
       })
     }
 
@@ -145,7 +152,14 @@ export const upvoteSnippet = async ({ id }) => {
               }
             }
           }
-        },
+        },include: {
+          votes:  {
+            where: {
+              userId,
+              snippetId
+            }
+          }
+        }
       })
     }
   }
@@ -170,7 +184,14 @@ export const upvoteSnippet = async ({ id }) => {
             entityType: 'SNIPPET',
           }
         }
-      },
+      },include: {
+        votes:  {
+          where: {
+            userId,
+            snippetId
+          }
+        }
+      }
     })
   }
 
@@ -224,7 +245,14 @@ export const downvoteSnippet = async ({ id }) => {
               id: hasVoted.id
             }
           }
-        },
+        },include: {
+          votes:  {
+            where: {
+              userId,
+              snippetId
+            }
+          }
+        }
       })
     }
 
@@ -250,7 +278,14 @@ export const downvoteSnippet = async ({ id }) => {
               }
             }
           }
-        },
+        },include: {
+          votes:  {
+            where: {
+              userId,
+              snippetId
+            }
+          }
+        }
       })
     }
   }
@@ -275,9 +310,18 @@ export const downvoteSnippet = async ({ id }) => {
             entityType: 'SNIPPET',
           }
         }
-      },
+      },include: {
+        votes:  {
+          where: {
+            userId,
+            snippetId
+          }
+        }
+      }
     })
   }
+
+  return newVote;
 }
 
 export const saveSnippet = async ({ id }) => {
