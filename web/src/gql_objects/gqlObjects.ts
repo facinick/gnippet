@@ -6,7 +6,7 @@ export type _Author = {
   author: FullSnippetAuthor
 }
 
-export type _Comment = Pick<Comment, 'id' | 'body' | 'createdAt' | 'score' | 'parentCommentId' >
+export type _Comment = Pick<Comment, 'id' | 'body' | 'createdAt' | 'score' | 'parentCommentId' | 'activity' > & _Author
 
 export type _Snippet = Pick<Snippet, 'id' | 'title' | 'body' | 'createdAt' | 'score' | 'activity'> & _Author
 

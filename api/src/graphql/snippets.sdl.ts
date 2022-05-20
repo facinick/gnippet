@@ -61,8 +61,6 @@ export const schema = gql`
     createSnippet(input: CreateSnippetInput!): Snippet! @requireAuth
     updateSnippet(id: Int!, input: UpdateSnippetInput!): Snippet! @requireAuth
     deleteSnippet(id: Int!): Snippet! @requireAuth
-    upvoteSnippet(id: Int!): Snippet! @requireAuth
-    downvoteSnippet(id: Int!): Snippet! @requireAuth
     saveSnippet(id: Int!): Snippet! @requireAuth
     unsaveSnippet(id: Int!): Snippet! @requireAuth
   }

@@ -25,4 +25,14 @@ export const schema = gql`
   type Query {
     vote(id: Int!): Vote @requireAuth
   }
+
+  input VotingInput {
+    snippetId: Int
+    entityType: EntityType!
+  }
+
+  type Mutation {
+    upvote(id: Int!, input: VotingInput): Vote! @requireAuth
+    downvote(id: Int!, input: VotingInput): Vote! @requireAuth
+  }
 `

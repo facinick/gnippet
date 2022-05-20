@@ -9,18 +9,19 @@ import type {
 
 // no auth restriction
 // no access restriction
-// export const comments: QueryResolvers['comments'] = ({ input }) => {
-//   console.log(`************`)
-//   console.log(input)
-//   const where = input?.filter
-//     ? {
-//       OR: [
-//         { body: { contains: input?.filter } },
-//       ],
-//     }
-//     : {}
-//   return db.comment.findMany({ where, skip: input?.skip, take: input?.take, orderBy: input.orderBy, })
-// }
+export const comments: QueryResolvers['comments'] = ({ snippetId, input }) => {
+  const where = input?.filter
+    ? {
+      OR: [
+        { body: { contains: input?.filter } },
+      ],
+      snippetId
+    }
+    : {
+      snippetId
+    }
+  return db.comment.findMany({ where, skip: input?.skip, take: input?.take, orderBy: input?.orderBy, })
+}
 
 // no auth restriction
 // no access restriction
@@ -67,18 +68,22 @@ export const deleteComment: MutationResolvers['deleteComment'] = async ({ id }) 
 
 // auth restriction
 // no access restriction
-export const upvoteComment = async ({ id }) => {
+export const upvoteComment = async ({ id , input}) => {
   requireAuth({})
   const userId: number = context.currentUser?.id;
   const commentId: number = id;
+  const { snippetId } = input
 
   const votes = await db.vote.findMany({
     where: {
       userId,
       commentId,
       entityType: 'COMMENT',
+      snippetId
     },
   });
+
+  console.log(`upvoting comment...`)
 
   const commentToVote = await db.comment.findUnique({
     where: {
@@ -88,7 +93,7 @@ export const upvoteComment = async ({ id }) => {
 
   // no such comment exists, ERROR
   if(!commentToVote) {
-    throw new Error("No Such Comment Exists to Upvote")
+    throw new Error(`No Such Comment Exists to Upvote: ${id} of ${input.snippetId}`)
   }
 
   const hasVoted = votes.find((vote) => vote.commentId === commentId);
@@ -163,27 +168,30 @@ export const upvoteComment = async ({ id }) => {
             type: 'UPVOTE',
             userId: userId,
             entityType: 'COMMENT',
+            snippetId
           }
         }
       },
     })
   }
 
-  return newVote;
+  return newVote
 }
 
 // auth restriction
 // no access restriction
-export const downvoteComment = async ({ id }) => {
+export const downvoteComment = async ({ id, input }) => {
   requireAuth({})
   const userId: number = context.currentUser?.id;
   const commentId: number = id;
+  const { snippetId } = input
 
   const votes = await db.vote.findMany({
     where: {
       userId,
       commentId,
       entityType: 'COMMENT',
+      snippetId
     },
   });
 
@@ -270,11 +278,14 @@ export const downvoteComment = async ({ id }) => {
             type: 'DOWNVOTE',
             userId: userId,
             entityType: 'COMMENT',
+            snippetId
           }
         }
       },
     })
   }
+
+  return newVote
 }
 
 export const Comment: CommentResolvers = {

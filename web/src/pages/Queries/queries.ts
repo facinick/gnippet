@@ -25,6 +25,7 @@ export const USER_DATA_QUERY = gql`
             commentId
             userId
             type
+            entityType
           }
     }
   }

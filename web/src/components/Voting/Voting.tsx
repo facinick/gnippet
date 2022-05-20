@@ -7,19 +7,21 @@ interface Props {
   votes: number;
   vote: 1 | -1 | 0
   snippetId: number
+  commentId?: number
+  entity: 'COMMENT' | 'SNIPPET'
 }
 
-  const Voting = ({ snippetId, vote, votes }: Props) => {
+  const Voting = ({ snippetId, commentId, vote, votes, entity }: Props) => {
   return (
     <>
     <Stack alignItems={'center'} direction="row" spacing={1}>
-      <Upvote vote={vote} snippetId={snippetId}/>
+      <Upvote commentId={commentId} entity={entity} vote={vote} snippetId={snippetId}/>
 
       <Typography>
         { votes }
       </Typography>
 
-      <Downvote vote={vote} snippetId={snippetId}/>
+      <Downvote commentId={commentId} entity={entity} vote={vote} snippetId={snippetId}/>
     </Stack>
     </>
   )

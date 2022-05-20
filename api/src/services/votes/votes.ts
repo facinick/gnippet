@@ -1,9 +1,12 @@
+import { requireAuth } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 import type {
   QueryResolvers,
   MutationResolvers,
   VoteResolvers,
 } from 'types/graphql'
+import { downvoteComment, upvoteComment } from '../comments/comments'
+import { downvoteSnippet, upvoteSnippet } from '../snippets/snippets'
 
 // export const votes = () => {
 //   return db.vote.findMany()
@@ -33,6 +36,38 @@ export const vote: QueryResolvers['vote'] = ({ id }) => {
 //     where: { id },
 //   })
 // }
+
+export const upvote = async ({ id, input }) => {
+  requireAuth({})
+  if(input.entityType === 'COMMENT') {
+    return upvoteComment({
+      id,
+      input: {
+        snippetId: input.snippetId
+      }
+    })
+  } else {
+    return upvoteSnippet({
+      id,
+    })
+  }
+}
+
+export const downvote = async ({ id, input }) => {
+  requireAuth({})
+  if(input.entityType === 'COMMENT') {
+    return downvoteComment({
+      id,
+      input: {
+        snippetId: input.snippetId
+      }
+    })
+  } else {
+    return downvoteSnippet({
+      id,
+    })
+  }
+}
 
 export const Vote: VoteResolvers = {
   user: (_obj, { root }) =>

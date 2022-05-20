@@ -5,11 +5,12 @@ import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth';
 import { USER_DATA_QUERY } from 'src/pages/Queries/queries';
 import { QUERY as SNIPPET_QUERY } from 'src/components/SnippetCell'
+import { QUERY as COMMENTS_QUERY } from 'src/components/CommentsCell'
 
 const DOWNVOTE = gql`
-  mutation downvoteSnippetMutation($input: Int!) {
-    downvoteSnippet(id: $input) {
-      id,
+  mutation downvoteMutation($id: Int!, $input: VotingInput) {
+    downvote(id: $id, input: $input) {
+      id
     }
   }
 `
@@ -17,37 +18,47 @@ const DOWNVOTE = gql`
 interface Props {
   snippetId: number
   vote: -1 | 1 | 0
+  entity: 'COMMENT' | 'SNIPPET'
+  commentId?: number
 }
 
-const Downvote = ({ snippetId, vote}: Props) => {
+const Downvote = ({ snippetId, vote, entity, commentId}: Props) => {
 
   const { currentUser } = useAuth()
 
-
-  const [downvote, { loading, error, data }] = useMutation(DOWNVOTE, {
-    onCompleted: () => {
-      toast.success(':/')
+  const [downvote, { loading }] = useMutation(DOWNVOTE, {
+    onCompleted: (data) => {
+      toast.success(':)')
     },
     refetchQueries: [
       {
         query: USER_DATA_QUERY,
         variables: {
-          id: currentUser?.id,
+          id: currentUser.id,
           votes: true,
           snippets: false
         }
       },
       {
-        query: SNIPPET_QUERY,
+        query: entity === 'COMMENT' ? COMMENTS_QUERY : SNIPPET_QUERY,
         variables: {
-          id: snippetId,
+          id: entity === 'COMMENT' ? commentId : snippetId,
+          snippetId: snippetId,
         }
       }
     ]
   })
 
   const onClick = () => {
-    downvote({ variables: { input: snippetId }})
+    downvote({
+      variables: {
+        id: entity === 'COMMENT' ? commentId : snippetId,
+        input: {
+          entityType: entity.toUpperCase(),
+          snippetId: snippetId,
+        }
+      }
+    })
   }
 
   return (

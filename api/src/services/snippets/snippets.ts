@@ -310,11 +310,13 @@ export const downvoteSnippet = async ({ id }) => {
             entityType: 'SNIPPET',
           }
         }
-      },include: {
+      },
+      include: {
         votes:  {
           where: {
             userId,
-            snippetId
+            snippetId,
+            entityType: 'SNIPPET',
           }
         }
       }

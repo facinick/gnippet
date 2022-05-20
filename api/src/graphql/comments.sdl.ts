@@ -42,6 +42,7 @@ export const schema = gql`
 
   type Query {
     # comments(input: CommentQueryFilterAndPagination): [Comment!]! @skipAuth
+    comments(snippetId: Int!, input: CommentQueryFilterAndPagination): [Comment!]! @skipAuth
     comment(id: Int!): Comment @skipAuth
   }
 
@@ -50,6 +51,10 @@ export const schema = gql`
     authorId: Int!
     snippetId: Int!
     parentCommentId: Int
+  }
+
+  input VoteCommentInput {
+    snippetId: Int!
   }
 
   input UpdateCommentInput {
@@ -62,7 +67,5 @@ export const schema = gql`
     createComment(input: CreateCommentInput!): Comment! @requireAuth
     updateComment(id: Int!, input: UpdateCommentInput!): Comment! @requireAuth
     deleteComment(id: Int!): Comment! @requireAuth
-    upvoteComment(id: Int!): Comment! @requireAuth
-    downvoteComment(id: Int!): Comment! @requireAuth
   }
 `
