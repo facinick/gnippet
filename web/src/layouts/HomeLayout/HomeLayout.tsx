@@ -3,6 +3,10 @@ import { Link, routes } from '@redwoodjs/router'
 import Search from 'src/components/Search/Search'
 import { Toaster } from '@redwoodjs/web/toast'
 import ThemeSwitch from 'src/components/ThemeSwitch/ThemeSwitch'
+import Stack from '@mui/material/Stack'
+import LogoutButton from 'src/components/LogoutButton/LogoutButton'
+import LoginButton from 'src/components/LoginButton/LoginButton'
+import HomeButton from 'src/components/HomeButton/HomeButton'
 
 type HomeLayoutProps = {
   children?: React.ReactNode
@@ -15,42 +19,38 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
   return (
     <>
       <Toaster />
+      <Stack spacing={5}>
       <header>
-        <Search />
-        {isAuthenticated && (
+        <Stack spacing={1} direction="row" alignItems={"center"}>
+
+
+          <div>
+            <HomeButton />
+          </div>
+
+          <div style={{width: "100%"}}>
+            <Search />
+          </div>
+
+          <div>
+            <ThemeSwitch />
+          </div>
+
+          {isAuthenticated && (
             <div>
-              <span>Logged in as {currentUser?.username}</span>{' '}
-              <button type="button" onClick={logOut}>
-                Logout
-              </button>
-            </div>
-          )
-        }
+              <LogoutButton />
+            </div>)
+          }
 
-        <nav>
-          <ul style={{listStyle: 'none', padding: 0}}>
-            <li>
-              <Link to={routes.home()}>Home</Link>
-            </li>
-            <li>
-              <Link to={routes.about()}>About</Link>
-            </li>
-            {!isAuthenticated &&
-              <>
-                <li>
-                  <Link to={routes.login()}>Login</Link>
-                </li>
-                <li>
-                  <Link to={routes.signup()}>Signup</Link>
-                </li>
-              </>
-            }
-          </ul>
-        </nav>
-
-        <ThemeSwitch />
+          {!isAuthenticated && (
+            <div>
+              <LoginButton />
+            </div>)
+          }
+        </Stack>
       </header>
       <main>{children}</main>
+      </Stack>
     </>
   )
 }

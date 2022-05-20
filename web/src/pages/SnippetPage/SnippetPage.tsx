@@ -1,3 +1,7 @@
+import CardContent from '@mui/material/CardContent'
+import Card from '@mui/material/Card'
+import Container from '@mui/material/Container'
+import Stack from '@mui/material/Stack'
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import SnippetCell from 'src/components/SnippetCell'
@@ -11,8 +15,14 @@ const SnippetPage = ({ id }: Props) => {
     <>
       <MetaTags title="Snippet" description="Snippet page" />
 
-      <h1>Snippet</h1>
-      <SnippetCell id={id}></SnippetCell>
+      <Container maxWidth="sm">
+        <Stack spacing={5}>
+
+          <SnippetCell id={id}></SnippetCell>
+
+        </Stack>
+      </Container>
+
     </>
   )
 }

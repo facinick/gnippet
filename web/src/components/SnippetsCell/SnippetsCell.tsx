@@ -2,6 +2,7 @@ import type { SnippetsQuery, Vote } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import Snippet from 'src/components/Snippet/Snippet'
 import { _Vote } from 'src/gql_objects/gqlObjects';
+import Stack from '@mui/material/Stack';
 
 export const QUERY = gql`
   query SnippetsQuery {
@@ -31,6 +32,7 @@ export const Success = ({ snippets}: CellSuccessProps<SnippetsQuery> ) => {
 
   return (
     <>
+    <Stack spacing={5}>
       {snippets.map(snippet =>
         <Snippet
           key={snippet.id}
@@ -38,6 +40,7 @@ export const Success = ({ snippets}: CellSuccessProps<SnippetsQuery> ) => {
           truncate={true}
         />)
       }
+      </Stack>
     </>
   )
 }

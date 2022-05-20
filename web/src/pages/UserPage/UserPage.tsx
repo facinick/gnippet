@@ -1,6 +1,5 @@
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import UserCell from 'src/components/UserCell/UserCell'
 
 interface Props {
   username: string
@@ -13,7 +12,7 @@ const UserPage = ({ username }: Props) => {
 
       <h1>@{username}</h1>
       <div>
-        <UserCell username={username}></UserCell>
+        {/* <UserCell username={username}></UserCell> */}
       </div>
     </>
   )

@@ -1,14 +1,13 @@
-import Box from "@mui/material/Box";
 import { useAuth } from "@redwoodjs/auth";
 import { Link, routes } from "@redwoodjs/router";
-import { useQuery } from "@redwoodjs/web";
 import { useEffect, useState } from "react";
 import { _Snippet, _SnippetWithVotes, _Vote } from "src/gql_objects/gqlObjects";
-import { UserDataQuery } from "src/pages/HomePage/HomePage";
+import { USER_DATA_QUERY } from "src/pages/Queries/queries";
 import { truncate as returnTruncatedText } from 'src/utils/stringUtils'
 import CreatedAt from "../CreatedAt/CreatedAt";
 import Username from "../Username/Username";
 import Voting from "../Voting/Voting";
+import { useApolloClient } from '@apollo/client'
 
 type Props = {
   snippet: _Snippet
@@ -27,15 +26,20 @@ const ControlledSnippet = ({ snippet, truncate }: Props) => {
 
   const allowVoting = isAuthenticated && currentUser?.id
 
-  const { loading, error, data } = useQuery(UserDataQuery, {
+  const client = useApolloClient();
+
+  const data = client.readQuery({
+    query: USER_DATA_QUERY,
     variables: {
-      id: currentUser?.id
-    }
+      id: currentUser?.id,
+      snippets: false,
+      votes: true
+    },
   });
 
   useEffect(() => {
 
-    if(!data || error) {
+    if(!data) {
       return
     }
 
@@ -63,7 +67,3 @@ const ControlledSnippet = ({ snippet, truncate }: Props) => {
 }
 
 export default ControlledSnippet
-function useApolloClient(): { cache: any; } {
-  throw new Error("Function not implemented.");
-}
-

@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import AboutPage from './AboutPage'
+import HomeButton from './HomeButton'
 
 //   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+//    https://redwoodjs.com/docs/testing#testing-components
 
-describe('AboutPage', () => {
+describe('HomeButton', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<AboutPage />)
+      render(<HomeButton />)
     }).not.toThrow()
   })
 })

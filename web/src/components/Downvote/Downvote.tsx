@@ -2,20 +2,14 @@ import IconButton from '@mui/material/IconButton';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { QUERY as SnippetQuery } from 'src/components/SnippetCell'
 import { useAuth } from '@redwoodjs/auth';
-import { UserDataQuery } from 'src/pages/HomePage/HomePage';
+import { USER_DATA_QUERY } from 'src/pages/Queries/queries';
+import { QUERY as SNIPPET_QUERY } from 'src/components/SnippetCell'
 
 const DOWNVOTE = gql`
   mutation downvoteSnippetMutation($input: Int!) {
     downvoteSnippet(id: $input) {
       id,
-      body,
-      createdAt,
-      score,
-      author {
-        username
-      }
     }
   }
 `
@@ -36,9 +30,17 @@ const Downvote = ({ snippetId, vote}: Props) => {
     },
     refetchQueries: [
       {
-        query: UserDataQuery,
+        query: USER_DATA_QUERY,
         variables: {
-          id: currentUser.id
+          id: currentUser?.id,
+          votes: true,
+          snippets: false
+        }
+      },
+      {
+        query: SNIPPET_QUERY,
+        variables: {
+          id: snippetId,
         }
       }
     ]

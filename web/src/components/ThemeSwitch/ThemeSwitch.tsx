@@ -1,14 +1,19 @@
-import { useTheme } from '@mui/material/styles';
-import Button from "@mui/material/Button"
-import { ColorModeContext } from "src/theme/ThemeProvider";
+import { useTheme } from '@mui/material/styles'
+import { ColorModeContext } from 'src/theme/ThemeProvider'
+import LightModeIcon from '@mui/icons-material/LightMode'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import ToggleButton from '@mui/material/ToggleButton'
 
 const ThemeSwitch = () => {
-
-  const theme = useTheme();
-  const colorMode = React.useContext(ColorModeContext);
-  const buttonText = theme.palette.mode === 'dark' ? 'Light' : 'Dark'
+  const theme = useTheme()
+  const colorMode = React.useContext(ColorModeContext)
   return (
-    <Button onClick={colorMode.toggleColorMode} variant="text">{buttonText}</Button>
+    <>
+        <ToggleButton title={theme.palette.mode === "dark" ? "Light Mode" : "Dark Mode"} value="check" onChange={colorMode.toggleColorMode}>
+          {theme.palette.mode === 'dark' && <LightModeIcon />}
+          {theme.palette.mode === 'light' && <DarkModeIcon />}
+        </ToggleButton>
+    </>
   )
 }
 

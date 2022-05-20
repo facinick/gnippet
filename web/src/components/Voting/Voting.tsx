@@ -9,7 +9,7 @@ interface Props {
   snippetId: number
 }
 
-  const Voting = ({ snippetId, vote, votes, disabled }: Props) => {
+  const Voting = ({ snippetId, vote, votes }: Props) => {
   return (
     <>
     <Stack alignItems={'center'} direction="row" spacing={1}>
