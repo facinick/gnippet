@@ -35,6 +35,7 @@ export const Success = ({ snippets}: CellSuccessProps<SnippetsQuery> ) => {
     <Stack spacing={5}>
       {snippets.map(snippet =>
         <Snippet
+          showActivity={true}
           key={snippet.id}
           snippet={snippet}
           truncate={true}

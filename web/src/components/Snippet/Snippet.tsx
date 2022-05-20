@@ -12,9 +12,10 @@ import { useApolloClient } from '@apollo/client'
 type Props = {
   snippet: _Snippet
   truncate: boolean
+  showActivity: boolean
 }
 
-const ControlledSnippet = ({ snippet, truncate }: Props) => {
+const ControlledSnippet = ({ showActivity, snippet, truncate }: Props) => {
 
   const { id, title, score, activity, author, body, createdAt } = snippet
 
@@ -62,7 +63,7 @@ const ControlledSnippet = ({ snippet, truncate }: Props) => {
         { truncate && <p>{newBody} <Link to={routes.snippet({ id: id })}>[read_more]</Link> - {<CreatedAt createdAt={createdAt} />} by {<Username username={author.username} />}</p>}
         {!truncate && <p>{newBody} - {<CreatedAt createdAt={createdAt} />} by {<Username username={author.username} />}</p>}
         { allowVoting && <Voting entity={'SNIPPET'} snippetId={id} votes={score} vote={vote} /> }
-        <span>{activity} comments</span>
+        { showActivity && <span>{activity} {activity === 1 ? "comment" : "comments"}</span> }
       </article>)
 }
 

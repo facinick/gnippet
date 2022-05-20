@@ -11,6 +11,7 @@ import {
 } from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
+import { useRef } from 'react'
 import { QUERY as SnippetsQuery } from 'src/components/SnippetsCell/SnippetsCell'
 const CREATE = gql`
   mutation CreateSnippetMutation($input: CreateSnippetInput!) {
@@ -41,6 +42,9 @@ interface Props {
 }
 
 const SnippetForm = ({ authorId, pageId }: Props) => {
+
+  const formRef = useRef<HTMLFormElement>()
+
   const [createSnippet, { loading, error }] = useMutation(CREATE, {
     refetchQueries: [{query: SnippetsQuery}],
     onCompleted: () => {
@@ -50,12 +54,13 @@ const SnippetForm = ({ authorId, pageId }: Props) => {
 
   const onSubmit: SubmitHandler<FormValues> = (input) => {
     createSnippet({ variables: { input: { pageId, authorId, ...input }}})
+    formRef.current.reset()
   }
 
   return (
     <div>
       <h3>Create a Snippet</h3>
-      <Form  onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
+      <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <FormError
           error={error} />
 

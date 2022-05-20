@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack'
 
 export const QUERY = gql`
   query CommentsQuery($snippetId: Int!) {
-    comments(snippetId: $snippetId) {
+    comments(snippetId: $snippetId, input: { orderBy: { createdAt: desc } }) {
       id
       body
       score
@@ -22,22 +22,23 @@ export const QUERY = gql`
 
 export const Loading = () => <div>Loading...</div>
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => <div>No Comments... Such Empty</div>
 
 export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ comments, snippetId }: CellSuccessProps<CommentsQuery>) => {
+export const Success = ({
+  comments,
+  snippetId,
+}: CellSuccessProps<CommentsQuery>) => {
   return (
     <>
       <Stack spacing={5}>
-      {comments.map((comment) => {
-          return <Comment
-            snippetId={snippetId}
-            key={comment.id}
-            comment={comment}
-            />
+        {comments.map((comment) => {
+          return (
+            <Comment snippetId={snippetId} key={comment.id} comment={comment} />
+          )
         })}
       </Stack>
     </>

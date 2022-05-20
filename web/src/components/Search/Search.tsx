@@ -47,12 +47,11 @@ const Search = () => {
           request: { input: string },
         ) => {
 
-          console.log(`executing search: ${request.input}`)
           executeSearch({
             variables: { filter: request.input }
           },)
         },
-        400
+        1000
       ),
     []
   )
@@ -63,12 +62,9 @@ const Search = () => {
       return
     }
 
-    console.log(data)
+    const _options = [...formatUsers(data.users), ...formatPages(data.pages), ...formatTags(data.tags)]
 
-    const options = [...formatUsers(data.users), ...formatPages(data.pages), ...formatTags(data.tags)]
-    console.log(`setting options: ${options}`)
-    setOptions(options)
-
+    setOptions(_options)
   }, [data])
 
   React.useEffect(() => {
@@ -81,6 +77,27 @@ const Search = () => {
     fetch({ input: inputValue })
   }, [inputValue, fetch])
 
+  const onSelect = (event: any, newValue: SearchObject | null) => {
+    console.log(newValue)
+
+    switch(newValue.type) {
+      case 'users' : {
+
+        break;
+      }
+      case 'pages' : {
+
+        break;
+      }
+      break;
+      case 'tags': {
+
+        break;
+      }
+      default:
+
+    }
+  }
 
   return (
       <Autocomplete
@@ -97,16 +114,12 @@ const Search = () => {
         groupBy={(option) => option.type}
         options={options}
         autoComplete
-        // includeInputInList
-        // filterSelectedOptions
 
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);
         }}
 
-        onChange={(event: any, newValue: SearchObject | null) => {
-          console.log(newValue)
-        }}
+        onChange={onSelect}
 
         loading={loading}
 
