@@ -40,7 +40,7 @@ const Downvote = ({ snippetId, vote, entity, commentId}: Props) => {
 
       const { score, cudAction, vote } = downvote
 
-      const { userId, snippetId } = vote
+      const { userId, snippetId, commentId } = vote
 
       const { user } = cache.readQuery({
         query: USER_DATA_QUERY,
@@ -72,7 +72,26 @@ const Downvote = ({ snippetId, vote, entity, commentId}: Props) => {
       }
       // modify comment score
       else {
-        console.log(`modify comments cache baby`)
+        const { snippet } = cache.readQuery({
+          query: COMMENTS_QUERY,
+          variables: {
+            id: snippetId,
+            snippetId,
+          }
+        })
+
+        const newComments = snippet.comments.map(comment => comment.id === commentId ? {...comment, score } : comment)
+        const newSnippet = {...snippet,comments: newComments}
+        cache.writeQuery({
+          query: COMMENTS_QUERY,
+          data: {
+            snippet: newSnippet,
+            variables: {
+              id: snippetId,
+              snippetId,
+            }
+          },
+        });
       }
 
       switch(cudAction) {
