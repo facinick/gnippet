@@ -3,7 +3,6 @@ export const schema = gql`
     id: Int!
     title: String!
     body: String!
-    score: Int!
     authorId: Int!
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -15,6 +14,9 @@ export const schema = gql`
     comments(input: CommentQueryFilterAndPagination): [Comment]!
     votes: [Vote]!
     page: Page
+    # sum of votes
+    score: Int!
+    # number of comments
     activity: Int!
   }
 
@@ -38,7 +40,7 @@ export const schema = gql`
   }
 
   type Query {
-    snippets(input: SnippetQueryFilterAndPagination): [Snippet!]! @skipAuth
+    snippets(input: SnippetQueryFilterAndPagination): [Snippet]! @skipAuth
     snippet(id: Int!): Snippet @skipAuth
   }
 

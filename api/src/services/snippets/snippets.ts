@@ -1,9 +1,12 @@
+import { ServerError } from 'src/error/ServerError';
 import { requireAuth } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 import type {
   QueryResolvers,
   MutationResolvers,
   SnippetResolvers,
+  MutationsaveSnippetArgs,
+  MutationunsaveSnippetArgs,
 } from 'types/graphql'
 
 export const snippets: QueryResolvers['snippets'] = ({ input }) => {
@@ -43,7 +46,7 @@ export const snippet: QueryResolvers['snippet'] = ({ id }) => {
   })
 }
 
-export const createSnippet: MutationResolvers['createSnippet'] = ({
+export const createSnippet: MutationResolvers['createSnippet'] = async ({
   input,
 }) => {
   requireAuth({})
@@ -72,273 +75,16 @@ export const deleteSnippet: MutationResolvers['deleteSnippet'] = ({ id }) => {
   })
 }
 
-export const upvoteSnippet = async ({ id }) => {
+export const saveSnippet = async ({ id }: MutationsaveSnippetArgs) => {
   requireAuth({})
   const userId: number = context.currentUser?.id;
-  const snippetId: number = id;
 
-  const votes = await db.vote.findMany({
-    where: {
-      userId,
-      snippetId,
-      entityType: 'SNIPPET',
-    },
-  });
-
-  const snippet = await db.snippet.findUnique({
-    where: {
-      id
-    },
-  });
-
-  // no such snippet exists, ERROR
-  if(!snippet) {
-    throw new Error("No Such Snippet Exists to Upvote")
-  }
-
-  const hasVoted = votes.find((vote) => vote.snippetId === snippetId);
-  let newVote;
-
-  // vote exists
-  if(hasVoted) {
-
-    // was upvoted
-    // set snippet score = score - 1
-    // delete vote
-    if(hasVoted.type === 'UPVOTE') {
-      newVote = await db.snippet.update({
-        where: {
-          id: snippetId
-        },
-        data: {
-          score: {
-            decrement: 1
-          },
-          votes: {
-            delete: {
-              id: hasVoted.id
-            }
-          }
-        },include: {
-          votes:  {
-            where: {
-              userId,
-              snippetId
-            }
-          }
-        }
-      })
-    }
-
-    // was downvoted
-    // set snippet score = score + 2
-    // change vote type
-    else {
-      newVote = await db.snippet.update({
-        where: {
-          id: snippetId
-        },
-        data: {
-          score: {
-            increment: 2
-          },
-          votes: {
-            update: {
-              where: {
-                id: hasVoted.id
-              },
-              data: {
-                type: 'UPVOTE'
-              }
-            }
-          }
-        },include: {
-          votes:  {
-            where: {
-              userId,
-              snippetId
-            }
-          }
-        }
-      })
-    }
-  }
-
-  // was not voted
-  // set snippet score = score + 1
-  // set vote type and entity type
-  else {
-    newVote = await db.snippet.update({
-      where: {
-        id: snippetId
-      },
-      data: {
-        score: {
-          increment: 1
-        },
-        votes: {
-          // it's snippet id should be set and comment id should be not set
-          create: {
-            type: 'UPVOTE',
-            userId: userId,
-            entityType: 'SNIPPET',
-          }
-        }
-      },include: {
-        votes:  {
-          where: {
-            userId,
-            snippetId
-          }
-        }
-      }
-    })
-  }
-
-  return newVote;
-}
-
-export const downvoteSnippet = async ({ id }) => {
-  requireAuth({})
-  const userId: number = context.currentUser?.id;
-  const snippetId: number = id;
-
-  const votes = await db.vote.findMany({
-    where: {
-      userId,
-      snippetId,
-      entityType: 'SNIPPET',
-    },
-  });
-
-  const snippet = await db.snippet.findUnique({
-    where: {
-      id
-    },
-  });
-
-  // no such snippet exists, ERROR
-  if(!snippet) {
-    throw new Error("No Such Snippet Exists to Upvote")
-  }
-
-  const hasVoted = votes.find((vote) => vote.snippetId === snippetId);
-  let newVote;
-
-  // vote exists
-  if(hasVoted) {
-
-    // was downvoted
-    // set snippet score = score + 1
-    // delete vote
-    if(hasVoted.type === 'DOWNVOTE') {
-      newVote = await db.snippet.update({
-        where: {
-          id: snippetId
-        },
-        data: {
-          score: {
-            increment: 1
-          },
-          votes: {
-            delete: {
-              id: hasVoted.id
-            }
-          }
-        },include: {
-          votes:  {
-            where: {
-              userId,
-              snippetId
-            }
-          }
-        }
-      })
-    }
-
-    // was upvoted
-    // set snippet score = score - 2
-    // change vote type
-    else {
-      newVote = await db.snippet.update({
-        where: {
-          id: snippetId
-        },
-        data: {
-          score: {
-            decrement: 2
-          },
-          votes: {
-            update: {
-              where: {
-                id: hasVoted.id
-              },
-              data: {
-                type: 'DOWNVOTE'
-              }
-            }
-          }
-        },include: {
-          votes:  {
-            where: {
-              userId,
-              snippetId
-            }
-          }
-        }
-      })
-    }
-  }
-
-  // was not voted
-  // set snippet score = score - 1
-  // set vote type and entity type
-  else {
-    newVote = await db.snippet.update({
-      where: {
-        id: snippetId
-      },
-      data: {
-        score: {
-          decrement: 1
-        },
-        votes: {
-          // it's snippet id should be set and comment id should be not set
-          create: {
-            type: 'DOWNVOTE',
-            userId: userId,
-            entityType: 'SNIPPET',
-          }
-        }
-      },
-      include: {
-        votes:  {
-          where: {
-            userId,
-            snippetId,
-            entityType: 'SNIPPET',
-          }
-        }
-      }
-    })
-  }
-
-  return newVote;
-}
-
-export const saveSnippet = async ({ id }) => {
-  requireAuth({})
-  const userId: number = context.currentUser?.id;
-  const snippetId: number = id;
-
-  const snippetToSave = await db.snippet.findUnique({
-    where: {
-      id: snippetId
-    }
-  })
+  const snippetToSave = await snippet({ id })
 
   if(!snippetToSave) {
-    throw new Error("Can't save snippet that doesn't exist")
+    throw new ServerError({
+      message: "Can't save snippet that doesn't exist"
+    })
   }
 
   await db.user.update({
@@ -348,7 +94,7 @@ export const saveSnippet = async ({ id }) => {
     data: {
       savedSnippets: {
         connect: {
-          id: snippetId
+          id
         }
       }
     }
@@ -357,19 +103,16 @@ export const saveSnippet = async ({ id }) => {
   return snippetToSave;
 }
 
-export const unsaveSnippet = async ({ id }) => {
+export const unsaveSnippet = async ({ id }: MutationunsaveSnippetArgs) => {
   requireAuth({})
   const userId: number = context.currentUser?.id;
-  const snippetId: number = id;
 
-  const snippetToSave = await db.snippet.findUnique({
-    where: {
-      id: snippetId
-    }
-  })
+  const snippetToUnSave = await snippet({ id })
 
-  if(!snippetToSave) {
-    throw new Error("Can't un save snippet that doesn't exist")
+  if(!snippetToUnSave) {
+    throw new ServerError({
+      message: "Can't Unsave snippet that doesn't exist"
+    })
   }
 
   await db.user.update({
@@ -379,13 +122,21 @@ export const unsaveSnippet = async ({ id }) => {
     data: {
       savedSnippets: {
         disconnect: {
-          id: snippetId
+          id
         }
       }
     }
   });
 
-  return snippetToSave;
+  return snippetToUnSave;
+}
+
+export const incrementScore = async ({ id, value }) => {
+  return db.snippet.update({ where: { id }, data: { score: { increment: value }}})
+}
+
+export const decrementScore = async ({ id, value }) => {
+  return db.snippet.update({ where: { id }, data: { score: { decrement: value }}})
 }
 
 export const Snippet: SnippetResolvers = {

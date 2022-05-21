@@ -42,7 +42,7 @@ export const schema = gql`
 
   type Query {
     # comments(input: CommentQueryFilterAndPagination): [Comment!]! @skipAuth
-    comments(snippetId: Int!, input: CommentQueryFilterAndPagination): [Comment!]! @skipAuth
+    comments(input: CommentQueryFilterAndPagination): [Comment!]! @skipAuth
     comment(id: Int!): Comment @skipAuth
   }
 

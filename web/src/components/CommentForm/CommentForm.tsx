@@ -46,15 +46,30 @@ const CommentForm = ({ authorId, snippetId, parentCommentId }: Props) => {
     onCompleted: () => {
       toast.success('Comment Created!')
     },
-    refetchQueries: [
-      {
+    update(cache, { data: { createComment } }) {
+
+      const { snippet } = cache.readQuery({
         query: COMMENTS_QUERY,
         variables: {
           id: snippetId,
           snippetId,
         }
-      }
-    ]
+      })
+
+      const newComments = [createComment].concat(snippet.comments)
+      const newSnippet = {...snippet,comments: newComments}
+
+      cache.writeQuery({
+        query: COMMENTS_QUERY,
+        data: {
+          snippet: newSnippet,
+          variables: {
+            id: snippetId,
+            snippetId,
+          }
+        },
+      });
+    },
   })
 
   const onSubmit: SubmitHandler<FormValues> = (input) => {

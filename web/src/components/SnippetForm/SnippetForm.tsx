@@ -46,9 +46,23 @@ const SnippetForm = ({ authorId, pageId }: Props) => {
   const formRef = useRef<HTMLFormElement>()
 
   const [createSnippet, { loading, error }] = useMutation(CREATE, {
-    refetchQueries: [{query: SnippetsQuery}],
     onCompleted: () => {
       toast.success('Snippet Created!')
+    },
+    update(cache, { data: { createSnippet } }) {
+
+      const { snippets } = cache.readQuery({
+        query: SnippetsQuery,
+      })
+
+      let newSnippets = [createSnippet].concat(snippets)
+
+      cache.writeQuery({
+        query: SnippetsQuery,
+        data: {
+          snippets: newSnippets
+        },
+      });
     },
   })
 

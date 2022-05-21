@@ -1,8 +1,7 @@
-import { MetaTags, useQuery } from '@redwoodjs/web'
+import { MetaTags } from '@redwoodjs/web'
 import SnippetsCell from 'src/components/SnippetsCell'
 import { useAuth } from '@redwoodjs/auth'
 import SnippetForm from 'src/components/SnippetForm/SnippetForm'
-import { gql } from '@apollo/client'
 import Container from '@mui/material/Container'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -15,6 +14,7 @@ const HomePage = () => {
       <MetaTags title="Home" description="Home page" />
       <Container maxWidth="sm">
         <Stack spacing={5}>
+          {/****** Create a Post ******/}
           {isAuthenticated &&
             <Card variant="outlined">
               <CardContent>
@@ -22,8 +22,12 @@ const HomePage = () => {
               </CardContent>
             </Card>
           }
-        <SnippetsCell />
+          {/******** All Posts ********/}
+          <SnippetsCell />
         </Stack>
+
+        {/******** Trending Posts ********/}
+        {/******** Trending Comments ********/}
       </Container>
     </>
   )

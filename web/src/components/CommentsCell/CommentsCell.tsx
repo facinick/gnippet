@@ -1,21 +1,25 @@
-import type { CommentsQuery } from 'types/graphql'
+import type { FindSnippetQuery } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import Comment from 'src/components/Comment'
 import Stack from '@mui/material/Stack'
+import { useApolloClient } from '@apollo/client'
+import { USER_DATA_QUERY } from "src/pages/Queries/queries";
+import { useAuth } from '@redwoodjs/auth';
+import { _SnippetWithComments } from 'src/gql_objects/gqlObjects'
 
 export const QUERY = gql`
-  query CommentsQuery($snippetId: Int!) {
-    comments(snippetId: $snippetId, input: { orderBy: { createdAt: desc } }) {
+  query SnippetsCommentsQuery($snippetId: Int!) {
+    snippet(id: $snippetId) {
       id
-      body
-      score
-      activity
-      authorId
-      author {
-        username
+      comments(input: { orderBy: { createdAt: desc }} ) {
+        id
+        body
+        score
+        author {
+          username
+        }
+        createdAt
       }
-      createdAt
-      parentCommentId
     }
   }
 `
@@ -29,13 +33,13 @@ export const Failure = ({ error }: CellFailureProps) => (
 )
 
 export const Success = ({
-  comments,
+  snippet,
   snippetId,
-}: CellSuccessProps<CommentsQuery>) => {
+}: { snippet: _SnippetWithComments, snippetId: number }) => {
   return (
     <>
       <Stack spacing={5}>
-        {comments.map((comment) => {
+        {snippet.comments.map((comment) => {
           return (
             <Comment snippetId={snippetId} key={comment.id} comment={comment} />
           )

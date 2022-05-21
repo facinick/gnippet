@@ -9,17 +9,14 @@ import type {
 
 // no auth restriction
 // no access restriction
-export const comments: QueryResolvers['comments'] = ({ snippetId, input }) => {
+export const comments: QueryResolvers['comments'] = ({ input }) => {
   const where = input?.filter
     ? {
       OR: [
         { body: { contains: input?.filter } },
       ],
-      snippetId
     }
-    : {
-      snippetId
-    }
+    : {}
   return db.comment.findMany({ where, skip: input?.skip, take: input?.take, orderBy: input?.orderBy, })
 }
 
@@ -56,6 +53,14 @@ export const updateComment: MutationResolvers['updateComment'] = async ({
   })
 }
 
+export const incrementScore = async ({ id, value }) => {
+  return db.comment.update({ where: { id }, data: { score: { increment: value }}})
+}
+
+export const decrementScore = async ({ id, value }) => {
+  return db.comment.update({ where: { id }, data: { score: { decrement: value }}})
+}
+
 // auth restriction
 // access restriction: commentOwner
 export const deleteComment: MutationResolvers['deleteComment'] = async ({ id }) => {
@@ -66,231 +71,9 @@ export const deleteComment: MutationResolvers['deleteComment'] = async ({ id }) 
   })
 }
 
-// auth restriction
-// no access restriction
-export const upvoteComment = async ({ id , input}) => {
-  requireAuth({})
-  const userId: number = context.currentUser?.id;
-  const commentId: number = id;
-  const { snippetId } = input
-
-  const votes = await db.vote.findMany({
-    where: {
-      userId,
-      commentId,
-      entityType: 'COMMENT',
-      snippetId
-    },
-  });
-
-  console.log(`upvoting comment...`)
-
-  const commentToVote = await db.comment.findUnique({
-    where: {
-      id
-    },
-  });
-
-  // no such comment exists, ERROR
-  if(!commentToVote) {
-    throw new Error(`No Such Comment Exists to Upvote: ${id} of ${input.snippetId}`)
-  }
-
-  const hasVoted = votes.find((vote) => vote.commentId === commentId);
-  let newVote;
-
-  // vote exists
-  if(hasVoted) {
-
-    // was upvoted
-    // set comment score = score - 1
-    // delete vote
-    if(hasVoted.type === 'UPVOTE') {
-      newVote = await db.comment.update({
-        where: {
-          id: commentId
-        },
-        data: {
-          score: {
-            decrement: 1
-          },
-          votes: {
-            delete: {
-              id: hasVoted.id
-            }
-          }
-        },
-      })
-    }
-
-    // was downvoted
-    // set comment score = score + 2
-    // change vote type
-    else {
-      newVote = await db.comment.update({
-        where: {
-          id: commentId
-        },
-        data: {
-          score: {
-            increment: 2
-          },
-          votes: {
-            update: {
-              where: {
-                id: hasVoted.id
-              },
-              data: {
-                type: 'UPVOTE'
-              }
-            }
-          }
-        },
-      })
-    }
-  }
-
-  // was not voted
-  // set comment score = score + 1
-  // set vote type and entity type
-  else {
-    newVote = await db.comment.update({
-      where: {
-        id: commentId
-      },
-      data: {
-        score: {
-          increment: 1
-        },
-        votes: {
-          // it's comment id should be set and comment id should be not set
-          create: {
-            type: 'UPVOTE',
-            userId: userId,
-            entityType: 'COMMENT',
-            snippetId
-          }
-        }
-      },
-    })
-  }
-
-  return newVote
-}
-
-// auth restriction
-// no access restriction
-export const downvoteComment = async ({ id, input }) => {
-  requireAuth({})
-  const userId: number = context.currentUser?.id;
-  const commentId: number = id;
-  const { snippetId } = input
-
-  const votes = await db.vote.findMany({
-    where: {
-      userId,
-      commentId,
-      entityType: 'COMMENT',
-      snippetId
-    },
-  });
-
-  const commentToVote = await db.comment.findUnique({
-    where: {
-      id
-    },
-  });
-
-  // no such comment exists, ERROR
-  if(!commentToVote) {
-    throw new Error("No Such Comment Exists to Upvote")
-  }
-
-  const hasVoted = votes.find((vote) => vote.commentId === commentId);
-  let newVote;
-
-  // vote exists
-  if(hasVoted) {
-
-    // was downvoted
-    // set comment score = score + 1
-    // delete vote
-    if(hasVoted.type === 'DOWNVOTE') {
-      newVote = await db.comment.update({
-        where: {
-          id: commentId
-        },
-        data: {
-          score: {
-            increment: 1
-          },
-          votes: {
-            delete: {
-              id: hasVoted.id
-            }
-          }
-        },
-      })
-    }
-
-    // was upvoted
-    // set comment score = score - 2
-    // change vote type
-    else {
-      newVote = await db.comment.update({
-        where: {
-          id: commentId
-        },
-        data: {
-          score: {
-            decrement: 2
-          },
-          votes: {
-            update: {
-              where: {
-                id: hasVoted.id
-              },
-              data: {
-                type: 'DOWNVOTE'
-              }
-            }
-          }
-        },
-      })
-    }
-  }
-
-  // was not voted
-  // set comment score = score - 1
-  // set vote type and entity type
-  else {
-    newVote = await db.comment.update({
-      where: {
-        id: commentId
-      },
-      data: {
-        score: {
-          decrement: 1
-        },
-        votes: {
-          // it's comment id should be set and comment id should be not set
-          create: {
-            type: 'DOWNVOTE',
-            userId: userId,
-            entityType: 'COMMENT',
-            snippetId
-          }
-        }
-      },
-    })
-  }
-
-  return newVote
-}
-
 export const Comment: CommentResolvers = {
 
-   // no auth restriction
+  // no auth restriction
   // no access restriction
   activity: async (_obj, { root }) =>
     db.comment.count({ where: { parentCommentId: root.id }}),

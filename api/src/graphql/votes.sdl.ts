@@ -1,7 +1,7 @@
 export const schema = gql`
   type Vote {
     id: Int!
-    type: VoteType!
+    value: Int!
     entityType: EntityType!
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -13,26 +13,57 @@ export const schema = gql`
     comment: Comment
   }
 
-  enum VoteType {
-    UPVOTE
-    DOWNVOTE
+  type Query {
+    votes: [Vote]! @requireAuth
+    vote(id: Int!): Vote @requireAuth
   }
+
   enum EntityType {
     COMMENT
     SNIPPET
   }
 
-  type Query {
-    vote(id: Int!): Vote @requireAuth
+  enum CUDAction {
+    CREATED
+    DELETED
+    UPDATED
   }
 
   input VotingInput {
     snippetId: Int
+    commentId: Int
     entityType: EntityType!
   }
 
+  input CreateVoteInput {
+    value: Int!
+    entityType: EntityType!
+    userId: Int!
+    snippetId: Int
+    commentId: Int
+  }
+
+  input UpdateVoteInput {
+    value: Int
+    entityType: EntityType
+    userId: Int
+    snippetId: Int
+    commentId: Int
+  }
+
+  union Entity = Comment | Snippet
+
+  type VoteResponse {
+    vote: Vote!
+    cudAction: CUDAction!
+    score: Int!
+  }
+
   type Mutation {
-    upvote(id: Int!, input: VotingInput): Vote! @requireAuth
-    downvote(id: Int!, input: VotingInput): Vote! @requireAuth
+    createVote(input: CreateVoteInput): Vote! @requireAuth
+    deleteVote(id: Int): Vote! @requireAuth
+    updateVote(id: Int, input: UpdateVoteInput): Vote! @requireAuth
+    upvote(input: VotingInput): VoteResponse! @requireAuth
+    downvote(input: VotingInput): VoteResponse! @requireAuth
   }
 `

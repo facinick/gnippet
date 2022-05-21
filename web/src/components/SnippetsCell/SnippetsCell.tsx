@@ -32,15 +32,15 @@ export const Success = ({ snippets}: CellSuccessProps<SnippetsQuery> ) => {
 
   return (
     <>
-    <Stack spacing={5}>
-      {snippets.map(snippet =>
-        <Snippet
-          showActivity={true}
-          key={snippet.id}
-          snippet={snippet}
-          truncate={true}
-        />)
-      }
+      <Stack spacing={5}>
+        {snippets.map(snippet =>
+          <Snippet
+            showActivity={true}
+            key={snippet.id}
+            snippet={snippet}
+            truncate={true}
+          />)
+        }
       </Stack>
     </>
   )

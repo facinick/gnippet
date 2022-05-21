@@ -17,13 +17,8 @@ type Props = {
 const Comment = ({ comment, snippetId }: Props) => {
 
   const { id, score, activity, author, body, createdAt } = comment
-
-  const [vote, setVote] = useState<0|1|-1>(0)
-
   const { isAuthenticated, currentUser } = useAuth()
-
-  const allowVoting = isAuthenticated && currentUser?.id
-
+  const [vote, setVote] = useState<0 | 1 | -1>(0)
   const client = useApolloClient();
 
   const data = client.readQuery({
@@ -36,28 +31,21 @@ const Comment = ({ comment, snippetId }: Props) => {
   });
 
   useEffect(() => {
-
-    if(!data) {
+    if(!data?.user) {
       return
     }
 
-    const votes: Array<_Vote> = data.user.votes
-    const matchedVotes = votes.filter((vote) => vote.snippetId === snippetId && vote.userId === currentUser?.id && vote.commentId === id)
+    const vote = data.user.votes.find(
+      (vote) => vote.snippetId === snippetId && vote.entityType === 'COMMENT' && vote.commentId === id
+    )
 
-    console.log(votes)
-
-    if(matchedVotes.length === 1) {
-      setVote(matchedVotes[0].type === 'UPVOTE' ? 1 : matchedVotes[0].type === 'DOWNVOTE' ? -1 : 0)
-    } else {
-      setVote(0)
-    }
-
+    setVote(vote ? vote.value as 1 | -1 | 0 : 0)
   }, [data])
 
   return (
       <article key={id}>
         <p>{body} - {<CreatedAt createdAt={createdAt} />} by {<Username username={author.username} />}</p>
-        { allowVoting && <Voting commentId={id} entity={'COMMENT'} snippetId={snippetId} votes={score} vote={vote} /> }
+        { isAuthenticated && <Voting commentId={id} entity={'COMMENT'} snippetId={snippetId} votes={score} vote={vote} /> }
         <span>{activity} replies</span>
       </article>)
 }

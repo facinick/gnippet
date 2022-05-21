@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Comment" ADD COLUMN     "score" INTEGER NOT NULL DEFAULT 0;

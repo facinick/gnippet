@@ -2,15 +2,24 @@ import IconButton from '@mui/material/IconButton';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { useAuth } from '@redwoodjs/auth';
 import { USER_DATA_QUERY } from 'src/pages/Queries/queries';
 import { QUERY as SNIPPET_QUERY } from 'src/components/SnippetCell'
 import { QUERY as COMMENTS_QUERY } from 'src/components/CommentsCell'
+import { EntityType } from 'types/graphql';
 
 const UPVOTE = gql`
-  mutation upvoteMutation($id: Int!, $input: VotingInput) {
-    upvote(id: $id, input: $input) {
-      id
+  mutation upvoteMutation($input: VotingInput) {
+    upvote(input: $input) {
+      vote {
+        id
+        value
+        entityType
+        userId
+        commentId
+        snippetId
+      }
+      cudAction
+      score
     }
   }
 `
@@ -18,46 +27,100 @@ const UPVOTE = gql`
 interface Props {
   snippetId: number
   vote: -1 | 1 | 0
-  entity: 'COMMENT' | 'SNIPPET'
+  entity: EntityType
   commentId?: number
 }
 
 const Upvote = ({ snippetId, vote, entity, commentId}: Props) => {
 
-  const { currentUser } = useAuth()
-
   const [upvote, { loading }] = useMutation(UPVOTE, {
-    onCompleted: (data) => {
-      toast.success(':)')
-    },
-    refetchQueries: [
-      {
+    update(cache, { data: { upvote } }) {
+
+      const { score, cudAction, vote } = upvote
+
+      const { userId, snippetId } = vote
+
+      const { user } = cache.readQuery({
         query: USER_DATA_QUERY,
         variables: {
-          id: currentUser.id,
+          id: userId,
+          votes: true,
+          snippets: false,
+      }})
+
+      let votes = user.votes
+
+      //modify snippet score
+      if(vote.entityType === 'SNIPPET') {
+
+        // const { snippet } = cache.readQuery({
+        //   query: SNIPPET_QUERY,
+        //   variables: {
+        //     id: snippetId,
+        // }})
+
+        // const newSnippet = { ...snippet, score}
+
+        // cache.writeQuery({
+        //   query: SNIPPET_QUERY,
+        //   data: {
+        //     snippet: newSnippet
+        //   }
+        // });
+      }
+      // modify comment score
+      else {
+        console.log(`modify comments cache baby`)
+      }
+
+      switch(cudAction) {
+        case 'CREATED':
+        // new vote was created... add this to my votes
+        votes = [...votes, vote]
+        break;
+
+        case 'DELETED':
+        // remove this vote, find by id
+        votes = votes.filter((_vote) => _vote.id != vote.id );
+        break;
+
+        case 'UPDATED':
+        // modify this vote's value, newValue = vote.value
+        votes = votes.map((_vote) => _vote.id === vote.id ? {..._vote, value: vote.value} : _vote );
+        break;
+
+        default:
+          throw new Error(`Unexpected value for cudAction: ${cudAction}`)
+      }
+
+      const newUserData = {...user, votes}
+      console.log(votes)
+
+      cache.writeQuery({
+        query: USER_DATA_QUERY,
+        data: {
+          user: newUserData
+        },
+        variables: {
           votes: true,
           snippets: false
         }
-      },
-      {
-        query: entity === 'COMMENT' ? COMMENTS_QUERY : SNIPPET_QUERY,
-        variables: {
-          id: entity === 'COMMENT' ? commentId : snippetId,
-          snippetId: snippetId,
-        }
-      }
-    ]
+      });
+    },
+    onCompleted: (data) => {
+      toast.success('upvoted')
+    },
   })
 
   const onClick = () => {
     upvote({
       variables: {
-        id: entity === 'COMMENT' ? commentId : snippetId,
         input: {
-          entityType: entity.toUpperCase(),
+          entityType: entity,
           snippetId: snippetId,
+          commentId: commentId,
         }
-      }
+      },
     })
   }
 

@@ -10,7 +10,7 @@ export type _Comment = Pick<Comment, 'id' | 'body' | 'createdAt' | 'score' | 'pa
 
 export type _Snippet = Pick<Snippet, 'id' | 'title' | 'body' | 'createdAt' | 'score' | 'activity'> & _Author
 
-export type _Vote = Pick<Vote, 'id' | 'userId' | 'snippetId' | 'commentId' | 'type'>
+export type _Vote = Pick<Vote, 'id' | 'userId' | 'snippetId' | 'commentId' | 'value' | 'entityType'>
 
 export type _Votes = {
   votes: Array<_Vote>
