@@ -1,5 +1,5 @@
 import { Router } from '@mui/icons-material';
-import LoginIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
 import IconButton from '@mui/material/IconButton';
 import { navigate, routes } from '@redwoodjs/router'
 

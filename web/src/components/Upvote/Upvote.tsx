@@ -52,21 +52,17 @@ const Upvote = ({ snippetId, vote, entity, commentId}: Props) => {
 
       //modify snippet score
       if(vote.entityType === 'SNIPPET') {
-
-        // const { snippet } = cache.readQuery({
-        //   query: SNIPPET_QUERY,
-        //   variables: {
-        //     id: snippetId,
-        // }})
-
-        // const newSnippet = { ...snippet, score}
-
-        // cache.writeQuery({
-        //   query: SNIPPET_QUERY,
-        //   data: {
-        //     snippet: newSnippet
-        //   }
-        // });
+        const snippetToModify = cache.writeFragment({
+          id: `Snippet:${snippetId}`, // The value of the to-do item's cache ID
+          fragment: gql`
+            fragment SnippetToUpdate on Snippet {
+              score
+            },
+          `,
+          data: {
+            score
+          }
+        })
       }
       // modify comment score
       else {
@@ -77,9 +73,6 @@ const Upvote = ({ snippetId, vote, entity, commentId}: Props) => {
             snippetId,
           }
         })
-
-        console.log(`comment in question: ${commentId}`)
-
 
         const newComments = snippet.comments.map(comment => comment.id === commentId ? {...comment, score } : comment)
         const newSnippet = {...snippet, comments: newComments}
