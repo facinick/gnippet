@@ -72,8 +72,8 @@ const SnippetForm = ({ authorId, pageId }: Props) => {
   }
 
   return (
-    <div>
-      <h3>Create a Snippet</h3>
+    <div >
+      <h3 style={{marginTop: 0}}>Create a Snippet</h3>
       <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <FormError
           error={error} />

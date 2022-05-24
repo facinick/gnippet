@@ -8,6 +8,7 @@ import SnippetCell from 'src/components/SnippetCell'
 import CommentsCell from 'src/components/CommentsCell'
 import CommentForm from 'src/components/CommentForm/CommentForm'
 import { useAuth } from '@redwoodjs/auth'
+import Typography from '@mui/material/Typography'
 interface Props {
   id: number
 }
@@ -24,6 +25,7 @@ const SnippetPage = ({ id }: Props) => {
         <Stack spacing={5}>
           <SnippetCell id={id}></SnippetCell>
           { isAuthenticated && <CommentForm snippetId={id} authorId={currentUser.id} /> }
+          <Typography variant="subtitle1"> ~ comments ~ </Typography>
           <CommentsCell snippetId={id} />
         </Stack>
       </Container>

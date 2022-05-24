@@ -48,6 +48,7 @@ const Downvote = ({ snippetId, vote, entity, commentId}: Props) => {
           id: userId,
           votes: true,
           snippets: false,
+          comments: false,
       }})
 
       let votes = user.votes
@@ -111,7 +112,6 @@ const Downvote = ({ snippetId, vote, entity, commentId}: Props) => {
       }
 
       const newUserData = {...user, votes}
-      console.log(votes)
 
       cache.writeQuery({
         query: USER_DATA_QUERY,
@@ -120,13 +120,18 @@ const Downvote = ({ snippetId, vote, entity, commentId}: Props) => {
         },
         variables: {
           votes: true,
-          snippets: false
+          snippets: false,
+          comments: false,
         }
       });
     },
 
-    onCompleted: (data) => {
-      toast.success('downvoted')
+    onCompleted: ({downvote}) => {
+      if(downvote.cudAction === 'CREATED' || downvote.cudAction === 'UPDATED') {
+        toast.success('😠')
+      } else {
+        toast.success('🙂')
+      }
     },
   })
 

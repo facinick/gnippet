@@ -8,14 +8,17 @@ import CreatedAt from '../CreatedAt/CreatedAt'
 import Username from '../Username/Username'
 import Voting from '../Voting/Voting'
 import { useApolloClient } from '@apollo/client'
+import BackButton from '../BackButton/BackButton'
+import Stack from '@mui/material/Stack'
 
 type Props = {
   snippet: _Snippet
   truncate: boolean
   showActivity: boolean
+  showBackButton: boolean
 }
 
-const ControlledSnippet = ({ showActivity, snippet, truncate }: Props) => {
+const ControlledSnippet = ({ showBackButton, showActivity, snippet, truncate }: Props) => {
   const { id, title, score, activity, author, body, createdAt } = snippet
   const { isAuthenticated, currentUser } = useAuth()
   const [vote, setVote] = useState<0 | 1 | -1>(0)
@@ -26,7 +29,8 @@ const ControlledSnippet = ({ showActivity, snippet, truncate }: Props) => {
     variables: {
       id: currentUser?.id,
       snippets: false,
-      votes: true
+      votes: true,
+      comments: false,
     },
   });
 
@@ -45,14 +49,17 @@ const ControlledSnippet = ({ showActivity, snippet, truncate }: Props) => {
   return (
     <article key={id}>
       <header>
-        <Link to={routes.snippet({ id: id })}>{title}</Link>
+        <Stack alignItems={'center'} spacing={1} direction={'row'}>
+          { showBackButton && <BackButton /> }
+          <Link to={routes.snippet({ id: id })}>{title}</Link>
+        </Stack>
       </header>
       {truncate && (
         <p>
           {returnTruncatedText(body, 150)}
-          <Link to={routes.snippet({ id: id })}>[read_more]</Link> -
-          {<CreatedAt createdAt={createdAt} />} by
-          {<Username username={author.username} />}
+          <Link to={routes.snippet({ id: id })}>[read-more]</Link> -
+          <i> {<CreatedAt createdAt={createdAt} />} by <span>{' '}</span>
+          {<Username username={author.username} />}</i>
         </p>
       )}
       {!truncate && (
@@ -65,9 +72,9 @@ const ControlledSnippet = ({ showActivity, snippet, truncate }: Props) => {
         <Voting entity={'SNIPPET'} snippetId={id} votes={score} vote={vote} />
       )}
       {showActivity && (
-        <span>
+        <p style={{marginBottom: 0}}>
           {activity} {activity === 1 ? 'comment' : 'comments'}
-        </span>
+        </p>
       )}
     </article>
   )

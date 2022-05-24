@@ -46,6 +46,7 @@ const Upvote = ({ snippetId, vote, entity, commentId}: Props) => {
           id: userId,
           votes: true,
           snippets: false,
+          comments: false,
       }})
 
       let votes = user.votes
@@ -76,9 +77,6 @@ const Upvote = ({ snippetId, vote, entity, commentId}: Props) => {
 
         const newComments = snippet.comments.map(comment => comment.id === commentId ? {...comment, score } : comment)
         const newSnippet = {...snippet, comments: newComments}
-        console.log(snippet.comments)
-        console.log(newComments)
-        console.log(score)
         cache.writeQuery({
           query: COMMENTS_QUERY,
           data: {
@@ -112,7 +110,6 @@ const Upvote = ({ snippetId, vote, entity, commentId}: Props) => {
       }
 
       const newUserData = {...user, votes}
-      console.log(votes)
 
       cache.writeQuery({
         query: USER_DATA_QUERY,
@@ -121,12 +118,17 @@ const Upvote = ({ snippetId, vote, entity, commentId}: Props) => {
         },
         variables: {
           votes: true,
-          snippets: false
+          snippets: false,
+          comments: false,
         }
       });
     },
-    onCompleted: (data) => {
-      toast.success('upvoted')
+    onCompleted: ({ upvote }) => {
+      if(upvote.cudAction === 'CREATED' || upvote.cudAction === 'UPDATED') {
+        toast.success('🙂')
+      } else {
+        toast.success('😠')
+      }
     },
   })
 

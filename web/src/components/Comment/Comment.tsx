@@ -26,7 +26,8 @@ const Comment = ({ comment, snippetId }: Props) => {
     variables: {
       id: currentUser?.id,
       snippets: false,
-      votes: true
+      votes: true,
+      comments: false,
     },
   });
 
@@ -46,7 +47,7 @@ const Comment = ({ comment, snippetId }: Props) => {
       <article key={id}>
         <p>{body} - {<CreatedAt createdAt={createdAt} />} by {<Username username={author.username} />}</p>
         { isAuthenticated && <Voting commentId={id} entity={'COMMENT'} snippetId={snippetId} votes={score} vote={vote} /> }
-        <span>{activity} replies</span>
+        {/* <span>{activity} replies</span> */}
       </article>)
 }
 

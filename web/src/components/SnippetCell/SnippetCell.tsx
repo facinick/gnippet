@@ -35,7 +35,7 @@ export const Success = ({
 
   return (
     <>
-       <Snippet showActivity={false} truncate={false} key={snippet.id} snippet={snippet} />
+       <Snippet showBackButton={true} showActivity={false} truncate={false} key={snippet.id} snippet={snippet} />
     </>
   )
 }

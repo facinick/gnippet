@@ -26,6 +26,7 @@ const Routes = () => {
         id: currentUser?.id,
         votes: true,
         snippets: true,
+        comments: true,
       }
     },
   );

@@ -20,9 +20,9 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
             <div>
               <HomeButton />
             </div>
-            <div>
+            {/* <div>
               <ThemeSwitch />
-            </div>
+            </div> */}
           </Stack>
         </header>
         <main>
