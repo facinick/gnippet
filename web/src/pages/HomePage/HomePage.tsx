@@ -7,7 +7,7 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Stack from '@mui/material/Stack'
 
-const HomePage = () => {
+const HomePage = ({ page }: { page: number }) => {
   const { isAuthenticated, currentUser } = useAuth()
   return (
     <>
@@ -15,15 +15,15 @@ const HomePage = () => {
       <Container maxWidth="sm">
         <Stack spacing={5}>
           {/****** Create a Post ******/}
-          {isAuthenticated &&
+          {isAuthenticated && (
             <Card variant="outlined">
               <CardContent>
                 <SnippetForm authorId={currentUser?.id} />
               </CardContent>
             </Card>
-          }
+          )}
           {/******** All Posts ********/}
-          <SnippetsCell />
+          <SnippetsCell page={page ? page : 0} skip={page ? page * 5 : 0} take={5} />
         </Stack>
 
         {/******** Trending Posts ********/}

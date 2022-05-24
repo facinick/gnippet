@@ -54,6 +54,7 @@ const Routes = () => {
 
         <Set wrap={HomeLayout}>
           <Route path="/" page={HomePage} name="home" />
+          <Route path="/new/{page:Int}" page={HomePage} name="home" />
           <Route path="/s/{id:Int}" page={SnippetPage} name="snippet" />
           <Route path="/u/{username:String}" page={UserPage} name="user" />
         </Set>

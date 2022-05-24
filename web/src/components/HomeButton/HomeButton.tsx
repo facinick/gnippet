@@ -6,7 +6,7 @@ import { navigate, routes } from '@redwoodjs/router'
 const HomeButton = () => {
 
   const onCLick = () => {
-    navigate(routes.home())
+    navigate(routes.home({page: 0}))
   }
 
   return (

@@ -39,8 +39,13 @@ export const schema = gql`
     orderBy: SnippetOrderByInput
   }
 
+  type AllSnippetsResponse {
+    data: [Snippet]!
+    count: Int!
+  }
+
   type Query {
-    snippets(input: SnippetQueryFilterAndPagination): [Snippet]! @skipAuth
+    snippets(input: SnippetQueryFilterAndPagination): AllSnippetsResponse @skipAuth
     snippet(id: Int!): Snippet @skipAuth
   }
 

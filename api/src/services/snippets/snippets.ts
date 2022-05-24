@@ -9,7 +9,7 @@ import type {
   MutationunsaveSnippetArgs,
 } from 'types/graphql'
 
-export const snippets: QueryResolvers['snippets'] = ({ input }) => {
+export const snippets: QueryResolvers['snippets'] = async ({ input }) => {
 
   let orderByActivity: false | string = false;
 
@@ -36,8 +36,14 @@ export const snippets: QueryResolvers['snippets'] = ({ input }) => {
       ],
     }
     : {}
+
+  const count = await db.snippet.count()
   //@ts-ignore
-  return db.snippet.findMany({ where, skip: input?.skip, take: input?.take, orderBy})
+  const data = await db.snippet.findMany({ where, skip: input?.skip, take: input?.take, orderBy})
+  return {
+    count,
+    data
+  }
 }
 
 export const snippet: QueryResolvers['snippet'] = ({ id }) => {
