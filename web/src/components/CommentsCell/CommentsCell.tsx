@@ -7,6 +7,7 @@ import { USER_DATA_QUERY } from "src/pages/Queries/queries";
 import { useAuth } from '@redwoodjs/auth';
 import { _SnippetWithComments } from 'src/gql_objects/gqlObjects'
 import Divider from '@mui/material/Divider'
+import Typography from '@mui/material/Typography'
 
 export const QUERY = gql`
   query SnippetsCommentsQuery($snippetId: Int!) {
@@ -38,15 +39,18 @@ export const Success = ({
   snippetId,
 }: { snippet: _SnippetWithComments, snippetId: number }) => {
 
-  const numberOfSnippets = snippet.comments.length
+  const numberOfComments = snippet.comments.length
   let isLastComment: boolean = false
   let renderDivider: boolean = false
-
+  const noComments: boolean = numberOfComments === 0
+  const yesComments: boolean = !noComments
   return (
     <>
+      {yesComments && <Typography variant="subtitle1"> ~ comments ~ </Typography>}
+      {noComments && <Typography variant="subtitle1"> ~ no comments ~ </Typography>}
       <Stack spacing={5}>
         {snippet.comments.map((comment, index) => {
-          isLastComment = (index === numberOfSnippets - 1) ? true : false
+          isLastComment = (index === numberOfComments - 1) ? true : false
           renderDivider = !isLastComment
           return (
             <>

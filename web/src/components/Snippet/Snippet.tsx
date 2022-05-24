@@ -58,13 +58,13 @@ const ControlledSnippet = ({ showBackButton, showActivity, snippet, truncate }: 
         <p>
           {returnTruncatedText(body, 150)}
           <Link to={routes.snippet({ id: id })}>[read-more]</Link> -
-          <i> {<CreatedAt createdAt={createdAt} />} by <span>{' '}</span>
+          <i className="created-at"> {<CreatedAt createdAt={createdAt} />} by <span>{' '}</span>
           {<Username username={author.username} />}</i>
         </p>
       )}
       {!truncate && (
         <p>
-          {body} - {<CreatedAt createdAt={createdAt} />} by{' '}
+          {body} - <i className="created-at"> {<CreatedAt createdAt={createdAt} />} by{' '} </i>
           {<Username username={author.username} />}
         </p>
       )}

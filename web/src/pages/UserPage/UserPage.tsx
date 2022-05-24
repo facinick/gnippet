@@ -15,9 +15,7 @@ const UserPage = ({ username }: Props) => {
 
       <h1>@{username}</h1>
       <Avatar alt={`${username} picture`} src={`https://avatars.dicebear.com/api/bottts/${username}.svg`} />
-      <div>
-        {/* <UserCell username={username}></UserCell> */}
-      </div>
+      <div> User page is under Dev, ciao </div>
     </>
   )
 }

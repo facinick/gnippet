@@ -45,7 +45,7 @@ const Comment = ({ comment, snippetId }: Props) => {
 
   return (
       <article key={id}>
-        <p>{body} - {<CreatedAt createdAt={createdAt} />} by {<Username username={author.username} />}</p>
+        <p>{body} - <i className="created-at"> {<CreatedAt createdAt={createdAt} />} by {<Username username={author.username} />}</i> </p>
         { isAuthenticated && <Voting commentId={id} entity={'COMMENT'} snippetId={snippetId} votes={score} vote={vote} /> }
         {/* <span>{activity} replies</span> */}
       </article>)

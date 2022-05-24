@@ -25,7 +25,6 @@ const SnippetPage = ({ id }: Props) => {
         <Stack spacing={5}>
           <SnippetCell id={id}></SnippetCell>
           { isAuthenticated && <CommentForm snippetId={id} authorId={currentUser.id} /> }
-          <Typography variant="subtitle1"> ~ comments ~ </Typography>
           <CommentsCell snippetId={id} />
         </Stack>
       </Container>
