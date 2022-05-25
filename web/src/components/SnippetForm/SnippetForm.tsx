@@ -53,6 +53,10 @@ const SnippetForm = ({ authorId, pageId }: Props) => {
 
       const { snippets } = cache.readQuery({
         query: SnippetsQuery,
+        variables: {
+          skip: 0,
+          take: 5,
+        }
       })
 
       let newSnippets = [createSnippet].concat(snippets.data)
