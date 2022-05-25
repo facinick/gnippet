@@ -55,12 +55,15 @@ const SnippetForm = ({ authorId, pageId }: Props) => {
         query: SnippetsQuery,
       })
 
-      let newSnippets = [createSnippet].concat(snippets)
+      let newSnippets = [createSnippet].concat(snippets.data)
 
       cache.writeQuery({
         query: SnippetsQuery,
         data: {
-          snippets: newSnippets
+          snippets: {
+            data: newSnippets,
+            count: snippets.count + 1
+          }
         },
       });
     },
