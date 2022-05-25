@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
 
 import LogoutButton from 'src/components/LogoutButton/LogoutButton'
+import WifiStatus from 'src/components/WifiStatus/WifiStatus'
 import LoginButton from 'src/components/LoginButton/LoginButton'
 import HomeButton from 'src/components/HomeButton/HomeButton'
 import Typography from '@mui/material/Typography'
@@ -26,9 +27,14 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
           <Grid columns={{xs: 12, sm: 12, md: 12 }} flexDirection={'row'} container spacing={2}>
             <Grid xs={4} item>
                 <div className={'left'}>
+                <Stack spacing={1}  display={'flex'} justifyContent={'flex-start'} alignItems={'center'} direction={'row'}>
                   <div>
                     <HomeButton />
                   </div>
+                  <div>
+                    <WifiStatus />
+                  </div>
+                </Stack>
                 </div>
             </Grid>
             <Grid xs={4} item>

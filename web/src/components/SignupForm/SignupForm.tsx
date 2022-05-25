@@ -33,14 +33,18 @@ const SignupForm = () => {
   }, [])
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const response = await signUp({ ...data })
-
-    if (response.message) {
-      toast(response.message)
-    } else if (response.error) {
-      toast.error(response.error)
-    } else {
-      toast.success('Welcome!')
+    try {
+      const response = await signUp({ ...data })
+      if (response.message) {
+        toast(response.message)
+      } else if (response.error) {
+        toast.error(response.error)
+      } else {
+        toast.success('Welcome!')
+      }
+    } catch(error) {
+      console.log(error.name)
+      console.log(error.message)
     }
   }
 
