@@ -9,13 +9,18 @@ import Stack from '@mui/material/Stack'
 
 const HomePage = ({ page }: { page: number }) => {
   const { isAuthenticated, currentUser } = useAuth()
+  const _page = page ? page : 0
+  const _skip = page ? page * 5 : 0
+  const _take = 5
+  const isHomePage = _page === 0
+
   return (
     <>
       <MetaTags title="Home" description="Home page" />
       <Container maxWidth="sm">
         <Stack spacing={5}>
           {/****** Create a Post ******/}
-          {isAuthenticated && (
+          {isAuthenticated && isHomePage && (
             <Card variant="outlined">
               <CardContent>
                 <SnippetForm authorId={currentUser?.id} />
@@ -23,7 +28,7 @@ const HomePage = ({ page }: { page: number }) => {
             </Card>
           )}
           {/******** All Posts ********/}
-          <SnippetsCell page={page ? page : 0} skip={page ? page * 5 : 0} take={5} />
+          <SnippetsCell page={_page} skip={_skip} take={_take} />
         </Stack>
 
         {/******** Trending Posts ********/}
