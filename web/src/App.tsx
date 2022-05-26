@@ -9,12 +9,11 @@ import Routes from 'src/Routes'
 import { cache } from 'src/localStore/cache'
 
 import './index.css'
-import { goOffline, goOnline, onlineStatusVar } from './localStore/onlineStatus'
+import { goOffline, goOnline } from './localStore/onlineStatus'
 import { useEffect } from 'react'
 
 const App = () => {
   useEffect(() => {
-    console.log(`listeners set`)
     window.addEventListener('online', goOnline)
     window.addEventListener('offline', goOffline)
 
