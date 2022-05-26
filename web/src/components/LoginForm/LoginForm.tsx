@@ -33,14 +33,17 @@ const LoginForm = () => {
   }, [])
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const response = await logIn({ ...data })
-
-    if (response.message) {
-      toast(response.message)
-    } else if (response.error) {
-      toast.error(response.error)
-    } else {
-      toast.success('Welcome back!')
+    try {
+      const response = await logIn({ ...data })
+      if (response.message) {
+        toast(response.message)
+      } else if (response.error) {
+        toast.error(response.error)
+      } else {
+        toast.success('Welcome back!')
+      }
+    } catch(error) {
+      toast.error(error.message)
     }
   }
 

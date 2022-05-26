@@ -3,16 +3,20 @@ import {
   Form,
   FormError,
   Label,
-  TextField,
+  // TextField,
   TextAreaField,
   Submit,
   SubmitHandler,
   FieldError,
 } from '@redwoodjs/forms'
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import TextField from '@mui/material/TextField';
+
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { QUERY as SnippetsQuery } from 'src/components/SnippetsCell/SnippetsCell'
+import Button from '@mui/material/Button';
 const CREATE = gql`
   mutation CreateSnippetMutation($input: CreateSnippetInput!) {
     createSnippet(input: $input) {
@@ -45,6 +49,45 @@ const SnippetForm = ({ authorId, pageId }: Props) => {
 
   const formRef = useRef<HTMLFormElement>()
 
+  const [title, setTitle] = useState("")
+  const [titleError, setTitleError] = useState(false)
+  const [titleErrorMessage, setTitleErrorMessage] = useState("")
+  const [body, setBody] = useState("")
+  const [bodyError, setBodyError] = useState(false)
+  const [bodyErrorMessage, setBodyErrorMessage] = useState("")
+
+  const onTitleInput = (event) => {
+    const value = event.target.value
+    setTitle(value)
+    setTitleError(false)
+    setTitleErrorMessage("")
+  }
+
+  const onBodyInput = (event) => {
+    const value = event.target.value
+    setBody(value)
+    setBodyError(false)
+    setBodyErrorMessage("")
+  }
+
+  const areInputsValid = () => {
+    if(!title) {
+      setTitleError(true)
+      setTitleErrorMessage("Title cannot be empty!")
+    }
+
+    if(!body) {
+      setBodyError(true)
+      setBodyErrorMessage("Body cannot be empty!")
+    }
+
+    if(!title || !body) {
+      return false
+    }
+
+    return true
+  }
+
   const [createSnippet, { loading, error }] = useMutation(CREATE, {
     onCompleted: () => {
       toast.success('Snippet Created!')
@@ -59,7 +102,7 @@ const SnippetForm = ({ authorId, pageId }: Props) => {
         }
       })
 
-      let newSnippets = [createSnippet].concat(snippets.data)
+      let newSnippets = [createSnippet].concat(snippets.data).slice(0,5)
 
       cache.writeQuery({
         query: SnippetsQuery,
@@ -69,55 +112,55 @@ const SnippetForm = ({ authorId, pageId }: Props) => {
             count: snippets.count + 1
           }
         },
+        variables: {
+          skip: 0,
+          take: 5,
+        }
       });
     },
   })
 
-  const onSubmit: SubmitHandler<FormValues> = (input) => {
-    createSnippet({ variables: { input: { pageId, authorId, ...input }}})
+  const onSubmit = () => {
+    if(!areInputsValid()) {
+      return
+    }
+    createSnippet({ variables: { input: { pageId, authorId, body, title }}})
     formRef.current.reset()
   }
 
   return (
     <div >
-      <h3 style={{marginTop: 0}}>Create a Snippet</h3>
+      <h3 style={{marginTop: 0}}>Post Snippet</h3>
       <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <FormError
           error={error} />
 
         <Stack direction="column" spacing={1}>
 
-          <Label
-            name="title"
-            errorClassName="error"
-            htmlFor="title" >
-            Title
-          </Label>
           <TextField
             name="title"
-            errorClassName="error"
-            validation={{ required: true }} />
-          <FieldError
-            name="title"
-            className="error" />
+            required
+            disabled={loading}
+            error={titleError}
+            helperText={titleError ? titleErrorMessage : ""}
+            onInput={onTitleInput}
+            size="small"
+            label={'Title'}
+            />
 
-          <Label
-            name="body"
-            errorClassName="error"
-            htmlFor="body" >
-            Snippet
-          </Label>
-          <TextAreaField
-            name="body"
-            errorClassName="error"
-            validation={{ required: true }} />
-          <FieldError name="body"
-          className="error" />
+          <TextField
+            label="Snippet"
+            disabled={loading}
+            error={bodyError}
+            helperText={bodyError ? bodyErrorMessage : ""}
+            required
+            onInput={onBodyInput}
+            multiline
+            size="small"
+            rows={4}
+          />
 
-          <Submit
-            disabled={loading} >
-            Submit
-          </Submit>
+          <Button aria-label='Post Snippet' title={'Post Snippet'} endIcon={<PostAddIcon />} size={'small'} variant="contained" onSubmit={onSubmit} disabled={loading} type="submit">Submit</Button>
 
         </Stack>
       </Form>

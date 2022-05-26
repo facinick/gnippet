@@ -9,8 +9,22 @@ export const cache: InMemoryCache = new InMemoryCache({
           read () {
             return onlineStatusVar();
           }
-        }
+        },
+        // snippets: {
+        //   merge(existing = [], incoming: any[]) {
+        //     return [...incoming];
+        //   },
+        // },
       }
-    }
+    },
+    User: {
+      fields: {
+        votes: {
+          merge(existing = [], incoming: any[]) {
+            return [...incoming];
+          },
+        },
+      },
+    },
   }
 });

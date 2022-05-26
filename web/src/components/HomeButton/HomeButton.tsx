@@ -10,7 +10,7 @@ const HomeButton = () => {
   }
 
   return (
-    <IconButton title={"Login"} onClick={onCLick} aria-label="login">
+    <IconButton title={"Home"} onClick={onCLick} aria-label="home">
       <HomeIcon />
     </IconButton>
   )

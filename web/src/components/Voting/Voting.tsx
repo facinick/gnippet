@@ -1,28 +1,52 @@
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Downvote from '../Downvote/Downvote';
-import Upvote from '../Upvote/Upvote';
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
+import Downvote from '../Downvote/Downvote'
+import Upvote from '../Upvote/Upvote'
 
 interface Props {
-  votes: number;
-  vote: 1 | -1 | 0
+  score: number
+  currentVoteValue: 1 | -1 | 0
   snippetId: number
   commentId?: number
+  userId: number
   entity: 'COMMENT' | 'SNIPPET'
+  currentVoteId: number
 }
 
-  const Voting = ({ snippetId, commentId, vote, votes, entity }: Props) => {
+const Voting = ({
+  snippetId,
+  commentId,
+  currentVoteValue,
+  score,
+  entity,
+  userId,
+  currentVoteId
+}: Props) => {
   return (
     <>
-    <Stack alignItems={'center'} direction="row" spacing={1}>
-      <Upvote commentId={commentId} entity={entity} vote={vote} snippetId={snippetId}/>
+      <Stack alignItems={'center'} direction="row" spacing={1}>
+        <Upvote
+          currentVoteValue={currentVoteValue}
+          userId={userId}
+          commentId={commentId}
+          score={score}
+          entity={entity}
+          snippetId={snippetId}
+          currentVoteId={currentVoteId}
+        />
 
-      <Typography>
-        { votes }
-      </Typography>
+        <Typography>{score}</Typography>
 
-      <Downvote commentId={commentId} entity={entity} vote={vote} snippetId={snippetId}/>
-    </Stack>
+        <Downvote
+          currentVoteValue={currentVoteValue}
+          userId={userId}
+          commentId={commentId}
+          score={score}
+          entity={entity}
+          snippetId={snippetId}
+          currentVoteId={currentVoteId}
+        />
+      </Stack>
     </>
   )
 }

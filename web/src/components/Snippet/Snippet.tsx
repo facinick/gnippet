@@ -21,7 +21,8 @@ type Props = {
 const ControlledSnippet = ({ showBackButton, showActivity, snippet, truncate }: Props) => {
   const { id, title, score, activity, author, body, createdAt } = snippet
   const { isAuthenticated, currentUser } = useAuth()
-  const [vote, setVote] = useState<0 | 1 | -1>(0)
+  const [currentVoteValue, setCurrentVoteValue] = useState<0 | 1 | -1>(0)
+  const [currentVoteId, setCurrentVoteId] = useState<number>(0)
   const client = useApolloClient();
 
   const data = client.readQuery({
@@ -43,7 +44,8 @@ const ControlledSnippet = ({ showBackButton, showActivity, snippet, truncate }: 
       (vote) => vote.snippetId === id && vote.entityType === 'SNIPPET'
     )
 
-    setVote(vote ? vote.value as 1 | -1 | 0 : 0)
+    setCurrentVoteValue(vote ? vote.value as 1 | -1 | 0 : 0)
+    setCurrentVoteId(vote ? vote.id : 0)
   }, [data])
 
   return (
@@ -55,21 +57,23 @@ const ControlledSnippet = ({ showBackButton, showActivity, snippet, truncate }: 
         </Stack>
       </header>
       {truncate && (
-        <p>
+      <p style={{whiteSpace: 'pre-line'}}>
           {returnTruncatedText(body, 150)}
-          <Link to={routes.snippet({ id: id })}>[read-more]</Link> -
+          <span>{' '}</span>
+          {body.length > 150 &&  <Link to={routes.snippet({ id: id })}>[read-more]</Link>} -
           <i className="created-at"> {<CreatedAt createdAt={createdAt} />} by <span>{' '}</span>
           {<Username username={author.username} />}</i>
         </p>
       )}
       {!truncate && (
-        <p>
+        <p style={{whiteSpace: 'pre-line'}}>
           {body} - <i className="created-at"> {<CreatedAt createdAt={createdAt} />} by{' '} </i>
+          <span>{' '}</span>
           {<Username username={author.username} />}
         </p>
       )}
       {isAuthenticated && (
-        <Voting entity={'SNIPPET'} snippetId={id} votes={score} vote={vote} />
+        <Voting currentVoteId={currentVoteId} userId={currentUser?.id} entity={'SNIPPET'} snippetId={id} score={score} currentVoteValue={currentVoteValue} />
       )}
       {showActivity && (
         <p style={{marginBottom: 0}}>

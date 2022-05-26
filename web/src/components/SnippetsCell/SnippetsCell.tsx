@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack'
 import Divider from '@mui/material/Divider'
 import Pagination from '@mui/material/Pagination'
 import { navigate } from '@redwoodjs/router'
+import Box from '@mui/material/Box'
 
 export const QUERY = gql`
   query SnippetsQuery($skip: Int!, $take:Int!) {
@@ -51,14 +52,16 @@ export const Success = ({
     navigate(`/new/${value - 1}`)
   }
 
+  const spacing = 5
+
   return (
     <>
-      <Stack spacing={5}>
+      <Stack spacing={spacing}>
         {snippets.data.map((snippet, index) => {
           isLastSnippet = index === numberOfSnippets - 1 ? true : false
           renderDivider = !isLastSnippet
           return (
-            <>
+            <Box key={snippet.id}>
               <Snippet
                 showBackButton={false}
                 showActivity={true}
@@ -66,8 +69,8 @@ export const Success = ({
                 snippet={snippet}
                 truncate={true}
               />
-              {renderDivider && <Divider />}
-            </>
+              {renderDivider && <Divider style={{paddingTop: `${spacing * 8}px`}} />}
+            </ Box>
           )
         })}
       </Stack>

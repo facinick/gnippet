@@ -43,8 +43,7 @@ const SignupForm = () => {
         toast.success('Welcome!')
       }
     } catch(error) {
-      console.log(error.name)
-      console.log(error.message)
+      toast.error(error.message)
     }
   }
 

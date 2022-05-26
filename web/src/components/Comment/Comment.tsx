@@ -18,7 +18,7 @@ const Comment = ({ comment, snippetId }: Props) => {
 
   const { id, score, activity, author, body, createdAt } = comment
   const { isAuthenticated, currentUser } = useAuth()
-  const [vote, setVote] = useState<0 | 1 | -1>(0)
+  const [currentVoteValue, setCurrentVoteValue] = useState<0 | 1 | -1>(0)
   const client = useApolloClient();
 
   const data = client.readQuery({
@@ -40,13 +40,13 @@ const Comment = ({ comment, snippetId }: Props) => {
       (vote) => vote.snippetId === snippetId && vote.entityType === 'COMMENT' && vote.commentId === id
     )
 
-    setVote(vote ? vote.value as 1 | -1 | 0 : 0)
+    setCurrentVoteValue(vote ? vote.value as 1 | -1 | 0 : 0)
   }, [data])
 
   return (
       <article key={id}>
-        <p>{body} - <i className="created-at"> {<CreatedAt createdAt={createdAt} />} by {<Username username={author.username} />}</i> </p>
-        { isAuthenticated && <Voting commentId={id} entity={'COMMENT'} snippetId={snippetId} votes={score} vote={vote} /> }
+        <p style={{whiteSpace: 'pre-line'}}>{body} - <i className="created-at"> {<CreatedAt createdAt={createdAt} />} by {<Username username={author.username} />}</i> </p>
+        { isAuthenticated && <Voting commentId={id} entity={'COMMENT'} snippetId={snippetId} score={score} vote={currentVoteValue} /> }
         {/* <span>{activity} replies</span> */}
       </article>)
 }

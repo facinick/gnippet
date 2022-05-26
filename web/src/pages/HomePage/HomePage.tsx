@@ -21,7 +21,7 @@ const HomePage = ({ page }: { page: number }) => {
         <Stack spacing={5}>
           {/****** Create a Post ******/}
           {isAuthenticated && isHomePage && (
-            <Card variant="outlined">
+            <Card >
               <CardContent>
                 <SnippetForm authorId={currentUser?.id} />
               </CardContent>

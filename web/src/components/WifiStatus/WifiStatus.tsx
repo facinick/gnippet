@@ -11,12 +11,12 @@ const WifiStatus = () => {
   return (
     <div>
       { !isOnline &&
-        <IconButton disabled aria-label="device-offline">
+        <IconButton title={'Device Offline'}  aria-label="device-offline">
           <SignalWifiOffIcon color={'error'} />
         </IconButton>
       }
       { isOnline &&
-        <IconButton disabled aria-label="device-offline">
+        <IconButton title={'Device Online'}  aria-label="device-online">
           <SignalWifiStatusbar4BarIcon color={'success'} />
         </IconButton>
       }
