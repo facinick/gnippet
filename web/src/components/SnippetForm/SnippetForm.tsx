@@ -17,6 +17,7 @@ import { toast } from '@redwoodjs/web/toast'
 import { useRef, useState } from 'react'
 import { QUERY as SnippetsQuery } from 'src/components/SnippetsCell/SnippetsCell'
 import Button from '@mui/material/Button';
+import { Typography } from '@mui/material';
 const CREATE = gql`
   mutation CreateSnippetMutation($input: CreateSnippetInput!) {
     createSnippet(input: $input) {
@@ -42,10 +43,11 @@ interface FormValues {
 
 interface Props {
   authorId: number
+  authorUsername: string
   pageId?: number
 }
 
-const SnippetForm = ({ authorId, pageId }: Props) => {
+const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
 
   const formRef = useRef<HTMLFormElement>()
 
@@ -130,7 +132,10 @@ const SnippetForm = ({ authorId, pageId }: Props) => {
 
   return (
     <div >
-      <h3 style={{marginTop: 0}}>Post Snippet</h3>
+      <Stack padding={'15px 0px'} alignItems={'center'} justifyContent={'space-between'} direction={'row'}>
+        <Typography variant='h6'>Post Snippet</Typography>
+        <i><Typography variant='caption'>as @{authorUsername}</Typography></i>
+      </Stack>
       <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <FormError
           error={error} />

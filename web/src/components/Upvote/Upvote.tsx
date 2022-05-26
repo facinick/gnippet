@@ -189,7 +189,6 @@ const Upvote = ({
   })
 
   const onClick = (event) => {
-    console.log(event)
     event.preventDefault()
     event.stopPropagation()
     upvote({
@@ -201,6 +200,8 @@ const Upvote = ({
         },
       },
     })
+    event.preventDefault()
+    event.stopPropagation()
     return false
   }
 

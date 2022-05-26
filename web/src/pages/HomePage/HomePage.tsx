@@ -23,7 +23,7 @@ const HomePage = ({ page }: { page: number }) => {
           {isAuthenticated && isHomePage && (
             <Card >
               <CardContent>
-                <SnippetForm authorId={currentUser?.id} />
+                <SnippetForm authorUsername={currentUser?.username} authorId={currentUser?.id} />
               </CardContent>
             </Card>
           )}
