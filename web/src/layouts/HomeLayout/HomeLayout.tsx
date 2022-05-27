@@ -68,6 +68,7 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
           </Grid>
         </header>
         <main>{children}</main>
+        <footer></footer>
       </Stack>
     </>
   )

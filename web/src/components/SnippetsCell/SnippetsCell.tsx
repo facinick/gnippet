@@ -65,6 +65,14 @@ export const Success = ({
 
   const spacing = 5
 
+  const snippetsPerPage = 5
+  const totalSnippets = snippets.count
+  const totalPages = Math.ceil(totalSnippets / snippetsPerPage)
+
+  const handleChange = (event, value) => {
+    navigate(`/new/${value - 1}`)
+  }
+
   return (
     <>
       <Stack spacing={spacing}>
@@ -89,6 +97,9 @@ export const Success = ({
           )
         })}
       </Stack>
+      <div style={{display: 'flex', justifyContent: 'center'}}>
+        <Pagination page={page + 1} onChange={handleChange}  count={totalPages} variant="outlined" />
+      </div>
     </>
   )
 }
