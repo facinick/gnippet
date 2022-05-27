@@ -189,8 +189,6 @@ const Upvote = ({
   })
 
   const onClick = (event) => {
-    event.preventDefault()
-    event.stopPropagation()
     upvote({
       variables: {
         input: {
@@ -200,9 +198,6 @@ const Upvote = ({
         },
       },
     })
-    event.preventDefault()
-    event.stopPropagation()
-    return false
   }
 
   return (

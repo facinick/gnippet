@@ -14,6 +14,7 @@ const SnippetTags = ({ tags }: Props) => {
         const isLastTag = index === n - 1
         return (
           <Chip
+            color={'primary'}
             size="small"
             style={
               isFirstTag
