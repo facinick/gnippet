@@ -49,11 +49,17 @@ export const schema = gql`
     snippet(id: Int!): Snippet @skipAuth
   }
 
+  input ConnectOrCreateTagInput {
+    id: Int
+    name: String!
+  }
+
   input CreateSnippetInput {
     title: String!
     body: String!
     authorId: Int!
     pageId: Int
+    tags: [ConnectOrCreateTagInput]
   }
 
   input UpdateSnippetInput {

@@ -20,6 +20,10 @@ export const QUERY = gql`
         score
         author {
           username
+        },
+        tags {
+          id
+          name
         }
       }
       count

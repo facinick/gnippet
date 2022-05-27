@@ -10,6 +10,7 @@ import Voting from '../Voting/Voting'
 import { useApolloClient } from '@apollo/client'
 import BackButton from '../BackButton/BackButton'
 import Stack from '@mui/material/Stack'
+import SnippetTags from '../SnippetTags/SnippetTags'
 
 type Props = {
   snippet: _Snippet
@@ -75,6 +76,7 @@ const ControlledSnippet = ({ showBackButton, showActivity, snippet, truncate }: 
       {isAuthenticated && (
         <Voting currentVoteId={currentVoteId} userId={currentUser?.id} entity={'SNIPPET'} snippetId={id} score={score} currentVoteValue={currentVoteValue} />
       )}
+      <SnippetTags tags={snippet.tags}></SnippetTags>
       {showActivity && (
         <p style={{marginBottom: 0}}>
           {activity} {activity === 1 ? 'comment' : 'comments'}

@@ -15,6 +15,10 @@ export const QUERY = gql`
       author {
         username
       }
+      tags {
+        id
+        name
+      }
     }
   }
 `

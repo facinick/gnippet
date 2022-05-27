@@ -39,7 +39,7 @@ export const snippets: QueryResolvers['snippets'] = async ({ input }) => {
 
   const count = await db.snippet.count()
   //@ts-ignore
-  const data = await db.snippet.findMany({ where, skip: input?.skip, take: input?.take, orderBy})
+  const data = await db.snippet.findMany({ where, skip: input?.skip, take: input?.take, orderBy, include: { tags: true }})
   return {
     count,
     data
@@ -49,6 +49,7 @@ export const snippets: QueryResolvers['snippets'] = async ({ input }) => {
 export const snippet: QueryResolvers['snippet'] = ({ id }) => {
   return db.snippet.findUnique({
     where: { id },
+    include: { tags: true }
   })
 }
 
@@ -56,8 +57,43 @@ export const createSnippet: MutationResolvers['createSnippet'] = async ({
   input,
 }) => {
   requireAuth({})
+
+  const { tags } = input
+  const tagsToConnect = tags.filter((tag) => tag.id != undefined).map( ({id, ...rest})  => { return { id } })
+  const tagsToCreate = tags.filter((tag) => tag.id == undefined)
+
+  console.log({
+    data: {
+      ...input,
+      tags: {
+        connect: [
+          ...tagsToConnect
+        ],
+        create: [
+          ...tagsToCreate
+        ]
+      }
+    },
+    include: {
+      tags: true
+    }
+  })
+
   return db.snippet.create({
-    data: input,
+    data: {
+      ...input,
+      tags: {
+        connect: [
+          ...tagsToConnect
+        ],
+        create: [
+          ...tagsToCreate
+        ]
+      }
+    },
+    include: {
+      tags: true
+    }
   })
 }
 

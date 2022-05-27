@@ -18,6 +18,10 @@ import { useRef, useState } from 'react'
 import { QUERY as SnippetsQuery } from 'src/components/SnippetsCell/SnippetsCell'
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
+import TagSearchAndAdd, { TagsSearchObject } from '../TagSearchAndAdd/TagSearchAndAdd';
+import TagsCell from 'src/components/TagsCell'
+import { Tag } from 'types/graphql';
+
 const CREATE = gql`
   mutation CreateSnippetMutation($input: CreateSnippetInput!) {
     createSnippet(input: $input) {
@@ -29,6 +33,10 @@ const CREATE = gql`
       score
       author {
         username
+      }
+      tags {
+        id
+        name
       }
     }
   }
@@ -57,6 +65,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
   const [body, setBody] = useState("")
   const [bodyError, setBodyError] = useState(false)
   const [bodyErrorMessage, setBodyErrorMessage] = useState("")
+  const [tags, setTags] = useState<Array<TagsSearchObject>>([])
 
   const onTitleInput = (event) => {
     const value = event.target.value
@@ -126,7 +135,8 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
     if(!areInputsValid()) {
       return
     }
-    createSnippet({ variables: { input: { pageId, authorId, body, title }}})
+
+    createSnippet({ variables: { input: { pageId, authorId, body, title, tags }}})
     formRef.current.reset()
   }
 
@@ -164,6 +174,8 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
             size="small"
             rows={4}
           />
+
+          <TagsCell setTags={setTags} />
 
           <Button aria-label='Post Snippet' title={'Post Snippet'} endIcon={<PostAddIcon />} size={'small'} variant="contained" onSubmit={onSubmit} disabled={loading} type="submit">Submit</Button>
 
