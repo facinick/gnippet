@@ -51,8 +51,6 @@ const Routes = () => {
 
   }, [isAuthenticated])
 
-  console.log(`rerednering routes`)
-
   return (
     <Router>
         <Set wrap={AuthLayout}>

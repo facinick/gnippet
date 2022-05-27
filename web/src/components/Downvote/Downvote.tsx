@@ -7,6 +7,7 @@ import { USER_DATA_QUERY, USER_VOTES_QUERY } from 'src/pages/Queries/queries'
 import { QUERY as SNIPPET_QUERY } from 'src/components/SnippetCell'
 import { QUERY as COMMENTS_QUERY } from 'src/components/CommentsCell'
 import { EntityType } from 'types/graphql'
+import { Button } from '@mui/material'
 
 const DOWNVOTE = gql`
   mutation downvoteMutation($input: VotingInput) {
@@ -191,11 +192,11 @@ const Downvote = ({
   }
 
   return (
-    <IconButton disabled={loading || disabled} onClick={onClick} aria-label="downvote">
+    <Button variant='text' size={'large'} disabled={loading || disabled} onClick={onClick} aria-label="downvote">
       <ArrowDownwardIcon
-        color={currentVoteValue === -1 ? 'error' : 'inherit'}
+        color={currentVoteValue === -1 ? 'error' : 'disabled'}
       />
-    </IconButton>
+    </Button>
   )
 }
 

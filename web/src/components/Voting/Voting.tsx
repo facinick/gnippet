@@ -49,6 +49,22 @@ const Voting = ({ snippetId, commentId, score, entity }: Props) => {
     setCurrentVoteId(vote ? vote.id : 0)
   }, [userVotesQueryResults])
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      client.writeQuery({
+        query: USER_VOTES_QUERY,
+        variables: {
+          input: {
+            userId: currentUser?.id,
+          },
+        },
+        data: {
+          votes: []
+        }
+      })
+    }
+  }, [isAuthenticated])
+
   return (
     <>
       <Stack alignItems={'center'} direction="row" spacing={1}>

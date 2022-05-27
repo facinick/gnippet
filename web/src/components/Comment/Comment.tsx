@@ -21,22 +21,25 @@ const Comment = ({ comment }: Props) => {
   return (
     <article key={id}>
       <Stack spacing={2}>
-      <Typography variant='body2' component='p' style={{ whiteSpace: 'pre-line' }}>
-        {body} -{' '}
-        <Typography  variant='body2' component='i'>
-          {' '}
-          {<CreatedAt createdAt={createdAt} />} by{' '}
-          {<Username username={author.username} />}
-        </Typography>{' '}
-      </Typography>
-      {isAuthenticated && (
+        <Typography
+          variant="body2"
+          component="p"
+          style={{ whiteSpace: 'pre-line' }}
+        >
+          {body} -{' '}
+          <Typography variant="body2" component="i">
+            {' '}
+            {<CreatedAt createdAt={createdAt} />} by{' '}
+            {<Username username={author.username} />}
+          </Typography>{' '}
+        </Typography>
+
         <Voting
           commentId={id}
           entity={'COMMENT'}
           snippetId={snippetId}
           score={score}
         />
-      )}
       </Stack>
     </article>
   )
