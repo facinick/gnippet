@@ -22,7 +22,7 @@ export const Failure = ({ error }: CellFailureProps) => (
 export const Success = ({ tags, setTags }: CellSuccessProps<TagsQuery> & {setTags: (tags) => void}) => {
   return (
     <>
-      <TagSearchAndAdd setTags={setTags} tags={tags} />
+      <TagSearchAndAdd setTags={setTags} />
     </>
   )
 }

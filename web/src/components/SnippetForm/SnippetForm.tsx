@@ -16,6 +16,7 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { useRef, useState } from 'react'
 import { QUERY as SnippetsQuery } from 'src/components/SnippetsCell/SnippetsCell'
+import { QUERY as TagsQuery } from 'src/components/TagsCell/TagsCell'
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 import TagSearchAndAdd, { TagsSearchObject } from '../TagSearchAndAdd/TagSearchAndAdd';
@@ -112,6 +113,23 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
           take: 5,
         }
       })
+
+      // older existing tags
+      const { tags } = cache.readQuery({
+        query: TagsQuery,
+      })
+      // has newly created tags + maybe older ones
+      const addedTags = createSnippet.tags.filter((tago) => !tags.some(tag => tag.id === tago.id))
+      // pick these ones from
+
+      if(addedTags.length > 0) {
+        cache.writeQuery({
+          query: TagsQuery,
+          data: {
+            tags: [...tags, ...addedTags]
+          },
+        });
+      }
 
       let newSnippets = [createSnippet].concat(snippets.data).slice(0,5)
 

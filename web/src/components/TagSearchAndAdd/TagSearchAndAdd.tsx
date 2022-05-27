@@ -1,8 +1,10 @@
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField'
 import Chip from '@mui/material/Chip'
 import { Tag } from 'types/graphql'
+import { QUERY as TagsQuery } from 'src/components/TagsCell/TagsCell'
+import { useApolloClient } from '@apollo/client'
 
 type TagSearchId = Pick<Tag, 'id'>
 type TagSearchName = Pick<Tag, 'name'>
@@ -12,19 +14,35 @@ export type TagsSearchObject = Partial<TagSearchId> & Required<TagSearchName>
 const filter = createFilterOptions<TagsSearchObject>();
 
 interface Props {
-  // these tags are coming from server, they have all the ids
-  tags: Array<TagSearchId & TagSearchName>
   setTags: (tags) => void
 }
 
-const TagSearchAndAdd = ({ tags, setTags }: Props) => {
+const TagSearchAndAdd = ({ setTags }: Props) => {
 
-  const tagsWithoutTypename = tags.map(({__typename, ...rest}) => { return rest })
+  const [localTags, setLocalTags] = useState<Array<TagSearchId & TagSearchName>>([])
+  //@ts-ignore
+  const tagsWithoutTypename = localTags.map(({__typename, ...rest}) => { return rest })
   const [inputValue, setInputValue] = React.useState('')
   const [options, setOptions] = React.useState<readonly TagsSearchObject[]>(tagsWithoutTypename)
   const onSelect = (event: any, newValue: Array<TagsSearchObject> | null) => {
     setTags(newValue)
   }
+
+  const client = useApolloClient();
+
+  const data = client.readQuery({
+    query: TagsQuery,
+  });
+
+  useEffect(() => {
+    if(!data?.tags) {
+      return
+    }
+
+    setLocalTags(data?.tags)
+    setOptions(data?.tags)
+
+  }, [data])
 
   return (
     <Autocomplete
