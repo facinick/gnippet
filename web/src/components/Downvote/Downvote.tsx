@@ -3,7 +3,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { useAuth } from '@redwoodjs/auth'
-import { USER_DATA_QUERY } from 'src/pages/Queries/queries'
+import { USER_DATA_QUERY, USER_VOTES_QUERY } from 'src/pages/Queries/queries'
 import { QUERY as SNIPPET_QUERY } from 'src/components/SnippetCell'
 import { QUERY as COMMENTS_QUERY } from 'src/components/CommentsCell'
 import { EntityType } from 'types/graphql'
@@ -33,6 +33,7 @@ interface Props {
   userId: number
   currentVoteId: number
   score: number
+  disabled: boolean
 }
 
 const Downvote = ({
@@ -40,6 +41,7 @@ const Downvote = ({
   snippetId,
   entity,
   commentId,
+  disabled,
   currentVoteValue,
   currentVoteId,
   score
@@ -49,27 +51,25 @@ const Downvote = ({
       const { score, cudAction, vote } = downvote
       const { userId, snippetId, commentId, id, value } = vote
 
-      const userDataQueryResult = cache.readQuery({
-        query: USER_DATA_QUERY,
+      const userVotesQueryResults = cache.readQuery({
+        query: USER_VOTES_QUERY,
         variables: {
-          id: userId,
-          votes: true,
-          snippets: false,
-          comments: false,
-        },
+          input: {
+            userId,
+          }
+        }
       })
 
-      if(!userDataQueryResult) {
+      if(!userVotesQueryResults) {
         return
       }
 
-      const user = userDataQueryResult.user
-
-      let cachedVotes = user.votes
+       //@ts-ignore
+      let cachedVotes = userVotesQueryResults.votes
 
       //modify snippet score
       if (vote.entityType === 'SNIPPET') {
-        const snippetToModify = cache.writeFragment({
+        cache.writeFragment({
           id: `Snippet:${snippetId}`, // The value of the to-do item's cache ID
           fragment: gql`
             fragment SnippetToUpdate on Snippet {
@@ -83,26 +83,15 @@ const Downvote = ({
       }
       // modify comment score
       else {
-        const { snippet } = cache.readQuery({
-          query: COMMENTS_QUERY,
-          variables: {
-            id: snippetId,
-            snippetId,
-          },
-        })
-
-        const newComments = snippet.comments.map((comment) =>
-          comment.id === commentId ? { ...comment, score } : comment
-        )
-        const newSnippet = { ...snippet, comments: newComments }
-        cache.writeQuery({
-          query: COMMENTS_QUERY,
+        cache.writeFragment({
+          id: `Comment:${commentId}`,
+          fragment: gql`
+            fragment CommentToUpdate on Comment {
+              score
+            }
+          `,
           data: {
-            snippet: newSnippet,
-            variables: {
-              id: snippetId,
-              snippetId,
-            },
+            score,
           },
         })
       }
@@ -129,32 +118,31 @@ const Downvote = ({
           throw new Error(`Unexpected value for cudAction: ${cudAction}`)
       }
 
-      const newUserData = { ...user, votes: cachedVotes }
-
       if(cudAction === 'DELETED') {
         cache.evict({ id: `Vote:${id}` })
       }
 
       cache.writeQuery({
-        query: USER_DATA_QUERY,
+        query: USER_VOTES_QUERY,
         data: {
-          user: newUserData,
+          votes: cachedVotes,
         },
         variables: {
-          votes: true,
-          snippets: false,
-          comments: false,
+          input: {
+            userId,
+          }
         },
       })
+
     },
     onCompleted: ({ downvote }) => {
       if (
         downvote.cudAction === 'CREATED' ||
         downvote.cudAction === 'UPDATED'
       ) {
-        toast.success('😠')
+        toast.success('Downvoted')
       } else {
-        toast.success('🙂')
+        toast.success('Cancelled Downvote')
       }
     },
     // optimisticResponse: {
@@ -203,7 +191,7 @@ const Downvote = ({
   }
 
   return (
-    <IconButton disabled={loading} onClick={onClick} aria-label="downvote">
+    <IconButton disabled={loading || disabled} onClick={onClick} aria-label="downvote">
       <ArrowDownwardIcon
         color={currentVoteValue === -1 ? 'error' : 'inherit'}
       />

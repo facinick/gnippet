@@ -2,35 +2,63 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Downvote from '../Downvote/Downvote'
 import Upvote from '../Upvote/Upvote'
+import { useApolloClient } from '@apollo/client'
+import { USER_DATA_QUERY, USER_VOTES_QUERY } from 'src/pages/Queries/queries'
+import { useState, useEffect } from 'react'
+import { useAuth } from '@redwoodjs/auth'
 
 interface Props {
   score: number
-  currentVoteValue: 1 | -1 | 0
   snippetId: number
   commentId?: number
-  userId: number
   entity: 'COMMENT' | 'SNIPPET'
-  currentVoteId: number
 }
 
-const Voting = ({
-  snippetId,
-  commentId,
-  currentVoteValue,
-  score,
-  entity,
-  userId,
-  currentVoteId
-}: Props) => {
+const Voting = ({ snippetId, commentId, score, entity }: Props) => {
+  const { isAuthenticated, currentUser } = useAuth()
+  const [currentVoteValue, setCurrentVoteValue] = useState<0 | 1 | -1>(0)
+  const [currentVoteId, setCurrentVoteId] = useState<number>(0)
+  const client = useApolloClient()
+
+  const userVotesQueryResults = client.readQuery({
+    query: USER_VOTES_QUERY,
+    variables: {
+      input: {
+        userId: currentUser?.id,
+      },
+    },
+  })
+
+  useEffect(() => {
+    if (!userVotesQueryResults) {
+      return
+    }
+
+    const vote = userVotesQueryResults.votes.find(
+      (vote) =>
+        (vote.snippetId === snippetId &&
+          vote.entityType === entity &&
+          vote.entityType === 'SNIPPET') ||
+        (vote.commentId === commentId &&
+          vote.entityType &&
+          vote.entityType === entity &&
+          vote.entityType === 'COMMENT')
+    )
+
+    setCurrentVoteValue(vote ? (vote.value as 1 | -1 | 0) : 0)
+    setCurrentVoteId(vote ? vote.id : 0)
+  }, [userVotesQueryResults])
+
   return (
     <>
       <Stack alignItems={'center'} direction="row" spacing={1}>
         <Upvote
           currentVoteValue={currentVoteValue}
-          userId={userId}
+          userId={currentUser?.id}
           commentId={commentId}
           score={score}
           entity={entity}
+          disabled={!isAuthenticated}
           snippetId={snippetId}
           currentVoteId={currentVoteId}
         />
@@ -39,10 +67,11 @@ const Voting = ({
 
         <Downvote
           currentVoteValue={currentVoteValue}
-          userId={userId}
+          userId={currentUser?.id}
           commentId={commentId}
           score={score}
           entity={entity}
+          disabled={!isAuthenticated}
           snippetId={snippetId}
           currentVoteId={currentVoteId}
         />

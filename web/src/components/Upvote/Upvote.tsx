@@ -2,7 +2,7 @@ import IconButton from '@mui/material/IconButton'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { USER_DATA_QUERY } from 'src/pages/Queries/queries'
+import { USER_DATA_QUERY, USER_VOTES_QUERY } from 'src/pages/Queries/queries'
 import { QUERY as SNIPPET_QUERY } from 'src/components/SnippetCell'
 import { QUERY as COMMENTS_QUERY } from 'src/components/CommentsCell'
 import { EntityType } from 'types/graphql'
@@ -32,6 +32,7 @@ interface Props {
   userId: number
   score: number
   currentVoteId: number
+  disabled: boolean
 }
 
 const Upvote = ({
@@ -41,6 +42,7 @@ const Upvote = ({
   entity,
   commentId,
   userId,
+  disabled,
   score,
 }: Props) => {
   const [upvote, { loading }] = useMutation(UPVOTE, {
@@ -48,28 +50,27 @@ const Upvote = ({
       const { score, cudAction, vote } = upvote
       const { userId, snippetId, commentId, id, value } = vote
 
-      const userDataQueryResult = cache.readQuery({
-        query: USER_DATA_QUERY,
+      const userVotesQueryResults = cache.readQuery({
+        query: USER_VOTES_QUERY,
         variables: {
-          id: userId,
-          votes: true,
-          snippets: false,
-          comments: false,
-        },
+          input: {
+            userId,
+          }
+        }
       })
 
-      if(!userDataQueryResult) {
+      if(!userVotesQueryResults) {
         return
       }
 
-      const user = userDataQueryResult.user
-
-      let cachedVotes = user.votes
+      //@ts-ignore
+      let cachedVotes = userVotesQueryResults.votes
 
       //modify snippet score
       if (vote.entityType === 'SNIPPET') {
-        const snippetToModify = cache.writeFragment({
-          id: `Snippet:${snippetId}`, // The value of the to-do item's cache ID
+
+        cache.writeFragment({
+          id: `Snippet:${snippetId}`,
           fragment: gql`
             fragment SnippetToUpdate on Snippet {
               score
@@ -82,26 +83,16 @@ const Upvote = ({
       }
       // modify comment score
       else {
-        const { snippet } = cache.readQuery({
-          query: COMMENTS_QUERY,
-          variables: {
-            id: snippetId,
-            snippetId,
-          },
-        })
 
-        const newComments = snippet.comments.map((comment) =>
-          comment.id === commentId ? { ...comment, score } : comment
-        )
-        const newSnippet = { ...snippet, comments: newComments }
-        cache.writeQuery({
-          query: COMMENTS_QUERY,
+        cache.writeFragment({
+          id: `Comment:${commentId}`,
+          fragment: gql`
+            fragment CommentToUpdate on Comment {
+              score
+            }
+          `,
           data: {
-            snippet: newSnippet,
-            variables: {
-              id: snippetId,
-              snippetId,
-            },
+            score,
           },
         })
       }
@@ -128,31 +119,28 @@ const Upvote = ({
           throw new Error(`Unexpected value for cudAction: ${cudAction}`)
       }
 
-      const newUserData = { ...user, votes: cachedVotes }
-
       if(cudAction === 'DELETED') {
         cache.evict({ id: `Vote:${id}` })
       }
 
       cache.writeQuery({
-        query: USER_DATA_QUERY,
+        query: USER_VOTES_QUERY,
         data: {
-          user: newUserData,
+          votes: cachedVotes,
         },
         variables: {
-          id: userId,
-          votes: true,
-          snippets: false,
-          comments: false,
+          input: {
+            userId,
+          }
         },
       })
 
     },
     onCompleted: ({ upvote }) => {
       if (upvote.cudAction === 'CREATED' || upvote.cudAction === 'UPDATED') {
-        toast.success('🙂')
+        toast.success('Upvoted')
       } else {
-        toast.success('😠')
+        toast.success('Cancelled Upvote')
       }
     },
     // optimisticResponse: {
@@ -201,7 +189,7 @@ const Upvote = ({
   }
 
   return (
-    <IconButton type="button" disabled={loading} onClick={onClick} aria-label="upvote">
+    <IconButton type="button" disabled={loading || disabled} onClick={onClick} aria-label="upvote">
       <ArrowUpwardIcon color={currentVoteValue === 1 ? 'success' : 'inherit'} />
     </IconButton>
   )

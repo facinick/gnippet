@@ -19,6 +19,15 @@ export const QUERY = gql`
         id
         name
       }
+      comments(input: { orderBy: { createdAt: desc }} ) {
+        id
+        body
+        score
+        author {
+          username
+        }
+        createdAt
+      }
     }
   }
 `
@@ -38,8 +47,6 @@ export const Success = ({
 }: CellSuccessProps<FindSnippetQuery, FindSnippetQueryVariables>) => {
 
   return (
-    <>
-       <Snippet showBackButton={true} showActivity={false} truncate={false} key={snippet.id} snippet={snippet} />
-    </>
+    <><Snippet showCommentsHeader={true} showCommentsForm={true} showComments={true} showBackButton={true} showActivity={false} truncate={false} key={snippet.id} snippet={snippet} /></>
   )
 }

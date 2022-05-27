@@ -13,8 +13,12 @@ export const schema = gql`
     comment: Comment
   }
 
+  input VotesQueryInput {
+    userId: Int
+  }
+
   type Query {
-    votes: [Vote]! @requireAuth
+    votes(input: VotesQueryInput): [Vote]! @requireAuth
     vote(id: Int!): Vote @requireAuth
   }
 

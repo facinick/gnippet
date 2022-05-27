@@ -25,12 +25,11 @@ export const getCurrentUser = async (session) => {
       id: true,
       roles: true,
       username: true,
-      isBanned: true ,
+      isBanned: true,
       createdAt: true,
       updatedAt: true,
       bio: true,
       avatarUrl: true,
-      snippets: true,
       votes: true,
     },
   })

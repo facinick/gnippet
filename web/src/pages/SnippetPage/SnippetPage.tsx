@@ -9,26 +9,40 @@ import CommentsCell from 'src/components/CommentsCell'
 import CommentForm from 'src/components/CommentForm/CommentForm'
 import { useAuth } from '@redwoodjs/auth'
 import Typography from '@mui/material/Typography'
+import { useEffect } from 'react'
+import { USER_VOTES_QUERY } from '../Queries/queries'
+import { useLazyQuery } from '@apollo/client';
 interface Props {
   id: number
 }
 
 const SnippetPage = ({ id }: Props) => {
+  const { isAuthenticated, currentUser } = useAuth()
+  const [getLoggedInUserVotesData] = useLazyQuery(
+    USER_VOTES_QUERY,
+    {
+      variables: {
+        input: {
+          userId: currentUser?.id,
+        }
+      }
+    },
+  );
 
-  const { currentUser, isAuthenticated } = useAuth()
+  useEffect(() => {
+
+    if(currentUser?.id && isAuthenticated) {
+      getLoggedInUserVotesData()
+    }
+
+  }, [isAuthenticated])
 
   return (
     <>
       <MetaTags title="Snippet" description="Snippet page" />
-
       <Container maxWidth="sm">
-        <Stack spacing={5}>
-          <SnippetCell id={id}></SnippetCell>
-          { isAuthenticated && <CommentForm snippetId={id} authorId={currentUser.id} /> }
-          <CommentsCell snippetId={id} />
-        </Stack>
+        <SnippetCell id={id} />
       </Container>
-
     </>
   )
 }

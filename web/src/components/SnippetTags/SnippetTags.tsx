@@ -8,7 +8,7 @@ interface Props {
 const SnippetTags = ({ tags }: Props) => {
   const n = tags.length
   return (
-    <div style={{ marginTop: '20px' }}>
+    <div>
       {tags.map(({ name }, index) => {
         const isFirstTag = index === 0
         const isLastTag = index === n - 1

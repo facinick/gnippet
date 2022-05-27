@@ -7,6 +7,11 @@ import Divider from '@mui/material/Divider'
 import Pagination from '@mui/material/Pagination'
 import { navigate } from '@redwoodjs/router'
 import Box from '@mui/material/Box'
+import { useEffect } from 'react'
+import { isAuthenticated } from 'src/lib/auth'
+import { USER_VOTES_QUERY } from 'src/pages/Queries/queries'
+import { useLazyQuery } from '@apollo/client';
+import { useAuth } from '@redwoodjs/auth'
 
 export const QUERY = gql`
   query SnippetsQuery($skip: Int!, $take:Int!) {
@@ -20,10 +25,19 @@ export const QUERY = gql`
         score
         author {
           username
-        },
+        }
         tags {
           id
           name
+        }
+        comments(input: { orderBy: { createdAt: desc }} ) {
+          id
+          body
+          score
+          author {
+            username
+          }
+          createdAt
         }
       }
       count
@@ -48,13 +62,6 @@ export const Success = ({
   const numberOfSnippets = snippets.data.length
   let isLastSnippet: boolean = false
   let renderDivider: boolean = false
-  const snippetsPerPage = 5
-  const totalSnippets = snippets.count
-  const totalPages = Math.ceil(totalSnippets / snippetsPerPage)
-
-  const handleChange = (event, value) => {
-    navigate(`/new/${value - 1}`)
-  }
 
   const spacing = 5
 
@@ -64,23 +71,24 @@ export const Success = ({
         {snippets.data.map((snippet, index) => {
           isLastSnippet = index === numberOfSnippets - 1 ? true : false
           renderDivider = !isLastSnippet
+
           return (
-            <Box key={snippet.id}>
+            <React.Fragment key={snippet.id}>
               <Snippet
                 showBackButton={false}
                 showActivity={true}
                 key={snippet.id}
                 snippet={snippet}
+                showComments={false}
+                showCommentsForm={false}
+                showCommentsHeader={false}
                 truncate={true}
               />
-              {renderDivider && <Divider style={{paddingTop: `${spacing * 8}px`}} />}
-            </ Box>
+              { renderDivider && <Divider /> }
+            </ React.Fragment>
           )
         })}
       </Stack>
-      <div style={{display: 'flex', justifyContent: 'center'}}>
-        <Pagination page={page + 1} onChange={handleChange}  count={totalPages} variant="outlined" />
-      </div>
     </>
   )
 }

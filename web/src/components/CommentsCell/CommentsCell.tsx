@@ -46,8 +46,6 @@ export const Success = ({
   const yesComments: boolean = !noComments
   return (
     <>
-      {yesComments && <Typography variant="subtitle1"> ~ comments ~ </Typography>}
-      {noComments && <Typography variant="subtitle1"> ~ no comments ~ </Typography>}
       <Stack spacing={5}>
         {snippet.comments.map((comment, index) => {
           isLastComment = (index === numberOfComments - 1) ? true : false
