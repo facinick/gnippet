@@ -1,7 +1,7 @@
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 import { useEffect, useState } from 'react'
-import { USER_DATA_QUERY, USER_VOTES_QUERY } from 'src/pages/Queries/queries'
+import { USER_VOTES_QUERY } from 'src/pages/Queries/queries'
 import { truncate as returnTruncatedText } from 'src/utils/stringUtils'
 import CreatedAt from '../CreatedAt/CreatedAt'
 import Username from '../Username/Username'

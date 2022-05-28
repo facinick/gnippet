@@ -9,32 +9,32 @@ import {
   SubmitHandler,
   FieldError,
 } from '@redwoodjs/forms'
-import PostAddIcon from '@mui/icons-material/PostAdd';
-
+import PostAddIcon from '@mui/icons-material/PostAdd'
+import { EditorWrapper } from 'src/components/Editor/EditorWrapper'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { useRef, useState } from 'react'
+import { createRef, useRef, useState } from 'react'
 import { QUERY as SnippetsQuery } from 'src/components/SnippetsCell/SnippetsCell'
 import { QUERY as TagsQuery } from 'src/components/TagsCell/TagsCell'
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
-import { TagsSearchObject } from '../TagSearchAndAdd/TagSearchAndAdd';
+import Button from '@mui/material/Button'
+import Box from '@mui/material/Box'
+import { Typography } from '@mui/material'
+import { TagsSearchObject } from '../TagSearchAndAdd/TagSearchAndAdd'
 import TagsCell from 'src/components/TagsCell'
-import TextField, { TextFieldProps } from '@mui/material/TextField';
-
-import { styled } from '@mui/material/styles';
+import TextField, { TextFieldProps } from '@mui/material/TextField'
+import { styled } from '@mui/material/styles'
+import { useTheme } from '@emotion/react'
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,
   backgroundColor: theme.palette.containerPrimary.main,
-  "& .MuiInputBase-root": {
+  '& .MuiInputBase-root': {
     color: theme.palette.containerPrimary.contrastText,
   },
-  "& .MuiInputLabel-root": {
+  '& .MuiInputLabel-root': {
     color: theme.palette.containerPrimary.contrastText,
-  }
-}));
+  },
+}))
 
 const CREATE = gql`
   mutation CreateSnippetMutation($input: CreateSnippetInput!) {
@@ -63,43 +63,59 @@ interface Props {
 }
 
 const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
-
   const formRef = useRef<HTMLFormElement>()
+  const editorRef = useRef(null);
+  const theme = useTheme()
 
-  const [title, setTitle] = useState("")
+  const log = (event) => {
+    event.preventDefault()
+
+    if (editorRef?.current && editorRef?.current?.editor) {
+      console.log(editorRef.current.editor.current.getContent?.())
+    }
+  }
+
+  const [title, setTitle] = useState('')
   const [titleError, setTitleError] = useState(false)
-  const [titleErrorMessage, setTitleErrorMessage] = useState("")
-  const [body, setBody] = useState("")
+  const [titleErrorMessage, setTitleErrorMessage] = useState('')
+  const [body, setBody] = useState('')
   const [bodyError, setBodyError] = useState(false)
-  const [bodyErrorMessage, setBodyErrorMessage] = useState("")
+  const [bodyErrorMessage, setBodyErrorMessage] = useState('')
   const [tags, setTags] = useState<Array<TagsSearchObject>>([])
 
   const onTitleInput = (event) => {
     const value = event.target.value
     setTitle(value)
     setTitleError(false)
-    setTitleErrorMessage("")
+    setTitleErrorMessage('')
   }
 
   const onBodyInput = (event) => {
     const value = event.target.value
     setBody(value)
     setBodyError(false)
-    setBodyErrorMessage("")
+    setBodyErrorMessage('')
+  }
+
+  const onEditorChange = (data)=> {
+    console.log(data)
+    setBody(data)
+    setBodyError(false)
+    setBodyErrorMessage('')
   }
 
   const areInputsValid = () => {
-    if(!title) {
+    if (!title) {
       setTitleError(true)
-      setTitleErrorMessage("Title cannot be empty!")
+      setTitleErrorMessage('Title cannot be empty!')
     }
 
-    if(!body) {
+    if (!body) {
       setBodyError(true)
-      setBodyErrorMessage("Body cannot be empty!")
+      setBodyErrorMessage('Body cannot be empty!')
     }
 
-    if(!title || !body) {
+    if (!title || !body) {
       return false
     }
 
@@ -111,13 +127,12 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
       toast.success('Snippet Created!')
     },
     update(cache, { data: { createSnippet } }) {
-
       const { snippets } = cache.readQuery({
         query: SnippetsQuery,
         variables: {
           skip: 0,
           take: 5,
-        }
+        },
       })
 
       // older existing tags
@@ -125,84 +140,102 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
         query: TagsQuery,
       })
       // has newly created tags + maybe older ones
-      const addedTags = createSnippet.tags.filter((tago) => !tags.some(tag => tag.id === tago.id))
+      const addedTags = createSnippet.tags.filter(
+        (tago) => !tags.some((tag) => tag.id === tago.id)
+      )
       // pick these ones from
 
-      if(addedTags.length > 0) {
+      if (addedTags.length > 0) {
         cache.writeQuery({
           query: TagsQuery,
           data: {
-            tags: [...tags, ...addedTags]
+            tags: [...tags, ...addedTags],
           },
-        });
+        })
       }
 
-      let newSnippets = [createSnippet].concat(snippets.data).slice(0,5)
+      let newSnippets = [createSnippet].concat(snippets.data).slice(0, 5)
 
       cache.writeQuery({
         query: SnippetsQuery,
         data: {
           snippets: {
             data: newSnippets,
-            count: snippets.count + 1
-          }
+            count: snippets.count + 1,
+          },
         },
         variables: {
           skip: 0,
           take: 5,
-        }
-      });
+        },
+      })
     },
   })
 
   const onSubmit = () => {
-    if(!areInputsValid()) {
+    if (!areInputsValid()) {
       return
     }
 
-    createSnippet({ variables: { input: { pageId, authorId, body, title, tags }}})
+    createSnippet({
+      variables: { input: { pageId, authorId, body, title, tags } },
+    })
     formRef.current.reset()
   }
-
   return (
-    <React.Fragment >
-      <Stack padding={'15px 0px'} alignItems={'center'} justifyContent={'space-between'} direction={'row'}>
-        <Typography variant='h6'>Post Snippet</Typography>
-        <i><Typography variant='caption'>as @{authorUsername}</Typography></i>
+    <React.Fragment>
+      <Stack
+        padding={'15px 0px'}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+        direction={'row'}
+      >
+        <Typography variant="h6">Post Snippet</Typography>
+        <i>
+          <Typography variant="caption">as @{authorUsername}</Typography>
+        </i>
       </Stack>
       <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
-        <FormError
-          error={error} />
+        <FormError error={error} />
 
         <Stack direction="column" spacing={1}>
-
           <StyledTextField
             name="title"
             required
             disabled={loading}
             error={titleError}
-            helperText={titleError ? titleErrorMessage : ""}
+            helperText={titleError ? titleErrorMessage : ''}
             onInput={onTitleInput}
             size="small"
             label={'Title'}
-            />
+          />
 
           <StyledTextField
             label="Snippet"
             disabled={loading}
             error={bodyError}
-            helperText={bodyError ? bodyErrorMessage : ""}
+            helperText={bodyError ? bodyErrorMessage : ''}
             required
             onInput={onBodyInput}
             multiline
             size="small"
             rows={4}
           />
-
           <TagsCell setTags={setTags} />
-          <Box style={{height: '4px'}}></Box>
-          <Button style={{borderRadius: '30px', width: '150px'}} aria-label='Post Snippet' title={'Post Snippet'} endIcon={<PostAddIcon />} size={'small'} variant="contained" onSubmit={onSubmit} disabled={loading} type="submit">Submit</Button>
-
+          <Box style={{ height: '4px' }}></Box>
+          <Button
+            style={{ borderRadius: '30px', width: '150px' }}
+            aria-label="Post Snippet"
+            title={'Post Snippet'}
+            endIcon={<PostAddIcon />}
+            size={'small'}
+            variant="contained"
+            onSubmit={onSubmit}
+            disabled={loading}
+            type="submit"
+          >
+            Submit
+          </Button>
         </Stack>
       </Form>
     </React.Fragment>

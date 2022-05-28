@@ -1,13 +1,8 @@
-import type { FindSnippetQuery } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type { CellFailureProps } from '@redwoodjs/web'
 import Comment from 'src/components/Comment'
 import Stack from '@mui/material/Stack'
-import { useApolloClient } from '@apollo/client'
-import { USER_DATA_QUERY } from "src/pages/Queries/queries";
-import { useAuth } from '@redwoodjs/auth';
 import { _SnippetWithComments } from 'src/gql_objects/gqlObjects'
 import Divider from '@mui/material/Divider'
-import Typography from '@mui/material/Typography'
 
 export const QUERY = gql`
   query SnippetsCommentsQuery($snippetId: Int!) {

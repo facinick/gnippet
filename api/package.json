@@ -3,11 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@dicebear/avataaars": "^5.0.0-alpha.0",
-    "@dicebear/avatars-avataaars-sprites": "^4.10.2",
-    "@dicebear/croodles": "^4.10.2",
     "@redwoodjs/api": "1.4.0",
-    "@redwoodjs/graphql-server": "1.4.0",
-    "yup": "^0.32.11"
+    "@redwoodjs/graphql-server": "1.4.0"
   }
 }

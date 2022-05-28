@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography'
 import Downvote from '../Downvote/Downvote'
 import Upvote from '../Upvote/Upvote'
 import { useApolloClient } from '@apollo/client'
-import { USER_DATA_QUERY, USER_VOTES_QUERY } from 'src/pages/Queries/queries'
+import { USER_VOTES_QUERY } from 'src/pages/Queries/queries'
 import { useState, useEffect } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 
