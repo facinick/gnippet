@@ -13,7 +13,13 @@ export const QUERY = gql`
 
 export const Loading = () => <div>Loading tags...</div>
 
-export const Empty = () => <div>Empty</div>
+export const Empty = ({ setTags }: {setTags: (tags) => void}) => {
+  return (
+    <>
+      <TagSearchAndAdd setTags={setTags} />
+    </>
+  )
+}
 
 export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
