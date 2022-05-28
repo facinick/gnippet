@@ -6,7 +6,7 @@ import type {
   TagResolvers,
 } from 'types/graphql'
 
-export const tags: QueryResolvers['tags'] = ({ input }) => {
+export const tags: QueryResolvers['tags'] = async({ input }) => {
 
   const where = input?.filter
     ? {
@@ -16,7 +16,8 @@ export const tags: QueryResolvers['tags'] = ({ input }) => {
     }
     : {}
 
-  return db.tag.findMany({ where, skip: input?.skip, take: input?.take, orderBy: input?.orderBy })
+  const tags = await db.tag.findMany({ where, skip: input?.skip, take: input?.take, orderBy: input?.orderBy }) || []
+  return tags
 }
 
 // export const tag: QueryResolvers['tag'] = ({ id }) => {
