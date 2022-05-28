@@ -28,6 +28,7 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
           <Grid
             columns={{ xs: 12, sm: 12, md: 12 }}
             flexDirection={'row'}
+            alignItems={'center'}
             container
             spacing={2}
           >
@@ -51,7 +52,7 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
             </Grid>
             <Grid xs={4} item>
               <div className={'center'}>
-                <Typography textAlign={'center'} variant="h4" component="h2">
+                <Typography textAlign={'center'} variant="h6" component="h6">
                   Fnick;
                 </Typography>
               </div>
