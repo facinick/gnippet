@@ -3,12 +3,20 @@ import SnippetsCell from 'src/components/SnippetsCell'
 import { useAuth } from '@redwoodjs/auth'
 import SnippetForm from 'src/components/SnippetForm/SnippetForm'
 import Container from '@mui/material/Container'
-import Card from '@mui/material/Card'
+// import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Stack from '@mui/material/Stack'
 import { useEffect } from 'react'
 import { USER_VOTES_QUERY } from '../Queries/queries'
 import { useLazyQuery } from '@apollo/client';
+import Card, { CardProps } from '@mui/material/Card';
+
+import { styled } from '@mui/material/styles';
+
+const CreateSnippetCard = styled(Card)<CardProps>(({ theme }) => ({
+  color: theme.palette.containerPrimary.contrastText,
+  backgroundColor: theme.palette.containerPrimary.main
+}));
 
 const HomePage = ({ page }: { page: number }) => {
   const { isAuthenticated, currentUser } = useAuth()
@@ -44,11 +52,11 @@ const HomePage = ({ page }: { page: number }) => {
         <Stack spacing={5}>
           {/****** Create a Post ******/}
           {showSnippetForm && (
-            <Card >
+            <CreateSnippetCard>
               <CardContent>
                 <SnippetForm authorUsername={currentUser?.username} authorId={currentUser?.id} />
               </CardContent>
-            </Card>
+            </CreateSnippetCard>
           )}
           {/******** All Posts ********/}
           <SnippetsCell page={_page} skip={_skip} take={_take} />

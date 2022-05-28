@@ -7,7 +7,7 @@ const LogoutButton = () => {
   const { logOut } = useAuth()
 
   return (
-    <IconButton title={"Logout"} onClick={logOut} aria-label="logout">
+    <IconButton color={'secondary'} title={"Logout"} onClick={logOut} aria-label="logout">
       <LogoutIcon />
     </IconButton>
   )

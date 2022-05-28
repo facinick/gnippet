@@ -11,7 +11,7 @@ const LoginButton = () => {
 
   return (
     <IconButton title={"Login"} onClick={onCLick} aria-label="login">
-      <LoginIcon />
+      <LoginIcon color={'secondary'} />
     </IconButton>
   )
 }

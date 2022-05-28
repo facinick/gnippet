@@ -12,7 +12,7 @@ const BackButton = () => {
 
   return (
     <IconButton title={"Back"} onClick={onCLick} aria-label="back">
-      <ArrowBackIcon />
+      <ArrowBackIcon color={'secondary'} />
     </IconButton>
   )
 }

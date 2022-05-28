@@ -22,7 +22,6 @@ const TagSearchAndAdd = ({ setTags }: Props) => {
   const [localTags, setLocalTags] = useState<Array<TagSearchId & TagSearchName>>([])
   //@ts-ignore
   const tagsWithoutTypename = localTags.map(({__typename, ...rest}) => { return rest })
-  const [inputValue, setInputValue] = React.useState('')
   const [options, setOptions] = React.useState<readonly TagsSearchObject[]>(tagsWithoutTypename)
   const onSelect = (event: any, newValue: Array<TagsSearchObject> | null) => {
     setTags(newValue)

@@ -18,10 +18,11 @@ import { useRef, useState } from 'react'
 import { QUERY as SnippetsQuery } from 'src/components/SnippetsCell/SnippetsCell'
 import { QUERY as TagsQuery } from 'src/components/TagsCell/TagsCell'
 import Button from '@mui/material/Button';
-import { Typography } from '@mui/material';
+import { Card, Paper, Typography } from '@mui/material';
 import TagSearchAndAdd, { TagsSearchObject } from '../TagSearchAndAdd/TagSearchAndAdd';
 import TagsCell from 'src/components/TagsCell'
 import { Tag } from 'types/graphql';
+import { Box } from '@mui/system';
 
 const CREATE = gql`
   mutation CreateSnippetMutation($input: CreateSnippetInput!) {
@@ -159,7 +160,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
   }
 
   return (
-    <div >
+    <React.Fragment >
       <Stack padding={'15px 0px'} alignItems={'center'} justifyContent={'space-between'} direction={'row'}>
         <Typography variant='h6'>Post Snippet</Typography>
         <i><Typography variant='caption'>as @{authorUsername}</Typography></i>
@@ -199,7 +200,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
 
         </Stack>
       </Form>
-    </div>
+    </React.Fragment>
   )
 }
 

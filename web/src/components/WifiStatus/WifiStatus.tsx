@@ -17,7 +17,7 @@ const WifiStatus = () => {
       }
       { isOnline &&
         <IconButton title={'Device Online'}  aria-label="device-online">
-          <SignalWifiStatusbar4BarIcon color={'success'} />
+          <SignalWifiStatusbar4BarIcon color={'secondary'} />
         </IconButton>
       }
     </div>

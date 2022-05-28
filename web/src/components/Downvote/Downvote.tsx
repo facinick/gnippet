@@ -192,10 +192,8 @@ const Downvote = ({
   }
 
   return (
-    <Button variant='text' size={'large'} disabled={loading || disabled} onClick={onClick} aria-label="downvote">
-      <ArrowDownwardIcon
-        color={currentVoteValue === -1 ? 'error' : 'disabled'}
-      />
+    <Button color={currentVoteValue === -1 ? 'downvote' : 'inherit'} variant='text' size={'large'} disabled={loading || disabled} onClick={onClick} aria-label="downvote">
+      <ArrowDownwardIcon />
     </Button>
   )
 }

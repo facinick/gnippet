@@ -28,23 +28,10 @@ const Routes = () => {
     },
   );
 
-  const [getLoggedInUserVotesData] = useLazyQuery(
-    USER_VOTES_QUERY,
-    {
-      fetchPolicy: 'network-only',
-      variables: {
-        input: {
-          userId: currentUser?.id,
-        }
-      }
-    },
-  );
-
   useEffect(() => {
 
     if(currentUser?.id && isAuthenticated) {
       getLoggedInUserData()
-      // getLoggedInUserVotesData()
     } else {
       // reset cache
     }
@@ -65,6 +52,7 @@ const Routes = () => {
           <Route path="/new/{page:Int}" page={HomePage} name="home" />
           <Route path="/s/{id:Int}" page={SnippetPage} name="snippet" />
           <Route path="/u/{username:String}" page={UserPage} name="user" />
+          <Route path="/t/{name:String}" page={TagPage} name="tag" />
         </Set>
 
         <Route notfound page={NotFoundPage} />
