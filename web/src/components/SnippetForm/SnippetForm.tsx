@@ -17,6 +17,7 @@ import { useRef, useState } from 'react'
 import { QUERY as SnippetsQuery } from 'src/components/SnippetsCell/SnippetsCell'
 import { QUERY as TagsQuery } from 'src/components/TagsCell/TagsCell'
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import { TagsSearchObject } from '../TagSearchAndAdd/TagSearchAndAdd';
 import TagsCell from 'src/components/TagsCell'
@@ -199,8 +200,8 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
           />
 
           <TagsCell setTags={setTags} />
-
-          <Button aria-label='Post Snippet' title={'Post Snippet'} endIcon={<PostAddIcon />} size={'small'} variant="contained" onSubmit={onSubmit} disabled={loading} type="submit">Submit</Button>
+          <Box style={{height: '4px'}}></Box>
+          <Button style={{borderRadius: '30px', width: '150px'}} aria-label='Post Snippet' title={'Post Snippet'} endIcon={<PostAddIcon />} size={'small'} variant="contained" onSubmit={onSubmit} disabled={loading} type="submit">Submit</Button>
 
         </Stack>
       </Form>
