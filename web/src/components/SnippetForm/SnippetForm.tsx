@@ -18,11 +18,9 @@ import { useRef, useState } from 'react'
 import { QUERY as SnippetsQuery } from 'src/components/SnippetsCell/SnippetsCell'
 import { QUERY as TagsQuery } from 'src/components/TagsCell/TagsCell'
 import Button from '@mui/material/Button';
-import { Card, Paper, Typography } from '@mui/material';
-import TagSearchAndAdd, { TagsSearchObject } from '../TagSearchAndAdd/TagSearchAndAdd';
+import { Typography } from '@mui/material';
+import { TagsSearchObject } from '../TagSearchAndAdd/TagSearchAndAdd';
 import TagsCell from 'src/components/TagsCell'
-import { Tag } from 'types/graphql';
-import { Box } from '@mui/system';
 
 const CREATE = gql`
   mutation CreateSnippetMutation($input: CreateSnippetInput!) {
@@ -43,13 +41,6 @@ const CREATE = gql`
     }
   }
 `
-
-interface FormValues {
-  body: string
-  authorId: number
-  pageId?: number
-  title: string
-}
 
 interface Props {
   authorId: number

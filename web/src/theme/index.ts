@@ -12,11 +12,13 @@ declare module "@mui/material/styles" {
     upvote?: PaletteColor;
     downvote?: PaletteColor;
     containerPrimary?: PaletteColor;
+    containerSecondary?: PaletteColor;
   }
   interface PaletteOptions {
     upvote?: PaletteColor;
     downvote?: PaletteColor;
     containerPrimary?: PaletteColor;
+    containerSecondary?: PaletteColor;
   }
 }
 

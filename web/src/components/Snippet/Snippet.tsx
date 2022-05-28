@@ -83,7 +83,7 @@ const ControlledSnippet = ({
         <Voting entity={'SNIPPET'} snippetId={id} score={score} />
         {rendertags && <SnippetTags tags={tags} />}
         {isAuthenticated && showCommentsForm && (
-          <CommentForm snippetId={id} authorId={currentUser.id} />
+          <CommentForm authorUsername={currentUser?.username} snippetId={id} authorId={currentUser.id} />
         )}
         {showNumberOfComments && <NumberOfComments value={comments.length} />}
         {showCommentsHeader && (

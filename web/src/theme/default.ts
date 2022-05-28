@@ -37,6 +37,12 @@ export const theme: AppTheme = {
           contrastText: 'white',
         },
       }),
+      containerSecondary: palette.augmentColor({
+        color: {
+          main: '#121212',
+          contrastText: 'white',
+        },
+      }),
     }
   },
   light: {
@@ -55,6 +61,12 @@ export const theme: AppTheme = {
         },
       }),
       containerPrimary: palette.augmentColor({
+        color: {
+          main: '#fff',
+          contrastText: '#black',
+        },
+      }),
+      containerSecondary: palette.augmentColor({
         color: {
           main: '#fff',
           contrastText: '#black',
