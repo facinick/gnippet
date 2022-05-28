@@ -1,10 +1,25 @@
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
 import React, { useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField'
-import Chip from '@mui/material/Chip'
 import { Tag } from 'types/graphql'
 import { QUERY as TagsQuery } from 'src/components/TagsCell/TagsCell'
 import { useApolloClient } from '@apollo/client'
+
+import Chip, { ChipProps } from '@mui/material/Chip';
+import Paper, { PaperProps } from '@mui/material/Paper';
+
+import { styled } from '@mui/material/styles';
+
+const StyledPaper = styled(Paper)<PaperProps>(({ theme }) => ({
+  backgroundColor: theme.palette.containerPrimary.main,
+  color: theme.palette.containerPrimary.contrastText
+}));
+
+const StyledChip = styled(Chip)<ChipProps>(({ theme }) => ({
+  "& .MuiChip-label": {
+    paddingBottom: '3px',
+  },
+}));
 
 type TagSearchId = Pick<Tag, 'id'>
 type TagSearchName = Pick<Tag, 'name'>
@@ -51,12 +66,15 @@ const TagSearchAndAdd = ({ setTags }: Props) => {
       freeSolo
       size='small'
       filterSelectedOptions
+      PaperComponent={({ children }) => (
+          <StyledPaper>{children}</StyledPaper>
+      )}
       getOptionLabel={(option) =>
         typeof option === 'string' ? option : option.name
       }
       renderTags={(value: readonly TagsSearchObject[], getTagProps) =>
         value.map((option: TagsSearchObject, index: number) => (
-          <Chip
+          <StyledChip
             label={option.name}
             {...getTagProps({ index })}
             size={'small'}
