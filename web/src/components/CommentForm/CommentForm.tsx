@@ -30,7 +30,13 @@ const CREATE = gql`
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   color: theme.palette.containerSecondary.contrastText,
-  backgroundColor: theme.palette.containerSecondary.main
+  backgroundColor: theme.palette.containerSecondary.main,
+  "& .MuiInputBase-root": {
+    color: theme.palette.containerSecondary.contrastText,
+  },
+  "& .MuiInputLabel-root": {
+    color: theme.palette.containerSecondary.contrastText,
+  }
 }));
 
 interface Props {

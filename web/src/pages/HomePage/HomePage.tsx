@@ -15,7 +15,7 @@ import { styled } from '@mui/material/styles';
 
 const CreateSnippetCard = styled(Card)<CardProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,
-  backgroundColor: theme.palette.containerPrimary.main
+  backgroundColor: theme.palette.containerPrimary.main,
 }));
 
 const HomePage = ({ page }: { page: number }) => {

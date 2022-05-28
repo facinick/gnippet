@@ -10,7 +10,6 @@ import {
   FieldError,
 } from '@redwoodjs/forms'
 import PostAddIcon from '@mui/icons-material/PostAdd';
-import TextField from '@mui/material/TextField';
 
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
@@ -21,6 +20,20 @@ import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 import { TagsSearchObject } from '../TagSearchAndAdd/TagSearchAndAdd';
 import TagsCell from 'src/components/TagsCell'
+import TextField, { TextFieldProps } from '@mui/material/TextField';
+
+import { styled } from '@mui/material/styles';
+
+const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
+  color: theme.palette.containerPrimary.contrastText,
+  backgroundColor: theme.palette.containerPrimary.main,
+  "& .MuiInputBase-root": {
+    color: theme.palette.containerPrimary.contrastText,
+  },
+  "& .MuiInputLabel-root": {
+    color: theme.palette.containerPrimary.contrastText,
+  }
+}));
 
 const CREATE = gql`
   mutation CreateSnippetMutation($input: CreateSnippetInput!) {
@@ -162,7 +175,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
 
         <Stack direction="column" spacing={1}>
 
-          <TextField
+          <StyledTextField
             name="title"
             required
             disabled={loading}
@@ -173,7 +186,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
             label={'Title'}
             />
 
-          <TextField
+          <StyledTextField
             label="Snippet"
             disabled={loading}
             error={bodyError}
