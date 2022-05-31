@@ -2,6 +2,7 @@ import type { FindSnippetQuery, FindSnippetQueryVariables } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import Snippet from '../Snippet/Snippet'
 import { _Vote } from 'src/gql_objects/gqlObjects'
+import Meta from '../Meta/Meta'
 
 export const QUERY = gql`
   query FindSnippetQuery($id: Int!) {
@@ -32,15 +33,13 @@ export const QUERY = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => <Meta loading={true}/>
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => <Meta empty={true} message={"Snippet doesn't exist!"}/>
 
 export const Failure = ({
   error,
-}: CellFailureProps<FindSnippetQueryVariables>) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
-)
+}: CellFailureProps<FindSnippetQueryVariables>) =>  <Meta error={true} message={error.message} />
 
 export const Success = ({
   snippet

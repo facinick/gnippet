@@ -1,67 +1,189 @@
 import { useLazyQuery } from '@apollo/client'
+import Avatar from '@mui/material/Avatar'
+import Grid from '@mui/material/Grid'
+import Typography from '@mui/material/Typography'
 import { useAuth } from '@redwoodjs/auth'
 import { useQuery } from '@redwoodjs/web'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { USER_DATA_QUERY } from 'src/pages/Queries/queries'
-import BookmarksList from '../BookmarksList/BookmarksList'
+import Username from '../Username/Username'
+import UserActivityCell from 'src/components/UserActivityCell/UserActivityCell'
+import UserDataCell from 'src/components/UserDataCell/UserDataCell'
+import UserVotesCell from 'src/components/UserVotesCell/UserVotesCell'
+import Tabs from '@mui/material/Tabs'
+import MuiTab from '@mui/material/Tab'
+import BookmarksIcon from '@mui/icons-material/Bookmarks'
+import CreateIcon from '@mui/icons-material/Create'
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
+import { navigate } from '@redwoodjs/router'
+import Meta from '../Meta/Meta'
 
+enum Tab {
+  ACTIVITY = 0,
+  SAVED = 1,
+  VOTES = 2,
+}
 interface Props {
   username: string
+  tab: 'activity' | 'saved' | 'votes'
 }
 
-const UserCell = ({ username }: Props) => {
-  const { currentUser, isAuthenticated } = useAuth()
+const getTab = (tab): number => {
+  switch (tab) {
+    case 'activity':
+      return Tab.ACTIVITY
+      break
+    case 'saved':
+      return Tab.SAVED
+      break
+    case 'votes':
+      return Tab.VOTES
+      break
+    default:
+      return Tab.ACTIVITY
+  }
+}
+
+const getTabName = (tab): 'activity' | 'saved' | 'votes' => {
+  switch (tab) {
+    case 0:
+      return 'activity'
+      break
+    case 1:
+      return 'saved'
+      break
+    case 2:
+      return 'votes'
+      break
+    default:
+      return 'activity'
+  }
+}
+
+const UserCell = ({ username, tab }: Props) => {
+  const { currentUser, isAuthenticated, loading } = useAuth()
   const loadPrivateUserData =
     currentUser?.id && isAuthenticated && currentUser?.username === username
-  const [getUserData, { data, error, loading }] = useLazyQuery(USER_DATA_QUERY)
+
+  const [_tab, setTab] = useState<Tab>(getTab(tab))
 
   useEffect(() => {
-    // user is logged in viewing his profile
-    if (loadPrivateUserData) {
-      getUserData({
-        variables: {
-          id: currentUser?.id,
-          fetchPrivateData: true,
-        },
-      })
-    }
+    navigate(`/u/${username}/${getTabName(_tab)}`)
+  }, [_tab])
 
-    // user is logged in, viewing someone elses profile or is not logged in viewing their profile
-    // in any case they can only see public data of this username
-    else {
-      getUserData({
-        variables: {
-          id: currentUser?.id,
-          fetchPrivateData: false,
-        },
-      })
-    }
-  }, [isAuthenticated])
-
-  if (loading) {
-    return (
-      <div>{`Loading ${
-        loadPrivateUserData ? 'private' : 'public'
-      } user data...`}</div>
-    )
+  const handleTabChange = (event, _tab) => {
+    setTab(_tab)
   }
 
-  if (error) {
-    return (
-      <div>{`Error loading ${
-        loadPrivateUserData ? 'private' : 'public'
-      } user data...`}</div>
-    )
-  }
+  useEffect(() => {
+    if (loading) {
+      return
+    }
 
-  const savedBookmarks = data?.user?.bookmarks?.filter((bookmark) => bookmark.entityType === 'SNIPPET')
-  const savedSnippets = savedBookmarks?.map(bookmark => bookmark.snippet)
+    if (!isAuthenticated) {
+      setTab(Tab.ACTIVITY)
+    }
+  }, [loading])
 
   return (
     <div>
-      {savedSnippets && (
-        <BookmarksList snippets={savedSnippets} />
-      )}
+      <Grid container>
+        {/* user avatar  */}
+        <Grid
+          container
+          justifyContent={'center'}
+          alignItems={'center'}
+          item
+          xs={12}
+        >
+          <Avatar
+            sx={{ width: 95, height: 95 }}
+            src={`https://avatars.dicebear.com/api/bottts/${username}.svg`}
+          ></Avatar>
+        </Grid>
+        {/* user username  */}
+        <Grid
+          container
+          item
+          justifyContent={'center'}
+          alignItems={'center'}
+          xs={12}
+        >
+          <div>{<Username username={username} />}</div>
+        </Grid>
+        {/* user bio  */}
+        <Grid
+          container
+          item
+          justifyContent={'center'}
+          alignItems={'center'}
+          xs={12}
+        >
+          <div>bio</div>
+        </Grid>
+        {/* user snippets  */}
+        <Grid
+          container
+          item
+          justifyContent={'center'}
+          alignItems={'flex-start'}
+          md={12}
+          sm={12}
+        >
+          <Grid
+            item
+            justifyContent={'center'}
+            alignItems={'flex-start'}
+            md={12}
+            sm={12}
+          >
+            <Tabs value={_tab} onChange={handleTabChange} centered>
+              <MuiTab
+                iconPosition="end"
+                icon={<CreateIcon />}
+                aria-label="User Activity"
+                label="Activity"
+              />
+              <MuiTab
+                disabled={!loadPrivateUserData}
+                iconPosition="end"
+                icon={<BookmarksIcon />}
+                aria-label="User Saved Items"
+                label="Saved Stuff"
+              />
+              <MuiTab
+                disabled={!loadPrivateUserData}
+                iconPosition="end"
+                icon={
+                  <CompareArrowsIcon style={{ transform: 'rotate(90deg)'}} />
+                }
+                aria-label="User Saved Items"
+                label="Votes"
+              />
+            </Tabs>
+          </Grid>
+
+          <Grid
+            item
+            justifyContent={'center'}
+            alignItems={'flex-start'}
+            md={12}
+            sm={12}
+          >
+            {_tab === 0 && (
+              <UserActivityCell username={username} fetchPrivateData={false} />
+            )}
+            {_tab === 1 && !loading && (
+              <UserDataCell id={currentUser?.id} fetchPrivateData={true} />
+            )}
+            {_tab === 1 && loading && <Meta loading={true} />}
+            {_tab === 2 && !loading && (
+              <UserVotesCell id={currentUser?.id} fetchPrivateData={true} />
+            )}
+            {_tab === 2 && loading && <Meta loading={true} />}
+          </Grid>
+        </Grid>
+      </Grid>
     </div>
   )
 }

@@ -47,46 +47,38 @@ const SnippetItem = ({
       </ListItemAvatar>
       <ListItemText
         primary={
-          <React.Fragment>
-            <Link to={routes.snippet({ id: id })}>
-              <Typography>{title}</Typography>
-            </Link>
-          </React.Fragment>
+          <Typography>
+            <Link to={routes.snippet({ id: id })}>{title}</Link>
+          </Typography>
         }
-        secondary={
-          <React.Fragment>
-            <Typography>{`${_newBody}`}</Typography>
-          </React.Fragment>
-        }
+        secondary={<Typography>{`${_newBody}`}</Typography>}
       />
     </ListItem>
   )
 }
 
-const BookmarksList = ({ snippets }: Props) => {
+const SnippetsList = ({ snippets }: Props) => {
   return (
-      <Paper style={{maxWidth: '360px'}} variant="elevation" >
-        <List
-          style={{ overflowWrap: 'break-word' }}
-          sx={{ bgcolor: 'background.paper' }}
-        >
-          {snippets.map((snippet) => {
-            const { title, body, id, author } = snippet
-            return (
-              <React.Fragment key={id}>
-                <SnippetItem
-                  title={title}
-                  body={body}
-                  id={id}
-                  author={author}
-                />
-                <Divider variant="inset" component="li" />
-              </React.Fragment>
-            )
-          })}
-        </List>
-        </Paper>
+    <Paper square variant="outlined">
+      <List
+        style={{ overflowWrap: 'break-word' }}
+        sx={{ bgcolor: 'background.paper' }}
+      >
+        {snippets.map((snippet) => {
+          const { title, body, id, author } = snippet
+          return (
+            <SnippetItem
+              title={title}
+              body={body}
+              id={id}
+              key={id}
+              author={author}
+            />
+          )
+        })}
+      </List>
+    </Paper>
   )
 }
 
-export default BookmarksList
+export default SnippetsList

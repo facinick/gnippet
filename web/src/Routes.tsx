@@ -9,29 +9,8 @@
 import HomeLayout from 'src/layouts/HomeLayout'
 import AuthLayout from 'src/layouts/AuthLayout'
 import { Router, Route, Set } from '@redwoodjs/router'
-import { useAuth } from '@redwoodjs/auth'
-import { useEffect } from 'react'
-import { USER_DATA_QUERY } from './pages/Queries/queries'
-import { useLazyQuery } from '@apollo/client'
 
 const Routes = () => {
-  const { currentUser, isAuthenticated } = useAuth()
-
-  // const [getLoggedInUserData] = useLazyQuery(USER_DATA_QUERY)
-
-  // useEffect(() => {
-  //   if (currentUser?.id && isAuthenticated) {
-  //     getLoggedInUserData({
-  //       fetchPolicy: 'network-only',
-  //       variables: {
-  //         id: currentUser?.id,
-  //       },
-  //     })
-  //   } else {
-  //     // reset cache
-  //   }
-  // }, [isAuthenticated])
-
   return (
     <Router>
       <Set wrap={AuthLayout}>
@@ -46,6 +25,7 @@ const Routes = () => {
         <Route path="/new/{page:Int}" page={HomePage} name="home" />
         <Route path="/s/{id:Int}" page={SnippetPage} name="snippet" />
         <Route path="/u/{username:String}" page={UserPage} name="user" />
+        <Route path="/u/{username:String}/{tab:String}" page={UserPage} name="userTab" />
         <Route path="/t/{name:String}" page={TagPage} name="tag" />
       </Set>
 

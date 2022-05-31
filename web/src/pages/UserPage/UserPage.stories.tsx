@@ -1,7 +1,7 @@
 import UserPage from './UserPage'
 
 export const generated = () => {
-  return <UserPage />
+  return <UserPage username={'facinick'} />
 }
 
 export default { title: 'Pages/UserPage' }

@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack'
 import Divider from '@mui/material/Divider'
 import Pagination from '@mui/material/Pagination'
 import { navigate } from '@redwoodjs/router'
+import Meta from '../Meta/Meta'
 
 export const QUERY = gql`
   query SnippetsQuery($skip: Int!, $take:Int!) {
@@ -40,14 +41,12 @@ export const QUERY = gql`
 `
 
 export const Loading = () => {
-  return <div>Loading...</div>
+  return <Meta loading={true}/>
 }
 
-export const Empty = () => <div>Empty</div>
+export const Empty = () => <Meta empty={true} message={"Snippet doesn't exist!"}/>
 
-export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
-)
+export const Failure = ({ error }: CellFailureProps) => <Meta error={true} message={error.message} />
 
 export const Success = ({
   snippets,

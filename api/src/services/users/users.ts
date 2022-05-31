@@ -78,8 +78,6 @@ export const User: UserResolvers = {
     return  (await db.user.findUnique({ where: { id: root.id } })).roles
   },
   snippets: (_obj, { root }) => {
-    // requireAuth({})
-    // requireOwnerAccess({id: root.id})
     const where = _obj.input?.filter
     ? {
       OR: [

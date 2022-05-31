@@ -1,10 +1,10 @@
 export const USER_DATA_QUERY = gql`
   query UserQuery($id: Int!, $fetchPrivateData: Boolean!) {
     user: user(id: $id) {
-      id
+      id @include(if: $fetchPrivateData)
       username
-      roles
-      isBanned
+      roles  @include(if: $fetchPrivateData)
+      isBanned @include(if: $fetchPrivateData)
       avatarUrl
       bio
       createdAt
@@ -15,6 +15,25 @@ export const USER_DATA_QUERY = gql`
         userId
         value
         entityType
+        snippet {
+          id
+          title
+          body
+          author {
+            username
+          }
+        }
+        comment {
+          id
+          body
+          author {
+            username
+          }
+          snippet {
+            id
+            title
+          }
+        }
       }
       bookmarks @include(if: $fetchPrivateData) {
         id
@@ -36,6 +55,10 @@ export const USER_DATA_QUERY = gql`
           author {
             username
           }
+          snippet {
+            id
+            title
+          }
         }
       }
       snippets {
@@ -51,6 +74,116 @@ export const USER_DATA_QUERY = gql`
         tags {
           id
           name
+        }
+      }
+      comments {
+        id
+        body
+        createdAt
+        activity
+        score
+        author {
+          username
+        }
+        snippet {
+          id
+          title
+        }
+      }
+    }
+  }
+`
+
+export const USER_DATA_QUERY_BY_USERNAME = gql`
+  query UserQuery($username: String!, $fetchPrivateData: Boolean!) {
+    user: userByUsername(username: $username) {
+      id @include(if: $fetchPrivateData)
+      username
+      roles @include(if: $fetchPrivateData)
+      isBanned @include(if: $fetchPrivateData)
+      avatarUrl
+      bio
+      createdAt
+      votes @include(if: $fetchPrivateData) {
+        id
+        snippetId
+        commentId
+        userId
+        value
+        entityType
+        snippet {
+          id
+          title
+          body
+          author {
+            username
+          }
+        }
+        comment {
+          id
+          body
+          author {
+            username
+          }
+          snippet {
+            id
+            title
+          }
+        }
+      }
+      bookmarks @include(if: $fetchPrivateData) {
+        id
+        snippetId
+        commentId
+        userId
+        entityType
+        snippet {
+          id
+          title
+          body
+          author {
+            username
+          }
+        }
+        comment {
+          id
+          body
+          author {
+            username
+          }
+          snippet {
+            id
+            title
+          }
+        }
+      }
+      snippets {
+        id
+        title
+        body
+        createdAt
+        activity
+        score
+        author {
+          username
+        }
+        tags {
+          id
+          name
+        }
+      }
+      comments {
+        id
+        body
+        createdAt
+        activity
+        score
+        author {
+          username
+        }
+        snippet {
+          id
+          title
         }
       }
     }

@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import BookmarksList from './BookmarksList'
+import GqlMetaComponent from './GqlMetaComponent'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('BookmarksList', () => {
+describe('GqlMetaComponent', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<BookmarksList />)
+      render(<GqlMetaComponent />)
     }).not.toThrow()
   })
 })
