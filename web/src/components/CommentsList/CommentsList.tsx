@@ -14,6 +14,7 @@ import { truncate } from 'src/utils/stringUtils'
 import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
 import Paper from '@mui/material/Paper'
+import Box from '@mui/material/Box'
 
 interface Props {
   comments: Array<Comment>
@@ -63,7 +64,7 @@ const CommenttItem = ({
 
 const CommentsList = ({ comments }: Props) => {
   return (
-    <Paper square variant="outlined">
+    <Box>
       <List
         style={{ overflowWrap: 'break-word' }}
         sx={{ bgcolor: 'background.paper' }}
@@ -82,7 +83,7 @@ const CommentsList = ({ comments }: Props) => {
           )
         })}
       </List>
-    </Paper>
+    </Box>
   )
 }
 

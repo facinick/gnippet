@@ -14,6 +14,7 @@ import { truncate } from 'src/utils/stringUtils'
 import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
 import Paper from '@mui/material/Paper'
+import Box from '@mui/material/Box'
 
 interface Props {
   snippets: Array<Snippet>
@@ -59,7 +60,7 @@ const SnippetItem = ({
 
 const SnippetsList = ({ snippets }: Props) => {
   return (
-    <Paper square variant="outlined">
+    <Box >
       <List
         style={{ overflowWrap: 'break-word' }}
         sx={{ bgcolor: 'background.paper' }}
@@ -77,7 +78,7 @@ const SnippetsList = ({ snippets }: Props) => {
           )
         })}
       </List>
-    </Paper>
+    </Box>
   )
 }
 

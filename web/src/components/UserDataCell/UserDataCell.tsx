@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Meta from 'src/components/Meta/Meta'
+import { Stack } from '@mui/material'
 
 export const QUERY = USER_DATA_QUERY
 
@@ -29,9 +30,11 @@ export const Success = ({ user }: CellSuccessProps<UserQuery, UserQueryVariables
   const savedComments = savedCOmmentBookmarks?.map((bookmark) => bookmark.comment)
 
   return (
-    <div>
+    <Stack spacing={2}>
+      <Typography> Snippets</Typography>
       <SnippetsList snippets={savedSnippets}/>
+      <Typography> Comments</Typography>
       <CommentsList comments={savedComments}/>
-    </div>
+    </Stack>
   )
 }

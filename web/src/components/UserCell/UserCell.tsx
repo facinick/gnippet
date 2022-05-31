@@ -17,6 +17,8 @@ import CreateIcon from '@mui/icons-material/Create'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import { navigate } from '@redwoodjs/router'
 import Meta from '../Meta/Meta'
+import ProfileBio from '../ProfileBio/ProfileBio'
+import Stack from '@mui/material/Stack'
 
 enum Tab {
   ACTIVITY = 0,
@@ -87,8 +89,7 @@ const UserCell = ({ username, tab }: Props) => {
 
   return (
     <div>
-      <Grid container>
-        {/* user avatar  */}
+      <Grid spacing={5} container>
         <Grid
           container
           justifyContent={'center'}
@@ -96,20 +97,13 @@ const UserCell = ({ username, tab }: Props) => {
           item
           xs={12}
         >
+          <Stack alignItems={'center'} justifyContent={'center'} direction="column">
           <Avatar
             sx={{ width: 95, height: 95 }}
             src={`https://avatars.dicebear.com/api/bottts/${username}.svg`}
-          ></Avatar>
-        </Grid>
-        {/* user username  */}
-        <Grid
-          container
-          item
-          justifyContent={'center'}
-          alignItems={'center'}
-          xs={12}
-        >
-          <div>{<Username username={username} />}</div>
+          />
+          <Username username={username} />
+          </Stack>
         </Grid>
         {/* user bio  */}
         <Grid
@@ -119,25 +113,33 @@ const UserCell = ({ username, tab }: Props) => {
           alignItems={'center'}
           xs={12}
         >
-          <div>bio</div>
+          <ProfileBio bio="bio" />
         </Grid>
         {/* user snippets  */}
         <Grid
           container
           item
           justifyContent={'center'}
-          alignItems={'flex-start'}
+          alignItems={'center'}
           md={12}
+          spacing={5}
           sm={12}
         >
           <Grid
             item
             justifyContent={'center'}
-            alignItems={'flex-start'}
+            alignItems={'center'}
             md={12}
             sm={12}
           >
-            <Tabs value={_tab} onChange={handleTabChange} centered>
+            <Tabs
+              // allowScrollButtonsMobile
+              variant="scrollable"
+              scrollButtons="auto"
+              value={_tab}
+              onChange={handleTabChange}
+              centered
+            >
               <MuiTab
                 iconPosition="end"
                 icon={<CreateIcon />}
@@ -155,7 +157,7 @@ const UserCell = ({ username, tab }: Props) => {
                 disabled={!loadPrivateUserData}
                 iconPosition="end"
                 icon={
-                  <CompareArrowsIcon style={{ transform: 'rotate(90deg)'}} />
+                  <CompareArrowsIcon style={{ transform: 'rotate(90deg)' }} />
                 }
                 aria-label="User Saved Items"
                 label="Votes"
