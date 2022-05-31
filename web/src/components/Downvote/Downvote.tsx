@@ -55,9 +55,7 @@ const Downvote = ({
       const userVotesQueryResults = cache.readQuery({
         query: USER_VOTES_QUERY,
         variables: {
-          input: {
-            userId,
-          }
+          userId,
         }
       })
 
@@ -129,9 +127,7 @@ const Downvote = ({
           votes: cachedVotes,
         },
         variables: {
-          input: {
-            userId,
-          }
+          userId,
         },
       })
 

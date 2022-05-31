@@ -10,7 +10,7 @@ import CommentForm from 'src/components/CommentForm/CommentForm'
 import { useAuth } from '@redwoodjs/auth'
 import Typography from '@mui/material/Typography'
 import { useEffect } from 'react'
-import { USER_VOTES_QUERY } from '../Queries/queries'
+import { USER_VOTES_QUERY, USER_BOOKMARKS_QUERY } from '../Queries/queries'
 import { useLazyQuery } from '@apollo/client';
 interface Props {
   id: number
@@ -19,20 +19,23 @@ interface Props {
 const SnippetPage = ({ id }: Props) => {
   const { isAuthenticated, currentUser } = useAuth()
   const [getLoggedInUserVotesData] = useLazyQuery(
-    USER_VOTES_QUERY,
-    {
-      variables: {
-        input: {
-          userId: currentUser?.id,
-        }
-      }
-    },
-  );
+    USER_VOTES_QUERY);
+  const [getLoggedInUserBookmarksData] = useLazyQuery(
+    USER_BOOKMARKS_QUERY);
 
   useEffect(() => {
 
     if(currentUser?.id && isAuthenticated) {
-      getLoggedInUserVotesData()
+      getLoggedInUserVotesData({
+        variables: {
+          userId: currentUser.id,
+        }
+      })
+      getLoggedInUserBookmarksData({
+        variables: {
+          userId: currentUser.id,
+        }
+      })
     }
 
   }, [isAuthenticated])
@@ -40,7 +43,7 @@ const SnippetPage = ({ id }: Props) => {
   return (
     <>
       <MetaTags title="Snippet" description="Snippet page" />
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <SnippetCell id={id} />
       </Container>
     </>

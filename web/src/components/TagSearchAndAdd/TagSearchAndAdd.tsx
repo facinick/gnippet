@@ -53,8 +53,10 @@ const TagSearchAndAdd = ({ setTags }: Props) => {
       return
     }
 
-    setLocalTags(data?.tags)
-    setOptions(data?.tags)
+    const typenameRemovedTags = data?.tags.map(({__typename, ...rest}) => { return rest })
+
+    setLocalTags(typenameRemovedTags)
+    setOptions(typenameRemovedTags)
 
   }, [data])
 

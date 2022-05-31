@@ -232,7 +232,6 @@ export const downvote = async ({ input }: MutationupvoteArgs) => {
   // vote doesn't exists,
   // user is trying to [downvote for first time]
   else {
-    console.log(`DEBUG: vote doesnt exists`)
     // create a new vote with value -1
     upsertedVote = db.vote.create({
       data: { value: -1, entityType, userId, snippetId, commentId },

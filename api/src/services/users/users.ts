@@ -96,6 +96,11 @@ export const User: UserResolvers = {
     requireOwnerAccess({id: root.id})
     return db.user.findUnique({ where: { id: root.id } }).votes();
   },
+  bookmarks: (_obj, { root }) => {
+    requireAuth({})
+    requireOwnerAccess({id: root.id})
+    return db.user.findUnique({ where: { id: root.id } }).bookmarks();
+  },
   comments: (_obj, { root }) =>{
     // requireAuth({})
     // requireOwnerAccess({id: root.id})
@@ -122,21 +127,6 @@ export const User: UserResolvers = {
     : {}
 
     return db.user.findUnique({ where: { id: root.id } }).pages({ where, orderBy: _obj.input?.orderBy, skip: _obj.input?.skip, take: _obj.input?.take })
-  },
-  savedSnippets: (_obj, { root }) =>{
-    requireAuth({})
-    requireOwnerAccess({id: root.id})
-
-    const where = _obj.input?.filter
-    ? {
-      OR: [
-        { title: { contains: _obj.input?.filter } },
-        { body: { contains: _obj.input?.filter } },
-      ],
-    }
-    : {}
-
-    return db.user.findUnique({ where: { id: root.id } }).savedSnippets({ where, orderBy: _obj.input?.orderBy, skip: _obj.input?.skip, take: _obj.input?.take })
   },
   joinedPages: (_obj, { root }) =>{
     requireAuth({})

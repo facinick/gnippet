@@ -7,7 +7,7 @@ import Container from '@mui/material/Container'
 import CardContent from '@mui/material/CardContent'
 import Stack from '@mui/material/Stack'
 import { useEffect } from 'react'
-import { USER_VOTES_QUERY } from '../Queries/queries'
+import { USER_VOTES_QUERY, USER_BOOKMARKS_QUERY } from '../Queries/queries'
 import { useLazyQuery } from '@apollo/client';
 import Card, { CardProps } from '@mui/material/Card';
 
@@ -27,20 +27,24 @@ const HomePage = ({ page }: { page: number }) => {
   const showSnippetForm = isAuthenticated && isHomePage
 
   const [getLoggedInUserVotesData] = useLazyQuery(
-    USER_VOTES_QUERY,
-    {
-      variables: {
-        input: {
-          userId: currentUser?.id,
-        }
-      }
-    },
-  );
+    USER_VOTES_QUERY);
+
+  const [getLoggedInUserBookmarksData] = useLazyQuery(
+    USER_BOOKMARKS_QUERY);
 
   useEffect(() => {
 
     if(currentUser?.id && isAuthenticated) {
-      getLoggedInUserVotesData()
+      getLoggedInUserVotesData({
+        variables: {
+          userId: currentUser.id,
+        }
+      })
+      getLoggedInUserBookmarksData({
+        variables: {
+          userId: currentUser.id,
+        }
+      })
     }
 
   }, [isAuthenticated])
@@ -48,7 +52,7 @@ const HomePage = ({ page }: { page: number }) => {
   return (
     <>
       <MetaTags title="Home" description="Home page" />
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Stack spacing={5}>
           {/****** Create a Post ******/}
           {showSnippetForm && (

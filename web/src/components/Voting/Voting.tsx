@@ -23,9 +23,7 @@ const Voting = ({ snippetId, commentId, score, entity }: Props) => {
   const userVotesQueryResults = client.readQuery({
     query: USER_VOTES_QUERY,
     variables: {
-      input: {
-        userId: currentUser?.id,
-      },
+      userId: currentUser?.id,
     },
   })
 
@@ -54,9 +52,7 @@ const Voting = ({ snippetId, commentId, score, entity }: Props) => {
       client.writeQuery({
         query: USER_VOTES_QUERY,
         variables: {
-          input: {
-            userId: currentUser?.id,
-          },
+          userId: currentUser?.id,
         },
         data: {
           votes: []

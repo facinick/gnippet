@@ -7,6 +7,7 @@ import { truncate as returnTruncatedText } from 'src/utils/stringUtils'
 import CreatedAt from '../CreatedAt/CreatedAt'
 import Username from '../Username/Username'
 import Voting from '../Voting/Voting'
+import Bookmark from '../Bookmark/Bookmark'
 import { useApolloClient } from '@apollo/client'
 import BackButton from '../BackButton/BackButton'
 import Stack from '@mui/material/Stack'
@@ -19,7 +20,7 @@ import NumberOfComments from '../NumberOfComments/NumberOfComments'
 import CommentsHeader from '../CommentsHeader/CommentsHeader'
 
 type Props = {
-  snippet: Snippet
+  snippet: Omit<Snippet, 'authorId | languages | updatedAt | votes'>
   truncate: boolean
   showActivity: boolean
   showBackButton: boolean
@@ -45,11 +46,11 @@ const ControlledSnippet = ({
 
   return (
     <article key={id}>
-      <Stack spacing={2}>
+      <Stack style={{overflowWrap: 'break-word'}} spacing={2}>
         <header>
           <Stack alignItems={'center'} spacing={1} direction={'row'}>
             {showBackButton && <BackButton />}
-            <Link to={routes.snippet({ id: id })}>
+            <Link style={{width: '100%'}} to={routes.snippet({ id: id })}>
               <Typography variant='h6'>
                 {title}
               </Typography>
@@ -80,7 +81,10 @@ const ControlledSnippet = ({
             {<Username username={author.username} />}
           </Typography>
         )}
-        <Voting entity={'SNIPPET'} snippetId={id} score={score} />
+        <Stack direction={'row'}>
+          <Voting entity={'SNIPPET'} snippetId={id} score={score} />
+          { isAuthenticated && <Bookmark entity={'SNIPPET'} snippetId={id} />}
+        </Stack>
         {rendertags && <SnippetTags tags={tags} />}
         {isAuthenticated && showCommentsForm && (
           <CommentForm authorUsername={currentUser?.username} snippetId={id} authorId={currentUser.id} />

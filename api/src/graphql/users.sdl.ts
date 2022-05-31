@@ -16,9 +16,9 @@ export const schema = gql`
     # private data ------------------
     snippets(input: SnippetQueryFilterAndPagination): [Snippet]!
     votes: [Vote]!
+    bookmarks: [Bookmark]!
     comments(input: CommentQueryFilterAndPagination): [Comment]!
     pages(input: PageQueryFilterAndPagination): [Page!]!
-    savedSnippets(input: SnippetQueryFilterAndPagination): [Snippet]!
     joinedPages(input: PageQueryFilterAndPagination): [Page]!
   }
 

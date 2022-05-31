@@ -6,12 +6,6 @@ import Stack from '@mui/material/Stack'
 import Divider from '@mui/material/Divider'
 import Pagination from '@mui/material/Pagination'
 import { navigate } from '@redwoodjs/router'
-import Box from '@mui/material/Box'
-import { useEffect } from 'react'
-import { isAuthenticated } from 'src/lib/auth'
-import { USER_VOTES_QUERY } from 'src/pages/Queries/queries'
-import { useLazyQuery } from '@apollo/client';
-import { useAuth } from '@redwoodjs/auth'
 
 export const QUERY = gql`
   query SnippetsQuery($skip: Int!, $take:Int!) {
@@ -45,7 +39,9 @@ export const QUERY = gql`
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => {
+  return <div>Loading...</div>
+}
 
 export const Empty = () => <div>Empty</div>
 

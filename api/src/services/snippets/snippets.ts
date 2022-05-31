@@ -62,23 +62,6 @@ export const createSnippet: MutationResolvers['createSnippet'] = async ({
   const tagsToConnect = tags.filter((tag) => tag.id != undefined).map( ({id, ...rest})  => { return { id } })
   const tagsToCreate = tags.filter((tag) => tag.id == undefined)
 
-  console.log({
-    data: {
-      ...input,
-      tags: {
-        connect: [
-          ...tagsToConnect
-        ],
-        create: [
-          ...tagsToCreate
-        ]
-      }
-    },
-    include: {
-      tags: true
-    }
-  })
-
   return db.snippet.create({
     data: {
       ...input,
@@ -115,62 +98,6 @@ export const deleteSnippet: MutationResolvers['deleteSnippet'] = ({ id }) => {
   return db.snippet.delete({
     where: { id },
   })
-}
-
-export const saveSnippet = async ({ id }: MutationsaveSnippetArgs) => {
-  requireAuth({})
-  const userId: number = context.currentUser?.id;
-
-  const snippetToSave = await snippet({ id })
-
-  if(!snippetToSave) {
-    throw new ServerError({
-      message: "Can't save snippet that doesn't exist"
-    })
-  }
-
-  await db.user.update({
-    where: {
-      id: userId
-    },
-    data: {
-      savedSnippets: {
-        connect: {
-          id
-        }
-      }
-    }
-  });
-
-  return snippetToSave;
-}
-
-export const unsaveSnippet = async ({ id }: MutationunsaveSnippetArgs) => {
-  requireAuth({})
-  const userId: number = context.currentUser?.id;
-
-  const snippetToUnSave = await snippet({ id })
-
-  if(!snippetToUnSave) {
-    throw new ServerError({
-      message: "Can't Unsave snippet that doesn't exist"
-    })
-  }
-
-  await db.user.update({
-    where: {
-      id: userId
-    },
-    data: {
-      savedSnippets: {
-        disconnect: {
-          id
-        }
-      }
-    }
-  });
-
-  return snippetToUnSave;
 }
 
 export const incrementScore = async ({ id, value }) => {

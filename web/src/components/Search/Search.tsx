@@ -78,8 +78,6 @@ const Search = () => {
   }, [inputValue, fetch])
 
   const onSelect = (event: any, newValue: SearchObject | null) => {
-    console.log(newValue)
-
     switch(newValue.type) {
       case 'users' : {
 

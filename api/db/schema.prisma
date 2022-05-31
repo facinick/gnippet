@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgres"
-  url      = env("DATABASE_URL")
+  url      = env("TEST_DATABASE_URL")
 }
 
 generator client {
@@ -9,24 +9,24 @@ generator client {
 }
 
 model User {
-  id                  Int       @id @default(autoincrement())
-  username            String    @unique
+  id                  Int        @id @default(autoincrement())
+  username            String     @unique
   hashedPassword      String
   salt                String
   resetToken          String?
   resetTokenExpiresAt DateTime?
-  roles               String    @default("user")
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
-  isBanned            Boolean   @default(false)
+  roles               String     @default("user")
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  isBanned            Boolean    @default(false)
   bio                 String?
   avatarUrl           String?
   // prisma relations
-  snippets            Snippet[] @relation("author")
+  snippets            Snippet[]  @relation("author")
   votes               Vote[]
+  bookmarks           Bookmark[]
   comments            Comment[]
-  pages               Page[]    @relation("created")
-  savedSnippets       Snippet[] @relation("saved")
+  pages               Page[]     @relation("created")
   joinedPages         Page[]
 }
 
@@ -41,12 +41,12 @@ model Snippet {
   pageId    Int?
   activity  Int        @default(0)
   // prisma relations
-  savedBy   User[]     @relation("saved")
   author    User       @relation("author", fields: [authorId], references: [id])
   languages Language[]
   tags      Tag[]
   comments  Comment[]
   votes     Vote[]
+  bookmarks Bookmark[]
   page      Page?      @relation(fields: [pageId], references: [id])
 }
 
@@ -77,22 +77,38 @@ model Vote {
   comment    Comment?   @relation(fields: [commentId], references: [id])
 }
 
+model Bookmark {
+  id         Int        @id @default(autoincrement())
+  entityType EntityType
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  userId     Int
+  // vote given to what, comment or snippet
+  snippetId  Int?
+  commentId  Int?
+  // prisma relations
+  user       User       @relation(fields: [userId], references: [id])
+  snippet    Snippet?   @relation(fields: [snippetId], references: [id])
+  comment    Comment?   @relation(fields: [commentId], references: [id])
+}
+
 model Comment {
-  id              Int       @id @default(autoincrement())
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id              Int        @id @default(autoincrement())
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
   body            String
   authorId        Int
-  score           Int       @default(0)
+  score           Int        @default(0)
   snippetId       Int
-  activity        Int       @default(0)
+  activity        Int        @default(0)
   // prisma relations
   votes           Vote[]
-  author          User      @relation(fields: [authorId], references: [id])
-  snippet         Snippet   @relation(fields: [snippetId], references: [id])
+  bookmarks       Bookmark[]
+  author          User       @relation(fields: [authorId], references: [id])
+  snippet         Snippet    @relation(fields: [snippetId], references: [id])
   parentCommentId Int?
-  parent          Comment?  @relation("parentChildComment", fields: [parentCommentId], references: [id])
-  comments        Comment[] @relation("parentChildComment")
+  parent          Comment?   @relation("parentChildComment", fields: [parentCommentId], references: [id])
+  comments        Comment[]  @relation("parentChildComment")
 }
 
 model Language {

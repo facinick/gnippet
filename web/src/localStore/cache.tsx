@@ -24,6 +24,11 @@ export const cache: InMemoryCache = new InMemoryCache({
             return [...incoming];
           },
         },
+        bookmarks: {
+          merge(existing = [], incoming: any[]) {
+            return [...incoming];
+          },
+        },
       },
     },
   }

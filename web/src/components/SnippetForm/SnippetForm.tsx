@@ -10,7 +10,6 @@ import {
   FieldError,
 } from '@redwoodjs/forms'
 import PostAddIcon from '@mui/icons-material/PostAdd'
-import { EditorWrapper } from 'src/components/Editor/EditorWrapper'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { createRef, useRef, useState } from 'react'
@@ -64,16 +63,7 @@ interface Props {
 
 const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
   const formRef = useRef<HTMLFormElement>()
-  const editorRef = useRef(null);
   const theme = useTheme()
-
-  const log = (event) => {
-    event.preventDefault()
-
-    if (editorRef?.current && editorRef?.current?.editor) {
-      console.log(editorRef.current.editor.current.getContent?.())
-    }
-  }
 
   const [title, setTitle] = useState('')
   const [titleError, setTitleError] = useState(false)
@@ -93,13 +83,6 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
   const onBodyInput = (event) => {
     const value = event.target.value
     setBody(value)
-    setBodyError(false)
-    setBodyErrorMessage('')
-  }
-
-  const onEditorChange = (data)=> {
-    console.log(data)
-    setBody(data)
     setBodyError(false)
     setBodyErrorMessage('')
   }

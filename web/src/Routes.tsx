@@ -17,20 +17,20 @@ import { useLazyQuery } from '@apollo/client'
 const Routes = () => {
   const { currentUser, isAuthenticated } = useAuth()
 
-  const [getLoggedInUserData] = useLazyQuery(USER_DATA_QUERY)
+  // const [getLoggedInUserData] = useLazyQuery(USER_DATA_QUERY)
 
-  useEffect(() => {
-    if (currentUser?.id && isAuthenticated) {
-      getLoggedInUserData({
-        fetchPolicy: 'network-only',
-        variables: {
-          id: currentUser?.id,
-        },
-      })
-    } else {
-      // reset cache
-    }
-  }, [isAuthenticated])
+  // useEffect(() => {
+  //   if (currentUser?.id && isAuthenticated) {
+  //     getLoggedInUserData({
+  //       fetchPolicy: 'network-only',
+  //       variables: {
+  //         id: currentUser?.id,
+  //       },
+  //     })
+  //   } else {
+  //     // reset cache
+  //   }
+  // }, [isAuthenticated])
 
   return (
     <Router>
