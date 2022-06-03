@@ -1,6 +1,13 @@
+import { goOnline, goOffline } from 'src/localStore/onlineStatus'
 import WifiStatus from './WifiStatus'
 
-export const generated = () => {
+export const online = () => {
+  goOnline()
+  return <WifiStatus />
+}
+
+export const offline = () => {
+  goOffline()
   return <WifiStatus />
 }
 

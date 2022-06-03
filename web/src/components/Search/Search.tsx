@@ -5,6 +5,8 @@ import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import throttle from 'lodash.throttle'
 import { formatPages, formatTags, formatUsers } from 'src/utils/searchResultsUtils';
+import { useTheme } from '@mui/material/styles';
+import { navigate } from '@redwoodjs/router';
 
 export const SearchQuery = gql`
   query FindSearchQuery($filter: String!) {
@@ -32,6 +34,8 @@ const Search = () => {
 
   const [inputValue, setInputValue] = React.useState('')
   const [options, setOptions] = React.useState<readonly SearchObject[]>([])
+  const theme = useTheme()
+  const inputRef = React.useRef(null)
 
   const [executeSearch, { data, loading, error }] = useLazyQuery(
     SearchQuery,
@@ -80,7 +84,7 @@ const Search = () => {
   const onSelect = (event: any, newValue: SearchObject | null) => {
     switch(newValue.type) {
       case 'users' : {
-
+          navigate(`/u/${newValue.id}`, { replace: true })
         break;
       }
       case 'pages' : {
@@ -93,7 +97,6 @@ const Search = () => {
         break;
       }
       default:
-
     }
   }
 
@@ -116,17 +119,20 @@ const Search = () => {
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);
         }}
-
         onChange={onSelect}
 
         loading={loading}
-
         disableClearable={true}
 
         renderInput={(params) => (
           <TextField
             {...params}
             label="Search users | pages | tags"
+            style={{
+              color: theme.palette.containerPrimary.contrastText,
+              backgroundColor: theme.palette.containerPrimary.main
+            }}
+            ref={inputRef}
             InputProps={{
               ...params.InputProps,
               type: 'search',

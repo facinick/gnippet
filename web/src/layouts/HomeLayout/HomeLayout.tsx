@@ -5,6 +5,7 @@ import { Toaster } from '@redwoodjs/web/toast'
 import ThemeSwitch from 'src/components/ThemeSwitch/ThemeSwitch'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
+import Container from '@mui/material/Container'
 
 import LogoutButton from 'src/components/LogoutButton/LogoutButton'
 import WifiStatus from 'src/components/WifiStatus/WifiStatus'
@@ -25,6 +26,7 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
       <Toaster />
       <Stack spacing={5}>
         <header>
+          <Stack alignItems={'center'} justifyContent={'cente'} >
           <Grid
             columns={{ xs: 12, sm: 12, md: 12 }}
             flexDirection={'row'}
@@ -52,9 +54,9 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
             </Grid>
             <Grid xs={4} item>
               <div className={'center'}>
-                <Typography textAlign={'center'} variant="h6" component="h6">
+                {/* <Typography textAlign={'center'} variant="h6" component="h6">
                   Fnick;
-                </Typography>
+                </Typography> */}
               </div>
             </Grid>
             <Grid xs={4} item>
@@ -89,6 +91,10 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
               </div>
             </Grid>
           </Grid>
+          <Container maxWidth="md">
+            <Search />
+          </Container>
+          </Stack>
         </header>
         <main>{children}</main>
         <footer></footer>

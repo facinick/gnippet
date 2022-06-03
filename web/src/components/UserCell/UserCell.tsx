@@ -27,7 +27,7 @@ enum Tab {
 }
 interface Props {
   username: string
-  tab: 'activity' | 'saved' | 'votes'
+  tab: 'activity' | 'saved' | 'votes' | string
 }
 
 const getTab = (tab): number => {
@@ -67,7 +67,9 @@ const UserCell = ({ username, tab }: Props) => {
   const loadPrivateUserData =
     currentUser?.id && isAuthenticated && currentUser?.username === username
 
-  const [_tab, setTab] = useState<Tab>(getTab(tab))
+  const isCurrentUserProfile = username === currentUser?.username
+
+  const [_tab, setTab] = useState<Tab>(isCurrentUserProfile ? Tab.ACTIVITY : getTab(tab))
 
   useEffect(() => {
     navigate(`/u/${username}/${getTabName(_tab)}`)
@@ -85,7 +87,18 @@ const UserCell = ({ username, tab }: Props) => {
     if (!isAuthenticated) {
       setTab(Tab.ACTIVITY)
     }
+
+    if (username !== currentUser.username) {
+      setTab(Tab.ACTIVITY)
+    }
+
   }, [loading])
+
+  useEffect(() => {
+    if(!isCurrentUserProfile) {
+      setTab(Tab.ACTIVITY)
+    }
+  }, [isCurrentUserProfile])
 
   return (
     <div>
@@ -138,7 +151,6 @@ const UserCell = ({ username, tab }: Props) => {
               scrollButtons="auto"
               value={_tab}
               onChange={handleTabChange}
-              centered
             >
               <MuiTab
                 iconPosition="end"
@@ -175,11 +187,15 @@ const UserCell = ({ username, tab }: Props) => {
             {_tab === 0 && (
               <UserActivityCell username={username} fetchPrivateData={false} />
             )}
-            {_tab === 1 && !loading && (
+
+
+            {_tab === 1 && !loading && isCurrentUserProfile && (
               <UserDataCell id={currentUser?.id} fetchPrivateData={true} />
             )}
             {_tab === 1 && loading && <Meta loading={true} />}
-            {_tab === 2 && !loading && (
+
+
+            {_tab === 2 && !loading && isCurrentUserProfile && (
               <UserVotesCell id={currentUser?.id} fetchPrivateData={true} />
             )}
             {_tab === 2 && loading && <Meta loading={true} />}

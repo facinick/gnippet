@@ -95,7 +95,7 @@ export const USER_DATA_QUERY = gql`
 `
 
 export const USER_DATA_QUERY_BY_USERNAME = gql`
-  query UserQuery($username: String!, $fetchPrivateData: Boolean!) {
+  query UserQueryByUsername($username: String!, $fetchPrivateData: Boolean!) {
     user: userByUsername(username: $username) {
       id @include(if: $fetchPrivateData)
       username

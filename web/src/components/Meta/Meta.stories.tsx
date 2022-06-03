@@ -1,7 +1,7 @@
-import GqlMetaComponent from './GqlMetaComponent'
+import Meta from './Meta'
 
 export const generated = () => {
-  return <GqlMetaComponent />
+  return <Meta />
 }
 
-export default { title: 'Components/GqlMetaComponent' }
+export default { title: 'Components/Meta' }

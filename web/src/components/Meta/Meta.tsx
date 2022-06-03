@@ -3,10 +3,10 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material/styles'
 
-export const Loading = () => (
+export const Loading = ({size}: {size: 'skinny' | 'comfortable'}) => (
   <Box
     sx={{
-      height: '200px',
+      height: size === 'skinny' ? 'auto' : '200px',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -16,10 +16,10 @@ export const Loading = () => (
   </Box>
 )
 
-export const Empty = ({ message }: {message: string}) => (
+export const Empty = ({ message, size }: {message: string, size: 'skinny' | 'comfortable'}) => (
   <Box
     sx={{
-      height: '200px',
+      height: size === 'skinny' ? 'auto' : '200px',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -29,14 +29,14 @@ export const Empty = ({ message }: {message: string}) => (
   </Box>
 )
 
-export const Failure = ({ message }: {message: string}) => {
+export const Failure = ({ message, size }: {message: string, size: 'skinny' | 'comfortable'}) => {
 
   const theme = useTheme()
 
   return(
   <Box
     sx={{
-      height: '200px',
+      height: size === 'skinny' ? 'auto' : '200px',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -57,26 +57,28 @@ interface Props {
   empty?: boolean
   message?: string
   children?: JSX.Element
+  size?: 'skinny' | 'comfortable'
 }
 
 const Meta = ({
   error,
   loading,
   empty,
+  size,
   children,
   message,
 }: Props) => {
 
   if(error) {
-    return <Failure message={message} />
+    return <Failure message={message} size={size || 'comfortable'} />
   }
 
   if(empty) {
-    return <Empty message={message} />
+    return <Empty message={message} size={size || 'comfortable'} />
   }
 
   if(loading) {
-    return <Loading/>
+    return <Loading size={size || 'comfortable'}/>
   }
 
   throw new Error('Invalid State in GQL Meta Component!')

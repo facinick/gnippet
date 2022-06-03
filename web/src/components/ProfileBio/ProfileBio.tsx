@@ -41,7 +41,7 @@ const ProfileBio = ({ bio }: Props) => {
   }
 
   return (
-      <ClickAwayListener style={{width: '100%', display: 'flex', justifyContent: 'center'}} onClickAway={onClickAway}>
+      <ClickAwayListener onClickAway={onClickAway}>
         <Box style={{ position: 'relative', maxWidth: '420px', minWidth: '300px', width: '100%' }}>
           <TextField
             multiline

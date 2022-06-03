@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import GqlMetaComponent from './GqlMetaComponent'
+import Meta from './Meta'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('GqlMetaComponent', () => {
+describe('Meta', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<GqlMetaComponent />)
+      render(<Meta />)
     }).not.toThrow()
   })
 })
