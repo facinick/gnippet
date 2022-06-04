@@ -59,6 +59,7 @@ export const schema = gql`
     body: String!
     authorId: Int!
     pageId: Int
+    imageUrl: String
     tags: [ConnectOrCreateTagInput]
   }
 
@@ -68,6 +69,7 @@ export const schema = gql`
     score: Int
     authorId: Int
     pageId: Int
+    imageUrl: String
   }
 
   type Mutation {

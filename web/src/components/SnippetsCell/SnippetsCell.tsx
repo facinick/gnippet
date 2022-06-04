@@ -103,6 +103,7 @@ export const Success = ({
                 showComments={false}
                 showCommentsForm={false}
                 showCommentsHeader={false}
+                showHeaderImage={true}
                 truncate={true}
               />
               {renderDivider && <Divider />}

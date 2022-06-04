@@ -13,6 +13,7 @@ import {
   FieldError,
 } from '@redwoodjs/forms'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useReactiveVar } from '@apollo/client'
 
 import PostAddIcon from '@mui/icons-material/PostAdd'
 import { useMutation } from '@redwoodjs/web'
@@ -30,6 +31,7 @@ import TextField, { TextFieldProps } from '@mui/material/TextField'
 import { styled } from '@mui/material/styles'
 import { useTheme } from '@emotion/react'
 import { Snippet } from 'types/graphql'
+import { sortByVar } from 'src/localStore/homeFeedSortBy'
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,
@@ -70,6 +72,8 @@ interface Props {
 }
 
 const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
+  const sortBy = useReactiveVar(sortByVar)
+
   const formRef = useRef<HTMLFormElement>()
   const imageRef = useRef<HTMLImageElement>()
   const theme = useTheme()
@@ -187,14 +191,14 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
       toast.success('Snippet Created!')
     },
     update(cache, { data: { createSnippet } }) {
-      const cacheData: { snippets: { data: Array<Snippet>; count: number } } =
-        cache.readQuery({
-          query: SnippetsQuery,
-          variables: {
-            skip: 0,
-            take: 5,
-          },
-        })
+      const cacheData = cache.readQuery({
+        query: SnippetsQuery,
+        variables: {
+          skip: 0,
+          take: 5,
+          sortBy: sortBy,
+        },
+      })
 
       // cache could be empty when creating the first snippet
       const snippets = cacheData ? cacheData.snippets : { data: [], count: 0 }
@@ -231,6 +235,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
         variables: {
           skip: 0,
           take: 5,
+          sortBy: sortBy,
         },
       })
     },
@@ -242,15 +247,18 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
     setValidating(false)
     if (!isValid) {
       return
-    } else {
-      console.log('inputs valid, gonna create now!')
-      return
     }
 
     createSnippet({
-      variables: { input: { pageId, authorId, body, title, tags } },
+      variables: { input: { pageId, authorId, body, title, tags, imageUrl } },
     })
     formRef.current.reset()
+    resetImagePreview()
+
+  }
+
+  const resetImagePreview = () => {
+    imageRef.current.removeAttribute('src')
   }
 
   const hideImagePreview = !(imageUrl && imageUrlIsValid)
