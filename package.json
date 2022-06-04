@@ -12,6 +12,7 @@
     "setup-frontend-auth": "rw generate dbAuth",
     "gen-secret": "rw generate secret",
     "migrate": "rw prisma migrate dev",
+    "prisma-push": "rw prisma db push --preview-feature",
     "types": "rw generate types",
     "dev": "rw dev",
     "studio": "rw prisma studio",
