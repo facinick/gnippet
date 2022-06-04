@@ -1,5 +1,6 @@
 import { onlineStatusVar } from "./onlineStatus";
 import { InMemoryCache } from "@apollo/client";
+import { sortByVar } from "./homeFeedSortBy";
 
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
@@ -8,6 +9,11 @@ export const cache: InMemoryCache = new InMemoryCache({
         isOnline: {
           read () {
             return onlineStatusVar();
+          }
+        },
+        homeFeedSortBy: {
+          read () {
+            return sortByVar();
           }
         },
         // snippets: {

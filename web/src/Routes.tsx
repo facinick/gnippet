@@ -22,7 +22,9 @@ const Routes = () => {
 
       <Set wrap={HomeLayout}>
         <Route path="/" page={HomePage} name="home" />
-        <Route path="/new/{page:Int}" page={HomePage} name="home" />
+        <Route path="/new/{page:Int}" page={HomePage} name="homeSortPage" />
+        <Route path="/activity/{page:Int}" page={HomePage} name="homeSortPage" />
+        <Route path="/score/{page:Int}" page={HomePage} name="homeSortPage" />
         <Route path="/s/{id:Int}" page={SnippetPage} name="snippet" />
         <Route path="/u/{username:String}" page={UserPage} name="user" />
         <Route path="/u/{username:String}/{tab:String}" page={UserPage} name="userTab" />

@@ -11,22 +11,24 @@ import type {
 
 export const snippets: QueryResolvers['snippets'] = async ({ input }) => {
 
-  let orderByActivity: false | string = false;
+  let orderBy
 
-  // is a custom aggregation field
-  if(input.orderBy.activity) {
-    orderByActivity = input.orderBy.activity;
-    delete input.orderBy['activity']
+  if(input.orderBy === 'new') {
+    orderBy = { 'createdAt': 'desc' }
   }
 
-  const orderBy = orderByActivity
-    ? [{
-        comments: {
-          _count: orderByActivity
-        }
-      }]
-      :
-      [input.orderBy]
+  if(input.orderBy === 'activity') {
+    orderBy = [{
+      comments: {
+        _count: 'desc'
+      }
+    }]
+  }
+
+  if(input.orderBy === 'score') {
+    orderBy = { 'score': 'desc' }
+  }
+
 
   const where = input?.filter
     ? {

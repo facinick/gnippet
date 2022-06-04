@@ -20,11 +20,10 @@ export const schema = gql`
     activity: Int!
   }
 
-  input SnippetOrderByInput {
-    createdAt: SnippetSort
-    updatedAt: SnippetSort
-    activity: SnippetSort
-    score: SnippetSort
+  enum SnippetOrderByInput {
+    new
+    activity
+    score
   }
 
   enum SnippetSort {

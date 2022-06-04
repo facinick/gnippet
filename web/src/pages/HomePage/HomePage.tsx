@@ -6,47 +6,63 @@ import Container from '@mui/material/Container'
 // import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Stack from '@mui/material/Stack'
+import { navigate, useLocation } from '@redwoodjs/router'
 import { useEffect } from 'react'
 import { USER_VOTES_QUERY, USER_BOOKMARKS_QUERY } from '../Queries/queries'
-import { useLazyQuery } from '@apollo/client';
-import Card, { CardProps } from '@mui/material/Card';
-
-import { styled } from '@mui/material/styles';
+import { useLazyQuery } from '@apollo/client'
+import Card, { CardProps } from '@mui/material/Card'
+import { useReactiveVar } from '@apollo/client'
+import { styled } from '@mui/material/styles'
+import { setSortBy, sortByVar } from 'src/localStore/homeFeedSortBy'
+import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const CreateSnippetCard = styled(Card)<CardProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,
   backgroundColor: theme.palette.containerPrimary.main,
-}));
+}))
 
 const HomePage = ({ page }: { page: number }) => {
   const { isAuthenticated, currentUser } = useAuth()
-  const _page = page ? page : 0
-  const _skip = page ? page * 5 : 0
+  const _page = !isNaN(page) ? page : 0
+  const _skip = !isNaN(page) ? page * 5 : 0
+  const { pathname } = useLocation()
+  const sortBy = pathname.split('/')[1]
+  const _sortBy =
+    sortBy === 'activity' || sortBy === 'new' || sortBy === 'score'
+      ? sortBy
+      : 'new'
   const _take = 5
   const isHomePage = _page === 0
   const showSnippetForm = isAuthenticated && isHomePage
 
-  const [getLoggedInUserVotesData] = useLazyQuery(
-    USER_VOTES_QUERY);
+  useEffect(() => {
+    setSortBy({ field: _sortBy })
+  }, [])
 
-  const [getLoggedInUserBookmarksData] = useLazyQuery(
-    USER_BOOKMARKS_QUERY);
+  const esortBy = useReactiveVar(sortByVar)
 
   useEffect(() => {
+    navigate(`/${esortBy}/${_page}`)
+  }, [esortBy])
 
-    if(currentUser?.id && isAuthenticated) {
+  const [getLoggedInUserVotesData] = useLazyQuery(USER_VOTES_QUERY)
+
+  const [getLoggedInUserBookmarksData] = useLazyQuery(USER_BOOKMARKS_QUERY)
+
+  useEffect(() => {
+    if (currentUser?.id && isAuthenticated) {
       getLoggedInUserVotesData({
         variables: {
           userId: currentUser.id,
-        }
+        },
       })
       getLoggedInUserBookmarksData({
         variables: {
           userId: currentUser.id,
-        }
+        },
       })
     }
-
   }, [isAuthenticated])
 
   return (
@@ -57,13 +73,26 @@ const HomePage = ({ page }: { page: number }) => {
           {/****** Create a Post ******/}
           {showSnippetForm && (
             <CreateSnippetCard>
-              <CardContent>
-                <SnippetForm authorUsername={currentUser?.username} authorId={currentUser?.id} />
-              </CardContent>
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    Create
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <SnippetForm
+                      authorUsername={currentUser?.username}
+                      authorId={currentUser?.id}
+                    />
+                  </AccordionDetails>
+                </Accordion>
             </CreateSnippetCard>
           )}
           {/******** All Posts ********/}
-          <SnippetsCell page={_page} skip={_skip} take={_take} />
+          <SnippetsCell
+            sortBy={_sortBy}
+            page={_page}
+            skip={_skip}
+            take={_take}
+          />
         </Stack>
       </Container>
     </>

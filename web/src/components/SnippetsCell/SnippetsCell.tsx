@@ -1,4 +1,4 @@
-import type { SnippetsQuery, Vote } from 'types/graphql'
+import type { SnippetsQuery, SnippetOrderByInput } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import Snippet from 'src/components/Snippet/Snippet'
 import { _Vote } from 'src/gql_objects/gqlObjects'
@@ -7,10 +7,11 @@ import Divider from '@mui/material/Divider'
 import Pagination from '@mui/material/Pagination'
 import { navigate } from '@redwoodjs/router'
 import Meta from '../Meta/Meta'
+import HomeFeedSortBy from 'src/components/HomeFeedSortBy/HomeFeedSortBy'
 
 export const QUERY = gql`
-  query SnippetsQuery($skip: Int!, $take:Int!) {
-    snippets (input: { orderBy: { createdAt: desc }, skip: $skip, take: $take }) {
+  query SnippetsQuery($skip: Int!, $take:Int!, $sortBy: SnippetOrderByInput!) {
+    snippets (input: { orderBy: $sortBy, skip: $skip, take: $take }) {
       data {
         id
         title
@@ -52,8 +53,9 @@ export const Success = ({
   snippets,
   skip,
   take,
+  sortBy,
   page
-}: CellSuccessProps<SnippetsQuery> & { skip: number, take: number, page: number }) => {
+}: CellSuccessProps<SnippetsQuery> & { skip: number, take: number, page: number, sortBy: string }) => {
   const numberOfSnippets = snippets.data.length
   let isLastSnippet: boolean = false
   let renderDivider: boolean = false
@@ -65,11 +67,12 @@ export const Success = ({
   const totalPages = Math.ceil(totalSnippets / snippetsPerPage)
 
   const handleChange = (event, value) => {
-    navigate(`/new/${value - 1}`)
+    navigate(`/${sortBy}/${value - 1}`)
   }
 
   return (
     <>
+      <HomeFeedSortBy />
       <Stack spacing={spacing}>
         {snippets.data.map((snippet, index) => {
           isLastSnippet = index === numberOfSnippets - 1 ? true : false
