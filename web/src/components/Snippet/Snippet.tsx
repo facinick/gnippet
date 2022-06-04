@@ -1,14 +1,11 @@
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
-import { useEffect, useState } from 'react'
 import { _Snippet, _SnippetWithVotes, _Vote } from 'src/gql_objects/gqlObjects'
-import { USER_VOTES_QUERY } from 'src/pages/Queries/queries'
 import { truncate as returnTruncatedText } from 'src/utils/stringUtils'
 import CreatedAt from '../CreatedAt/CreatedAt'
 import Username from '../Username/Username'
 import Voting from '../Voting/Voting'
 import Bookmark from '../Bookmark/Bookmark'
-import { useApolloClient } from '@apollo/client'
 import BackButton from '../BackButton/BackButton'
 import Stack from '@mui/material/Stack'
 import SnippetTags from '../SnippetTags/SnippetTags'
@@ -16,8 +13,10 @@ import CommentForm from '../CommentForm/CommentForm'
 import Comments from '../Comments/Comments'
 import { Snippet } from 'types/graphql'
 import Typography from '@mui/material/Typography'
+import Avatar from '@mui/material/Avatar'
 import NumberOfComments from '../NumberOfComments/NumberOfComments'
 import CommentsHeader from '../CommentsHeader/CommentsHeader'
+import CopySnippetUrl from '../CopySnippetUrl/CopySnippetUrl'
 
 type Props = {
   snippet: Omit<Snippet, 'authorId | languages | updatedAt | votes'>
@@ -27,18 +26,30 @@ type Props = {
   showComments: boolean
   showCommentsForm: boolean
   showCommentsHeader: boolean
+  showHeaderImage: boolean
 }
 
-const ControlledSnippet = ({
+const SnippetUi = ({
   showBackButton,
   showActivity,
+  showHeaderImage,
   snippet,
   truncate,
   showComments,
   showCommentsForm,
   showCommentsHeader,
 }: Props) => {
-  const { id, title, score, author, body, createdAt, tags, comments } = snippet
+  const {
+    id,
+    title,
+    score,
+    author,
+    body,
+    createdAt,
+    tags,
+    comments,
+    imageUrl,
+  } = snippet
   const { isAuthenticated, currentUser } = useAuth()
 
   const showNumberOfComments = comments.length > 0 && !showCommentsHeader
@@ -46,25 +57,28 @@ const ControlledSnippet = ({
 
   return (
     <article key={id}>
-      <Stack style={{overflowWrap: 'break-word'}} spacing={2}>
+      <Stack style={{ overflowWrap: 'break-word' }} spacing={2}>
         <header>
           <Stack alignItems={'center'} spacing={1} direction={'row'}>
             {showBackButton && <BackButton />}
-            <Link style={{width: '100%'}} to={routes.snippet({ id: id })}>
-              <Typography variant='h6'>
-                {title}
-              </Typography>
+            {showHeaderImage && imageUrl && <Avatar src={imageUrl} />}
+            <Link style={{ width: '100%' }} to={routes.snippet({ id: id })}>
+              <Typography variant="h6">{title}</Typography>
             </Link>
           </Stack>
         </header>
         {truncate && (
-          <Typography variant='body1' component="p" style={{ whiteSpace: 'pre-line' }}>
+          <Typography
+            variant="body1"
+            component="p"
+            style={{ whiteSpace: 'pre-line' }}
+          >
             {returnTruncatedText(body, 150)}
             {body.length > 150 && (
               <Link to={routes.snippet({ id: id })}>[read-more]</Link>
             )}{' '}
             -
-            <Typography variant='body1' component="i">
+            <Typography variant="body1" component="i">
               {' '}
               {<CreatedAt createdAt={createdAt} />} by <span> </span>
               {<Username username={author.username} />}
@@ -72,22 +86,31 @@ const ControlledSnippet = ({
           </Typography>
         )}
         {!truncate && (
-          <Typography variant='body1' component="p"  style={{ whiteSpace: 'pre-line' }}>
+          <Typography
+            variant="body1"
+            component="p"
+            style={{ whiteSpace: 'pre-line' }}
+          >
             {body} -{' '}
-            <Typography variant='body1' component="i">
+            <Typography variant="body1" component="i">
               {' '}
               {<CreatedAt createdAt={createdAt} />} by{' '}
             </Typography>
             {<Username username={author.username} />}
           </Typography>
         )}
-        <Stack direction={'row'}>
+        <Stack direction={'row'} alignItems={'center'}>
           <Voting entity={'SNIPPET'} snippetId={id} score={score} />
-          { isAuthenticated && <Bookmark entity={'SNIPPET'} snippetId={id} />}
+          {isAuthenticated && <Bookmark entity={'SNIPPET'} snippetId={id} />}
+          <CopySnippetUrl id={id}/>
         </Stack>
         {rendertags && <SnippetTags tags={tags} />}
         {isAuthenticated && showCommentsForm && (
-          <CommentForm authorUsername={currentUser?.username} snippetId={id} authorId={currentUser.id} />
+          <CommentForm
+            authorUsername={currentUser?.username}
+            snippetId={id}
+            authorId={currentUser.id}
+          />
         )}
         {showNumberOfComments && <NumberOfComments value={comments.length} />}
         {showCommentsHeader && (
@@ -99,4 +122,4 @@ const ControlledSnippet = ({
   )
 }
 
-export default ControlledSnippet
+export default SnippetUi

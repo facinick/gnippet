@@ -7,6 +7,7 @@ import {
   ToggleButton,
   Typography,
 } from '@mui/material'
+import { useEffect, useMemo, useState } from 'react'
 
 interface Props {
   bio: string
@@ -16,19 +17,19 @@ const ProfileBio = ({ bio }: Props) => {
   const [edit, toggleEdit] = React.useState<boolean>(false)
   const [_bio, setBio] = React.useState<string>(bio)
   const textAreaRef = React.useRef(null)
-
-  let beforeChange = bio
+  const [beforeChange, setBeforechange] = useState(bio)
 
   const onEditToggle = () => {
     if (!edit) {
       textAreaRef?.current.focus()
-      beforeChange = _bio
+      setBeforechange(_bio)
+    } else {
+      console.log(`save: ${_bio}`)
     }
     toggleEdit((oldValue) => !oldValue)
   }
 
   const onTextInput = (event) => {
-    console.log(event.target.value)
     setBio(event.target.value)
   }
 
@@ -36,8 +37,8 @@ const ProfileBio = ({ bio }: Props) => {
     if (!edit) {
       return
     }
-    toggleEdit(false)
     setBio(beforeChange)
+    toggleEdit(false)
   }
 
   return (
@@ -45,6 +46,7 @@ const ProfileBio = ({ bio }: Props) => {
         <Box style={{ position: 'relative', maxWidth: '420px', minWidth: '300px', width: '100%' }}>
           <TextField
             multiline
+            rows={3}
             maxRows={6}
             InputProps={{
               readOnly: !edit,

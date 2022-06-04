@@ -1,4 +1,7 @@
 import Stack from '@mui/material/Stack'
+import InputAdornment from '@mui/material/InputAdornment'
+import { useMemo } from 'react'
+
 import {
   Form,
   FormError,
@@ -9,6 +12,9 @@ import {
   SubmitHandler,
   FieldError,
 } from '@redwoodjs/forms'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useReactiveVar } from '@apollo/client'
+
 import PostAddIcon from '@mui/icons-material/PostAdd'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
@@ -17,12 +23,15 @@ import { QUERY as SnippetsQuery } from 'src/components/SnippetsCell/SnippetsCell
 import { QUERY as TagsQuery } from 'src/components/TagsCell/TagsCell'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
-import { Typography } from '@mui/material'
+import Paper from '@mui/material/Paper'
+import { CircularProgress, Typography } from '@mui/material'
 import { TagsSearchObject } from '../TagSearchAndAdd/TagSearchAndAdd'
 import TagsCell from 'src/components/TagsCell'
 import TextField, { TextFieldProps } from '@mui/material/TextField'
 import { styled } from '@mui/material/styles'
 import { useTheme } from '@emotion/react'
+import { Snippet } from 'types/graphql'
+import { sortByVar } from 'src/localStore/homeFeedSortBy'
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,
@@ -44,6 +53,7 @@ const CREATE = gql`
       createdAt
       activity
       score
+      imageUrl
       author {
         username
       }
@@ -62,22 +72,44 @@ interface Props {
 }
 
 const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
+  const sortBy = useReactiveVar(sortByVar)
+
   const formRef = useRef<HTMLFormElement>()
+  const imageRef = useRef<HTMLImageElement>()
   const theme = useTheme()
+  const horizontallyAlignImgAndBody = useMediaQuery(theme.breakpoints.up('sm'))
 
   const [title, setTitle] = useState('')
   const [titleError, setTitleError] = useState(false)
   const [titleErrorMessage, setTitleErrorMessage] = useState('')
+  // image url --------------------------------------------------------
+  const [imageUrl, setImageUrl] = useState('')
+  const [imageUrlValidating, setImagineUrlValidating] = useState(false)
+  const [imageUrlError, setImageUrlError] = useState(false)
+  const [imageUrlErrorMessage, setImageUrlErrorMessage] = useState('')
+  const [imageUrlIsValid, setImageUrlIsValid] = useState(false)
+  // ------------------------------------------------------------------
   const [body, setBody] = useState('')
   const [bodyError, setBodyError] = useState(false)
   const [bodyErrorMessage, setBodyErrorMessage] = useState('')
   const [tags, setTags] = useState<Array<TagsSearchObject>>([])
+  // ------------------------------------------------------------------
+  const [validating, setValidating] = useState(false)
 
   const onTitleInput = (event) => {
     const value = event.target.value
     setTitle(value)
     setTitleError(false)
     setTitleErrorMessage('')
+  }
+
+  const onImageUrlInput = (event) => {
+    const value = event.target.value.trim()
+    setImageUrl(value)
+    setImagineUrlValidating(false)
+    setImageUrlError(false)
+    setImageUrlErrorMessage('')
+    setImageUrlIsValid(false)
   }
 
   const onBodyInput = (event) => {
@@ -87,7 +119,54 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
     setBodyErrorMessage('')
   }
 
-  const areInputsValid = () => {
+  const isImageUrlValid = async (): Promise<boolean> => {
+    let isValid = false
+    try {
+      setImagineUrlValidating(true)
+      await _valudateImageUrl()
+      setImageUrlError(false)
+      setImageUrlErrorMessage('')
+      setImageUrlIsValid(true)
+      isValid = true
+      console.log(`image is valid`)
+    } catch (error) {
+      setImageUrlError(true)
+      setImageUrlErrorMessage('image url is invalid')
+      setImageUrlIsValid(false)
+      isValid = false
+      console.log(`image is invalid`)
+    } finally {
+      setImagineUrlValidating(false)
+    }
+    return isValid
+  }
+
+  const _valudateImageUrl = (): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      // no image url provided, it's valid
+      if (imageUrl == '') {
+        imageRef.current.removeAttribute('src')
+        resolve()
+      } else {
+        // set src
+        imageRef.current.src = imageUrl
+
+        // image url provided is not valid
+        imageRef.current.onerror = () => {
+          imageRef.current.onerror = undefined
+          reject()
+        }
+
+        // image url provided is valid
+        imageRef.current.onload = () => {
+          imageRef.current.onload = undefined
+          resolve()
+        }
+      }
+    })
+  }
+
+  const areInputsValid = async () => {
     if (!title) {
       setTitleError(true)
       setTitleErrorMessage('Title cannot be empty!')
@@ -98,7 +177,9 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
       setBodyErrorMessage('Body cannot be empty!')
     }
 
-    if (!title || !body) {
+    const isImageUrlValidResponse = await isImageUrlValid()
+
+    if (!title || !body || !isImageUrlValidResponse) {
       return false
     }
 
@@ -110,13 +191,17 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
       toast.success('Snippet Created!')
     },
     update(cache, { data: { createSnippet } }) {
-      const { snippets } = cache.readQuery({
+      const cacheData = cache.readQuery({
         query: SnippetsQuery,
         variables: {
           skip: 0,
           take: 5,
+          sortBy: sortBy,
         },
       })
+
+      // cache could be empty when creating the first snippet
+      const snippets = cacheData ? cacheData.snippets : { data: [], count: 0 }
 
       // older existing tags
       const { tags } = cache.readQuery({
@@ -150,48 +235,75 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
         variables: {
           skip: 0,
           take: 5,
+          sortBy: sortBy,
         },
       })
     },
   })
 
-  const onSubmit = () => {
-    if (!areInputsValid()) {
+  const onSubmit = async () => {
+    setValidating(true)
+    const isValid = await areInputsValid()
+    setValidating(false)
+    if (!isValid) {
       return
     }
 
     createSnippet({
-      variables: { input: { pageId, authorId, body, title, tags } },
+      variables: { input: { pageId, authorId, body, title, tags, imageUrl } },
     })
     formRef.current.reset()
-  }
-  return (
-    <React.Fragment>
-      <Stack
-        padding={'15px 0px'}
-        alignItems={'center'}
-        justifyContent={'space-between'}
-        direction={'row'}
-      >
-        <Typography variant="h6">Post Snippet</Typography>
-        <i>
-          <Typography variant="caption">as @{authorUsername}</Typography>
-        </i>
-      </Stack>
-      <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
-        <FormError error={error} />
+    resetImagePreview()
 
-        <Stack direction="column" spacing={1}>
-          <StyledTextField
-            name="title"
-            required
-            disabled={loading}
-            error={titleError}
-            helperText={titleError ? titleErrorMessage : ''}
-            onInput={onTitleInput}
-            size="small"
-            label={'Title'}
-          />
+  }
+
+  const resetImagePreview = () => {
+    imageRef.current.removeAttribute('src')
+  }
+
+  const hideImagePreview = !(imageUrl && imageUrlIsValid)
+
+  return (
+    <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
+      <FormError error={error} />
+      <Stack direction="column" spacing={1}>
+        <StyledTextField
+          name="title"
+          required
+          disabled={loading}
+          error={titleError}
+          helperText={titleError ? titleErrorMessage : ''}
+          onInput={onTitleInput}
+          size="small"
+          label={'Title'}
+        />
+        <Stack
+          direction={horizontallyAlignImgAndBody ? 'row' : 'column'}
+          spacing={hideImagePreview ? 0 : 1}
+        >
+          <Paper
+            variant={'outlined'}
+            style={{
+              width: horizontallyAlignImgAndBody ? '200px' : '100%',
+              height: '133px',
+              overflow: 'hidden',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              display: hideImagePreview ? 'none' : 'flex',
+            }}
+          >
+            {
+              <img
+                style={{
+                  width: '100%',
+                  display: hideImagePreview ? 'none' : 'block',
+                }}
+                ref={imageRef}
+              />
+            }
+            {imageUrlValidating && <CircularProgress size={'small'} />}
+          </Paper>
 
           <StyledTextField
             label="Snippet"
@@ -201,11 +313,31 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
             required
             onInput={onBodyInput}
             multiline
+            fullWidth
             size="small"
             rows={4}
           />
-          <TagsCell setTags={setTags} />
-          <Box style={{ height: '4px' }}></Box>
+        </Stack>
+        <StyledTextField
+          label={imageUrlError ? imageUrlErrorMessage : 'Image URL'}
+          disabled={loading}
+          error={imageUrlError}
+          InputProps={{
+            endAdornment: imageUrlValidating ? (
+              <InputAdornment position="start">
+                <CircularProgress size={'small'} />
+              </InputAdornment>
+            ) : (
+              <></>
+            ),
+          }}
+          onInput={onImageUrlInput}
+          size="small"
+        />
+        {/* <Button onClick={valudateImageUrl}>validate</Button> */}
+        <TagsCell setTags={setTags} />
+        <Box style={{ height: '4px' }} />
+        <Stack direction={'row'} spacing={2}>
           <Button
             style={{ borderRadius: '30px', width: '150px' }}
             aria-label="Post Snippet"
@@ -214,14 +346,17 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
             size={'small'}
             variant="contained"
             onSubmit={onSubmit}
-            disabled={loading}
+            disabled={loading || validating}
             type="submit"
           >
             Submit
           </Button>
+          <i>
+            <Typography variant="caption">as @{authorUsername}</Typography>
+          </i>
         </Stack>
-      </Form>
-    </React.Fragment>
+      </Stack>
+    </Form>
   )
 }
 

@@ -11,8 +11,8 @@ const HomeFeedSortBy = () => {
   }
 
   return (
-    <FormControl style={{maxWidth: '200px'}}>
-      <InputLabel>Sort By</InputLabel>
+    <FormControl size={'small'} style={{maxWidth: '200px'}}>
+      <InputLabel >Sort By</InputLabel>
       <Select
         value={sortBy}
         label="Sort By"

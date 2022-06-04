@@ -80,7 +80,7 @@ const DeleteBookmark = ({
 
   return (
     <Button
-      color={'secondary'}
+      color={'primary'}
       variant="text"
       size={'large'}
       type="button"

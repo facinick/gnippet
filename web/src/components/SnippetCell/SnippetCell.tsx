@@ -12,6 +12,7 @@ export const QUERY = gql`
       body
       createdAt
       activity
+      imageUrl
       score
       author {
         username
@@ -46,6 +47,6 @@ export const Success = ({
 }: CellSuccessProps<FindSnippetQuery, FindSnippetQueryVariables>) => {
 
   return (
-    <><Snippet showCommentsHeader={true} showCommentsForm={true} showComments={true} showBackButton={true} showActivity={false} truncate={false} key={snippet.id} snippet={snippet} /></>
+    <><Snippet showHeaderImage={false} showCommentsHeader={true} showCommentsForm={true} showComments={true} showBackButton={true} showActivity={false} truncate={false} key={snippet.id} snippet={snippet} /></>
   )
 }

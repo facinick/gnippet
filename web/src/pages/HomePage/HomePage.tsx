@@ -14,7 +14,12 @@ import Card, { CardProps } from '@mui/material/Card'
 import { useReactiveVar } from '@apollo/client'
 import { styled } from '@mui/material/styles'
 import { setSortBy, sortByVar } from 'src/localStore/homeFeedSortBy'
-import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  AccordionProps,
+} from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const CreateSnippetCard = styled(Card)<CardProps>(({ theme }) => ({
@@ -22,10 +27,17 @@ const CreateSnippetCard = styled(Card)<CardProps>(({ theme }) => ({
   backgroundColor: theme.palette.containerPrimary.main,
 }))
 
-const HomePage = ({ page }: { page: number }) => {
+const CreateSnippetAccordian = styled(Accordion)<AccordionProps>(
+  ({ theme }) => ({
+    color: theme.palette.containerPrimary.contrastText,
+    backgroundColor: theme.palette.containerPrimary.main,
+  })
+)
+
+const HomePage = ({ page }: { page?: number }) => {
   const { isAuthenticated, currentUser } = useAuth()
-  const _page = !isNaN(page) ? page : 0
-  const _skip = !isNaN(page) ? page * 5 : 0
+  const _page = !isNaN(page) ? Number(page) : 0
+  const _skip = !isNaN(page) ? Number(page) * 5 : 0
   const { pathname } = useLocation()
   const sortBy = pathname.split('/')[1]
   const _sortBy =
@@ -72,19 +84,17 @@ const HomePage = ({ page }: { page: number }) => {
         <Stack spacing={5}>
           {/****** Create a Post ******/}
           {showSnippetForm && (
-            <CreateSnippetCard>
-                <Accordion>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    Create
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <SnippetForm
-                      authorUsername={currentUser?.username}
-                      authorId={currentUser?.id}
-                    />
-                  </AccordionDetails>
-                </Accordion>
-            </CreateSnippetCard>
+            <CreateSnippetAccordian>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                Post Snippet
+              </AccordionSummary>
+              <AccordionDetails>
+                <SnippetForm
+                  authorUsername={currentUser?.username}
+                  authorId={currentUser?.id}
+                />
+              </AccordionDetails>
+            </CreateSnippetAccordian>
           )}
           {/******** All Posts ********/}
           <SnippetsCell
