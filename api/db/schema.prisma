@@ -34,6 +34,7 @@ model Snippet {
   id        Int        @id @default(autoincrement())
   title     String
   body      String
+  imageUrl  String?
   score     Int        @default(0)
   authorId  Int
   createdAt DateTime   @default(now())

@@ -23,6 +23,7 @@ import TagsCell from 'src/components/TagsCell'
 import TextField, { TextFieldProps } from '@mui/material/TextField'
 import { styled } from '@mui/material/styles'
 import { useTheme } from '@emotion/react'
+import { Snippet } from 'types/graphql'
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,
@@ -44,6 +45,7 @@ const CREATE = gql`
       createdAt
       activity
       score
+      imageUrl
       author {
         username
       }
@@ -110,13 +112,17 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
       toast.success('Snippet Created!')
     },
     update(cache, { data: { createSnippet } }) {
-      const { snippets } = cache.readQuery({
-        query: SnippetsQuery,
-        variables: {
-          skip: 0,
-          take: 5,
-        },
-      })
+      const cacheData: { snippets: { data: Array<Snippet>; count: number } } =
+        cache.readQuery({
+          query: SnippetsQuery,
+          variables: {
+            skip: 0,
+            take: 5,
+          },
+        })
+
+      // cache could be empty when creating the first snippet
+      const snippets = cacheData ? cacheData.snippets : { data: [], count: 0 }
 
       // older existing tags
       const { tags } = cache.readQuery({
@@ -166,46 +172,33 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
     formRef.current.reset()
   }
   return (
-    <React.Fragment>
-      <Stack
-        padding={'15px 0px'}
-        alignItems={'center'}
-        justifyContent={'space-between'}
-        direction={'row'}
-      >
-        <Typography variant="h6">Post Snippet</Typography>
-        <i>
-          <Typography variant="caption">as @{authorUsername}</Typography>
-        </i>
-      </Stack>
-      <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
-        <FormError error={error} />
-
-        <Stack direction="column" spacing={1}>
-          <StyledTextField
-            name="title"
-            required
-            disabled={loading}
-            error={titleError}
-            helperText={titleError ? titleErrorMessage : ''}
-            onInput={onTitleInput}
-            size="small"
-            label={'Title'}
-          />
-
-          <StyledTextField
-            label="Snippet"
-            disabled={loading}
-            error={bodyError}
-            helperText={bodyError ? bodyErrorMessage : ''}
-            required
-            onInput={onBodyInput}
-            multiline
-            size="small"
-            rows={4}
-          />
-          <TagsCell setTags={setTags} />
-          <Box style={{ height: '4px' }}></Box>
+    <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
+      <FormError error={error} />
+      <Stack direction="column" spacing={1}>
+        <StyledTextField
+          name="title"
+          required
+          disabled={loading}
+          error={titleError}
+          helperText={titleError ? titleErrorMessage : ''}
+          onInput={onTitleInput}
+          size="small"
+          label={'Title'}
+        />
+        <StyledTextField
+          label="Snippet"
+          disabled={loading}
+          error={bodyError}
+          helperText={bodyError ? bodyErrorMessage : ''}
+          required
+          onInput={onBodyInput}
+          multiline
+          size="small"
+          rows={4}
+        />
+        <TagsCell setTags={setTags} />
+        <Box style={{ height: '4px' }} />
+        <Stack direction={'row'} spacing={2}>
           <Button
             style={{ borderRadius: '30px', width: '150px' }}
             aria-label="Post Snippet"
@@ -219,9 +212,12 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
           >
             Submit
           </Button>
+          <i>
+            <Typography variant="caption">as @{authorUsername}</Typography>
+          </i>
         </Stack>
-      </Form>
-    </React.Fragment>
+      </Stack>
+    </Form>
   )
 }
 

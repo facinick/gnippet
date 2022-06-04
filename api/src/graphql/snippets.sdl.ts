@@ -6,6 +6,7 @@ export const schema = gql`
     authorId: Int!
     createdAt: DateTime!
     updatedAt: DateTime!
+    imageUrl: String
     pageId: Int
     # savedBy: [User]!
     author: User!

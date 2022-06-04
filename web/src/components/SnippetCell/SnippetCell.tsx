@@ -12,6 +12,7 @@ export const QUERY = gql`
       body
       createdAt
       activity
+      imageUrl
       score
       author {
         username

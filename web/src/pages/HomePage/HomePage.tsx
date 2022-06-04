@@ -22,10 +22,10 @@ const CreateSnippetCard = styled(Card)<CardProps>(({ theme }) => ({
   backgroundColor: theme.palette.containerPrimary.main,
 }))
 
-const HomePage = ({ page }: { page: number }) => {
+const HomePage = ({ page }: { page?: number }) => {
   const { isAuthenticated, currentUser } = useAuth()
-  const _page = !isNaN(page) ? page : 0
-  const _skip = !isNaN(page) ? page * 5 : 0
+  const _page = !isNaN(page) ? Number(page) : 0
+  const _skip = !isNaN(page) ? Number(page) * 5 : 0
   const { pathname } = useLocation()
   const sortBy = pathname.split('/')[1]
   const _sortBy =
@@ -75,7 +75,7 @@ const HomePage = ({ page }: { page: number }) => {
             <CreateSnippetCard>
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    Create
+                    Post Snippet
                   </AccordionSummary>
                   <AccordionDetails>
                     <SnippetForm

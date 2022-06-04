@@ -88,7 +88,7 @@ const UserCell = ({ username, tab }: Props) => {
       setTab(Tab.ACTIVITY)
     }
 
-    if (username !== currentUser.username) {
+    if (username !== currentUser?.username) {
       setTab(Tab.ACTIVITY)
     }
 

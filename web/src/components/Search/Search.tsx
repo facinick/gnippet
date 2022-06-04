@@ -7,6 +7,10 @@ import throttle from 'lodash.throttle'
 import { formatPages, formatTags, formatUsers } from 'src/utils/searchResultsUtils';
 import { useTheme } from '@mui/material/styles';
 import { navigate } from '@redwoodjs/router';
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import { useAuth } from '@redwoodjs/auth/dist/useAuth';
+
 
 export const SearchQuery = gql`
   query FindSearchQuery($filter: String!) {
@@ -32,6 +36,7 @@ type SearchObject = {
 
 const Search = () => {
 
+  const { isAuthenticated, currentUser } = useAuth()
   const [inputValue, setInputValue] = React.useState('')
   const [options, setOptions] = React.useState<readonly SearchObject[]>([])
   const theme = useTheme()
@@ -43,6 +48,8 @@ const Search = () => {
       fetchPolicy: 'network-only'
     },
   );
+
+  const searchHelperText = isAuthenticated && currentUser?.username ?  `hi @${currentUser?.username}, search users` : 'search users'
 
   const fetch = React.useMemo(
     () =>
@@ -105,37 +112,38 @@ const Search = () => {
         id="app-search"
         freeSolo
         filterOptions={(x) => x}
-
         getOptionLabel={(option) =>
           typeof option === 'string' ? option : option.label
         }
-
         noOptionsText={'No results found'}
-
         groupBy={(option) => option.type}
         options={options}
         autoComplete
-
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);
         }}
         onChange={onSelect}
-
         loading={loading}
         disableClearable={true}
-
+        size={'small'}
+        fullWidth
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Search users | pages | tags"
             style={{
               color: theme.palette.containerPrimary.contrastText,
-              backgroundColor: theme.palette.containerPrimary.main
+              backgroundColor: theme.palette.containerPrimary.main,
             }}
             ref={inputRef}
+            placeholder={searchHelperText}
             InputProps={{
               ...params.InputProps,
               type: 'search',
+              endAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon color={'disabled'} />
+                </InputAdornment>
+              )
             }}
           />
         )}
