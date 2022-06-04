@@ -12,7 +12,7 @@ import {
   SubmitHandler,
   FieldError,
 } from '@redwoodjs/forms'
-import useMediaQuery from '@mui/material/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 import PostAddIcon from '@mui/icons-material/PostAdd'
 import { useMutation } from '@redwoodjs/web'
@@ -73,7 +73,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
   const formRef = useRef<HTMLFormElement>()
   const imageRef = useRef<HTMLImageElement>()
   const theme = useTheme()
-  const horizontallyAlignImgAndBody = useMediaQuery(theme.breakpoints.up('sm'));
+  const horizontallyAlignImgAndBody = useMediaQuery(theme.breakpoints.up('sm'))
 
   const [title, setTitle] = useState('')
   const [titleError, setTitleError] = useState(false)
@@ -83,15 +83,14 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
   const [imageUrlValidating, setImagineUrlValidating] = useState(false)
   const [imageUrlError, setImageUrlError] = useState(false)
   const [imageUrlErrorMessage, setImageUrlErrorMessage] = useState('')
-  const [imageUrlValid, setImageUrlValid] = useState(true)
-  const [imageUrlInteracting, setImageUrlInteracting] = useState(false)
+  const [imageUrlIsValid, setImageUrlIsValid] = useState(false)
   // ------------------------------------------------------------------
   const [body, setBody] = useState('')
   const [bodyError, setBodyError] = useState(false)
   const [bodyErrorMessage, setBodyErrorMessage] = useState('')
   const [tags, setTags] = useState<Array<TagsSearchObject>>([])
-
-  const [previous, setPrevious] = useState('')
+  // ------------------------------------------------------------------
+  const [validating, setValidating] = useState(false)
 
   const onTitleInput = (event) => {
     const value = event.target.value
@@ -106,11 +105,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
     setImagineUrlValidating(false)
     setImageUrlError(false)
     setImageUrlErrorMessage('')
-    if (value == '') {
-      setImageUrlValid(true)
-    } else {
-      setImageUrlValid(false)
-    }
+    setImageUrlIsValid(false)
   }
 
   const onBodyInput = (event) => {
@@ -120,53 +115,54 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
     setBodyErrorMessage('')
   }
 
-  const valudateImageUrl = () => {
-    setImageUrlInteracting(false)
-    if(imageUrlValidating) {
-      return
-    }
-
-    setImagineUrlValidating(true)
-    // if (imageUrl == previous) {
-    //   setImagineUrlValidating(false)
-    //   return
-    // }
-
-    if (imageUrl == '') {
-      imageRef.current.removeAttribute('src')
-      setPrevious("")
-      setImagineUrlValidating(false)
+  const isImageUrlValid = async (): Promise<boolean> => {
+    let isValid = false
+    try {
+      setImagineUrlValidating(true)
+      await _valudateImageUrl()
       setImageUrlError(false)
       setImageUrlErrorMessage('')
-      setImageUrlValid(true)
-      return
-    }
-
-    console.log(`validate image url... [start]`)
-    imageRef.current.src = imageUrl
-
-    imageRef.current.onerror = () => {
-      setImagineUrlValidating(false)
+      setImageUrlIsValid(true)
+      isValid = true
+      console.log(`image is valid`)
+    } catch (error) {
       setImageUrlError(true)
       setImageUrlErrorMessage('image url is invalid')
-      setImageUrlValid(false)
-      console.log(`validate image url... [done] Error`)
-      imageRef.current.onerror = undefined
-      return
-    }
-
-    imageRef.current.onload = () => {
+      setImageUrlIsValid(false)
+      isValid = false
+      console.log(`image is invalid`)
+    } finally {
       setImagineUrlValidating(false)
-      setImageUrlError(false)
-      setImageUrlErrorMessage('')
-      setImageUrlValid(true)
-      console.log(`validate image url... [done] Success`)
-      imageRef.current.onload = undefined
-      return
     }
+    return isValid
   }
 
-  const areInputsValid = () => {
+  const _valudateImageUrl = (): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      // no image url provided, it's valid
+      if (imageUrl == '') {
+        imageRef.current.removeAttribute('src')
+        resolve()
+      } else {
+        // set src
+        imageRef.current.src = imageUrl
+
+        // image url provided is not valid
+        imageRef.current.onerror = () => {
+          imageRef.current.onerror = undefined
+          reject()
+        }
+
+        // image url provided is valid
+        imageRef.current.onload = () => {
+          imageRef.current.onload = undefined
+          resolve()
+        }
+      }
+    })
+  }
+
+  const areInputsValid = async () => {
     if (!title) {
       setTitleError(true)
       setTitleErrorMessage('Title cannot be empty!')
@@ -177,16 +173,12 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
       setBodyErrorMessage('Body cannot be empty!')
     }
 
-    if (imageUrl && !imageUrlValid) {
+    const isImageUrlValidResponse = await isImageUrlValid()
+
+    if (!title || !body || !isImageUrlValidResponse) {
       return false
     }
 
-    if (!title || !body || (imageUrl && imageUrlError)) {
-      return false
-    }
-
-    console.log(`valid!`)
-    return false
     return true
   }
 
@@ -244,8 +236,14 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
     },
   })
 
-  const onSubmit = () => {
-    if (!areInputsValid()) {
+  const onSubmit = async () => {
+    setValidating(true)
+    const isValid = await areInputsValid()
+    setValidating(false)
+    if (!isValid) {
+      return
+    } else {
+      console.log('inputs valid, gonna create now!')
       return
     }
 
@@ -255,7 +253,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
     formRef.current.reset()
   }
 
-  const hideImagePreview = !imageUrlValid || imageUrl === ""
+  const hideImagePreview = !(imageUrl && imageUrlIsValid)
 
   return (
     <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
@@ -271,18 +269,16 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
           size="small"
           label={'Title'}
         />
-        {/* <div>
-          <div> {`imageUrl: ${imageUrl}`}</div>
-          <div> {`imageUrlError: ${imageUrlError}`}</div>
-          <div> {`imageUrlErrorMessage: ${imageUrlErrorMessage}`}</div>
-          <div> {`imageUrlValid: ${imageUrlValid}`}</div>
-          <div> {`imageUrlValidating: ${imageUrlValidating}`}</div>
-        </div> */}
-        <Stack direction={horizontallyAlignImgAndBody ? 'row' : 'column'} spacing={hideImagePreview ? 0 : 1}>
+        <Stack
+          direction={horizontallyAlignImgAndBody ? 'row' : 'column'}
+          spacing={hideImagePreview ? 0 : 1}
+        >
           <Paper
-          variant={'outlined'}
+            variant={'outlined'}
             style={{
               width: horizontallyAlignImgAndBody ? '200px' : '100%',
+              height: '133px',
+              overflow: 'hidden',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
@@ -298,7 +294,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
                 ref={imageRef}
               />
             }
-            {imageUrlValidating && <CircularProgress />}
+            {imageUrlValidating && <CircularProgress size={'small'} />}
           </Paper>
 
           <StyledTextField
@@ -315,16 +311,13 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
           />
         </Stack>
         <StyledTextField
-          label={imageUrlError ? imageUrlErrorMessage : "Image URL"}
+          label={imageUrlError ? imageUrlErrorMessage : 'Image URL'}
           disabled={loading}
           error={imageUrlError}
-          // helperText={imageUrlError ? imageUrlErrorMessage : ''}
-          onBlur={valudateImageUrl}
-          onFocus={() => { setImageUrlInteracting(true); setPrevious(imageUrl)}}
           InputProps={{
             endAdornment: imageUrlValidating ? (
               <InputAdornment position="start">
-                <CircularProgress />
+                <CircularProgress size={'small'} />
               </InputAdornment>
             ) : (
               <></>
@@ -333,6 +326,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
           onInput={onImageUrlInput}
           size="small"
         />
+        {/* <Button onClick={valudateImageUrl}>validate</Button> */}
         <TagsCell setTags={setTags} />
         <Box style={{ height: '4px' }} />
         <Stack direction={'row'} spacing={2}>
@@ -344,7 +338,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
             size={'small'}
             variant="contained"
             onSubmit={onSubmit}
-            disabled={loading || imageUrlInteracting || imageUrlValidating}
+            disabled={loading || validating}
             type="submit"
           >
             Submit
