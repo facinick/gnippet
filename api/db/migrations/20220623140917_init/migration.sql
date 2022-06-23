@@ -27,7 +27,7 @@ CREATE TABLE "Snippet" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "body" TEXT NOT NULL,
-    "imageUrl" TEXT NOT NULL,
+    "imageUrl" TEXT,
     "score" INTEGER NOT NULL DEFAULT 0,
     "authorId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

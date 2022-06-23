@@ -140,37 +140,6 @@ const Upvote = ({
         toast.success('Cancelled Upvote')
       }
     },
-    // optimisticResponse: {
-    //   upvote: {
-    //     __typename: "VoteResponse",
-    //     vote: {
-    //       id:
-    //         currentVoteValue === -1
-    //           ? currentVoteId
-    //           : currentVoteValue === 1
-    //           ? currentVoteId
-    //           : Date.now(),
-    //       __typename: 'Vote',
-    //       value: 1,
-    //       entityType: entity,
-    //       userId,
-    //       commentId: commentId ? commentId : Date.now(),
-    //       snippetId,
-    //     },
-    //     cudAction:
-    //       currentVoteValue === -1
-    //         ? 'UPDATED'
-    //         : currentVoteValue === 1
-    //         ? 'DELETED'
-    //         : 'CREATED',
-    //     score:
-    //       currentVoteValue === -1
-    //         ? score + 2
-    //         : currentVoteValue === 1
-    //         ? score - 1
-    //         : score + 1,
-    //   },
-    // },
   })
 
   const onClick = (event) => {

@@ -1,21 +1,19 @@
 import { useAuth } from '@redwoodjs/auth'
-import { Link, routes } from '@redwoodjs/router'
-import { useEffect, useState } from 'react'
-import { truncate as returnTruncatedText } from 'src/utils/stringUtils'
 import CreatedAt from '../CreatedAt/CreatedAt'
 import Username from '../Username/Username'
 import Voting from '../Voting/Voting'
-import { useApolloClient } from '@apollo/client'
-import { Comment as TComment } from 'types/graphql'
+import { Comment as TComment, Snippet } from 'types/graphql'
 import { Stack, Typography } from '@mui/material'
 import Bookmark from '../Bookmark/Bookmark'
+import { DeepPartial } from 'src/theme'
 
 type Props = {
-  comment: TComment
+  comment: DeepPartial<Pick<TComment, 'id' | 'score' | 'activity' | 'author' | 'body' | 'createdAt'>>
+  snippetId: Snippet[keyof Pick<Snippet, 'id'>]
 }
 
-const Comment = ({ comment }: Props) => {
-  const { id, score, activity, author, body, createdAt, snippetId } = comment
+const Comment = ({ comment, snippetId }: Props) => {
+  const { id, score, activity, author, body, createdAt } = comment
   const { isAuthenticated } = useAuth()
 
   return (

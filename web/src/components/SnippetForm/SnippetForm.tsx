@@ -1,20 +1,11 @@
 import Stack from '@mui/material/Stack'
 import InputAdornment from '@mui/material/InputAdornment'
-import { useMemo } from 'react'
-
 import {
   Form,
   FormError,
-  Label,
-  // TextField,
-  TextAreaField,
-  Submit,
-  SubmitHandler,
-  FieldError,
 } from '@redwoodjs/forms'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useReactiveVar } from '@apollo/client'
-
 import PostAddIcon from '@mui/icons-material/PostAdd'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
@@ -30,8 +21,8 @@ import TagsCell from 'src/components/TagsCell'
 import TextField, { TextFieldProps } from '@mui/material/TextField'
 import { styled } from '@mui/material/styles'
 import { useTheme } from '@emotion/react'
-import { Snippet } from 'types/graphql'
 import { sortByVar } from 'src/localStore/homeFeedSortBy'
+import { useReadingTime } from 'src/utils/stringUtils'
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,
@@ -75,9 +66,9 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
   const sortBy = useReactiveVar(sortByVar)
 
   const formRef = useRef<HTMLFormElement>()
+  const bodyRef = useRef<HTMLInputElement>()
   const imageRef = useRef<HTMLImageElement>()
   const theme = useTheme()
-  const horizontallyAlignImgAndBody = useMediaQuery(theme.breakpoints.up('sm'))
 
   const [title, setTitle] = useState('')
   const [titleError, setTitleError] = useState(false)
@@ -254,7 +245,6 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
     })
     formRef.current.reset()
     resetImagePreview()
-
   }
 
   const resetImagePreview = () => {
@@ -262,6 +252,8 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
   }
 
   const hideImagePreview = !(imageUrl && imageUrlIsValid)
+
+  // const { readingTime, wordsCount } = useReadingTime({ref: bodyRef})
 
   return (
     <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
@@ -278,33 +270,15 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
           label={'Title'}
         />
         <Stack
-          direction={horizontallyAlignImgAndBody ? 'row' : 'column'}
-          spacing={hideImagePreview ? 0 : 1}
+          direction={'row'}
+          spacing={0}
         >
-          <Paper
-            variant={'outlined'}
+          <img
             style={{
-              width: horizontallyAlignImgAndBody ? '200px' : '100%',
-              height: '133px',
-              overflow: 'hidden',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              display: hideImagePreview ? 'none' : 'flex',
+              display: 'none',
             }}
-          >
-            {
-              <img
-                style={{
-                  width: '100%',
-                  display: hideImagePreview ? 'none' : 'block',
-                }}
-                ref={imageRef}
-              />
-            }
-            {imageUrlValidating && <CircularProgress size={'small'} />}
-          </Paper>
-
+            ref={imageRef}
+          />
           <StyledTextField
             label="Snippet"
             disabled={loading}
@@ -313,6 +287,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
             required
             onInput={onBodyInput}
             multiline
+            inputRef={bodyRef}
             fullWidth
             size="small"
             rows={4}
@@ -334,7 +309,6 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
           onInput={onImageUrlInput}
           size="small"
         />
-        {/* <Button onClick={valudateImageUrl}>validate</Button> */}
         <TagsCell setTags={setTags} />
         <Box style={{ height: '4px' }} />
         <Stack direction={'row'} spacing={2}>
@@ -354,6 +328,9 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
           <i>
             <Typography variant="caption">as @{authorUsername}</Typography>
           </i>
+          <div>
+          {/* {wordsCount} */}
+          </div>
         </Stack>
       </Stack>
     </Form>
