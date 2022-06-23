@@ -112,21 +112,20 @@ const SnippetUi = ({
             style={{ whiteSpace: 'pre-line' }}
           >
             {returnTruncatedText(body, 150)}
+            <Space />
             {body.length > 150 && (
               <>
-                <Space />
                 <ReadMore route={routes.snippet({ id })} />
                 <Space />
               </>
             )}
             {'-'}
             <Space />
+            <CreatedAt createdAt={createdAt} />
+            <Space />
+            {'by'}
+            <Space />
             <SnippetAuthorNameText variant="body1" component="i">
-              <Space />
-              <CreatedAt createdAt={createdAt} />
-              <Space />
-              {'by'}
-              <Space />
               {<Username username={author.username} />}
             </SnippetAuthorNameText>
           </Typography>
