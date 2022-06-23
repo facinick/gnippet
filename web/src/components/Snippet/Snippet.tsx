@@ -6,6 +6,8 @@ import CreatedAt from '../CreatedAt/CreatedAt'
 import Username from '../Username/Username'
 import Voting from '../Voting/Voting'
 import Bookmark from '../Bookmark/Bookmark'
+import ReadMore from '../ReadMore/ReadMore'
+import Space from '../Space/Space'
 import BackButton from '../BackButton/BackButton'
 import Stack from '@mui/material/Stack'
 import SnippetTags from '../SnippetTags/SnippetTags'
@@ -16,7 +18,10 @@ import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import NumberOfComments from '../NumberOfComments/NumberOfComments'
 import CommentsHeader from '../CommentsHeader/CommentsHeader'
+import FullSnippetBody from '../FullSnippetBody/FullSnippetBody'
 import CopySnippetUrl from '../CopySnippetUrl/CopySnippetUrl'
+import { LinkProps, TypographyProps } from '@mui/material'
+import { styled } from '@mui/material/styles'
 
 type Props = {
   snippet: Omit<Snippet, 'authorId | languages | updatedAt | votes'>
@@ -28,6 +33,37 @@ type Props = {
   showCommentsHeader: boolean
   showHeaderImage: boolean
 }
+
+const SnippetTitleText = styled(Typography)<TypographyProps>(({ theme }) => ({
+  // color: theme.palette.containerPrimary.contrastText,
+}))
+
+const SnippetAuthorNameText = styled(Typography)<TypographyProps>(
+  ({ theme }) => ({
+    color: theme.palette.containerPrimary.contrastText,
+    display: 'inline-block',
+  })
+)
+
+const SnippetTitleLink = styled(Link)<LinkProps>(({ theme }) => ({
+  color: theme.palette.containerPrimary.contrastText,
+  textDecorationThickness: '0.05rem !important',
+  textUnderlineOffset: '10px',
+  textDecoration: 'none',
+  '&:hover': {
+    textDecoration: 'underline',
+  },
+}))
+
+const SnippetReadmoreLink = styled(Link)<LinkProps>(({ theme }) => ({
+  color: theme.palette.primary.main,
+  textDecorationThickness: '0.05rem !important',
+  textUnderlineOffset: '10px',
+  textDecoration: 'none',
+  '&:hover': {
+    textDecoration: 'underline',
+  },
+}))
 
 const SnippetUi = ({
   showBackButton,
@@ -61,10 +97,12 @@ const SnippetUi = ({
         <header>
           <Stack alignItems={'center'} spacing={1} direction={'row'}>
             {showBackButton && <BackButton />}
-            {showHeaderImage && imageUrl && <Avatar style={{marginRight: 10}} src={imageUrl} />}
-            <Link style={{ width: '100%' }} to={routes.snippet({ id: id })}>
-              <Typography variant="h6">{title}</Typography>
-            </Link>
+            {showHeaderImage && imageUrl && (
+              <Avatar style={{ marginRight: 10 }} src={imageUrl} />
+            )}
+            <SnippetTitleLink to={routes.snippet({ id: id })}>
+              <SnippetTitleText variant="h6">{title}</SnippetTitleText>
+            </SnippetTitleLink>
           </Stack>
         </header>
         {truncate && (
@@ -75,14 +113,22 @@ const SnippetUi = ({
           >
             {returnTruncatedText(body, 150)}
             {body.length > 150 && (
-              <Link to={routes.snippet({ id: id })}>[read-more]</Link>
-            )}{' '}
-            -
-            <Typography variant="body1" component="i">
-              {' '}
-              {<CreatedAt createdAt={createdAt} />} by <span> </span>
+              <>
+                <Space />
+                <ReadMore route={routes.snippet({ id })} />
+                <Space />
+              </>
+            )}
+            {'-'}
+            <Space />
+            <SnippetAuthorNameText variant="body1" component="i">
+              <Space />
+              <CreatedAt createdAt={createdAt} />
+              <Space />
+              {'by'}
+              <Space />
               {<Username username={author.username} />}
-            </Typography>
+            </SnippetAuthorNameText>
           </Typography>
         )}
         {!truncate && (
@@ -91,18 +137,30 @@ const SnippetUi = ({
             component="p"
             style={{ whiteSpace: 'pre-line' }}
           >
-            {body} -{' '}
+            <FullSnippetBody
+              body={body}
+              imageUrl={imageUrl}
+              altText={'some alt text'}
+            />
+
             <Typography variant="body1" component="i">
-              {' '}
-              {<CreatedAt createdAt={createdAt} />} by{' '}
+              <div style={{ margin: '15px 0px' }}>
+                {'Posted on '}
+                <CreatedAt formatType={'date-time'} createdAt={createdAt} />
+                <Space />
+                {'by'}
+                <Space />
+                <SnippetAuthorNameText>
+                  <Username username={author.username} />
+                </SnippetAuthorNameText>
+              </div>
             </Typography>
-            {<Username username={author.username} />}
           </Typography>
         )}
         <Stack direction={'row'} alignItems={'center'}>
           <Voting entity={'SNIPPET'} snippetId={id} score={score} />
           {isAuthenticated && <Bookmark entity={'SNIPPET'} snippetId={id} />}
-          <CopySnippetUrl id={id}/>
+          <CopySnippetUrl id={id} />
         </Stack>
         {rendertags && <SnippetTags tags={tags} />}
         {isAuthenticated && showCommentsForm && (

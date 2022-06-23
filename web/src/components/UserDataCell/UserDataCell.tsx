@@ -29,11 +29,14 @@ export const Success = ({ user }: CellSuccessProps<UserQuery, UserQueryVariables
   const savedSnippets = savedSnippetBookmarks?.map((bookmark) => bookmark.snippet)
   const savedComments = savedCOmmentBookmarks?.map((bookmark) => bookmark.comment)
 
+  const snippetsHeaderText = savedSnippets.length > 0 ? "Snippets" : "Save snippets to view them here!"
+  const commentsHeaderText = savedComments.length > 0 ? "Comments" : "Save comments to view them here!"
+
   return (
     <Stack spacing={2}>
-      <Typography> Snippets</Typography>
+      <Typography> {snippetsHeaderText}</Typography>
       <SnippetsList snippets={savedSnippets}/>
-      <Typography> Comments</Typography>
+      <Typography> {commentsHeaderText}</Typography>
       <CommentsList comments={savedComments}/>
     </Stack>
   )

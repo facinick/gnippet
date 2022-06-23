@@ -13,7 +13,7 @@ export const QUERY = USER_DATA_QUERY_BY_USERNAME
 
 export const Loading = () => <Meta loading={true}/>
 
-export const Empty = ({username}) => <Meta empty={true} message={`${username}'s creations shall appear here!`}/>
+export const Empty = ({username}) => <Meta empty={true} message={`user ${username} not found`}/>
 
 export const Failure = ({ error }: UserQueryVariables) => <Meta error={true} message={error.message} />
 
@@ -24,11 +24,14 @@ export const Success = ({
   const userSnippets = user.snippets
   const userComments = user.comments
 
+  const snippetsHeaderText = userSnippets.length > 0 ? "Snippets" : "Create snippets to view them here!"
+  const commentsHeaderText = userComments.length > 0 ? "Comments" : "Create comments to view them here!"
+
   return (
   <Stack spacing={2}>
-    <Typography> Snippets</Typography>
+    <Typography> {snippetsHeaderText}</Typography>
     <SnippetsList snippets={userSnippets}/>
-    <Typography> Comments</Typography>
+    <Typography> {commentsHeaderText}</Typography>
     <CommentsList comments={userComments}/>
   </Stack>)
 }

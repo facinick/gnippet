@@ -93,3 +93,7 @@ export const xDaysAgo = (time: any): string => {
   return _xDaysAgo(new Date(time).getTime())
 }
 
+export const newTimeFormat = (time: any): string => {
+  return (new Date(time)).toDateString()
+}
+

@@ -2,6 +2,7 @@ import { theme as green } from './green'
 import { theme as blue } from './blue'
 import { theme as _default } from './default'
 import { theme as red } from './red'
+import { theme as vercel } from './vercel'
 
 import {  Palette, PaletteColor, ThemeOptions } from '@mui/material/styles';
 // import { Palette } from '@mui/material/styles';
@@ -40,8 +41,9 @@ export interface AppTheme {
 }
 
 export const color = {
-  0: _default,
+  0: vercel,
   1: green,
   2: blue,
   3: red,
+  4: _default,
 }

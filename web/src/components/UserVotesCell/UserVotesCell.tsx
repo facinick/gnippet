@@ -34,12 +34,18 @@ export const Success = ({
     .map((vote) => vote.comment)
     .filter((comment) => comment !== null)
 
+
+  const snippetsHeaderText =
+    votesSnippets.length > 0 ? 'Snippets' : 'Vote snippets to view them here!'
+  const commentsHeaderText =
+    votesComments.length > 0 ? 'Comments' : 'Vote comments to view them here!'
+
   return (
     <div>
       <Stack spacing={2}>
-        <Typography> Snippets</Typography>
+        <Typography> {snippetsHeaderText}</Typography>
         <SnippetsList snippets={votesSnippets} />
-        <Typography> Comments</Typography>
+        <Typography> {commentsHeaderText}</Typography>
         <CommentsList comments={votesComments} />
       </Stack>
     </div>

@@ -19,7 +19,7 @@ export default function ToggleColorMode(props: ThemeProviderProps) {
   const [mode, setMode] = React.useState<'light' | 'dark'>(
     prefersDarkMode ? 'dark' : 'light'
   )
-  const [theme, setTheme] = React.useState<0 | 1 | 2 | 3>(0)
+  const [theme, setTheme] = React.useState<0 | 1 | 2 | 3 | 4>(0)
 
   useEffect(() => {
     setMode(prefersDarkMode ? 'dark' : 'light')
@@ -31,7 +31,7 @@ export default function ToggleColorMode(props: ThemeProviderProps) {
         setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'))
       },
       shuffleColorTheme: () => {
-        setTheme((prevTheme) => ((prevTheme + 1) % 4) as 0 | 1 | 2 | 3)
+        setTheme((prevTheme) => ((prevTheme + 1) % 5) as 0 | 1 | 2 | 3 | 4)
       },
     }),
     []

@@ -6,6 +6,29 @@ import { useApolloClient } from '@apollo/client'
 import { USER_VOTES_QUERY } from 'src/pages/Queries/queries'
 import { useState, useEffect } from 'react'
 import { useAuth } from '@redwoodjs/auth'
+import { styled } from '@mui/material/styles'
+
+import { TypographyProps } from '@mui/material'
+
+const VotesCount = styled(Typography)<TypographyProps & { vote: 1 | -1 | 0 }>(
+  ({ theme, vote }) => ({
+    color:
+      vote === 1
+        ? theme.palette.upvote.contrastText
+        : vote === -1
+        ? theme.palette.downvote.contrastText
+        : 'inherit',
+    backgroundColor:
+      vote === 1
+        ? theme.palette.upvote.main
+        : vote === -1
+        ? theme.palette.downvote.main
+        : 'inherit',
+    padding: '0px 15px',
+    textAlign: 'center',
+    borderRadius: '50px',
+  })
+)
 
 interface Props {
   score: number
@@ -55,8 +78,8 @@ const Voting = ({ snippetId, commentId, score, entity }: Props) => {
           userId: currentUser?.id,
         },
         data: {
-          votes: []
-        }
+          votes: [],
+        },
       })
     }
   }, [isAuthenticated])
@@ -75,7 +98,7 @@ const Voting = ({ snippetId, commentId, score, entity }: Props) => {
           currentVoteId={currentVoteId}
         />
 
-        <Typography>{score}</Typography>
+        <VotesCount vote={currentVoteValue}>{score}</VotesCount>
 
         <Downvote
           currentVoteValue={currentVoteValue}
