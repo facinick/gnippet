@@ -15,10 +15,37 @@ import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
 import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
-
+import { LinkProps, TypographyProps, ListItemProps } from '@mui/material'
+import { styled } from '@mui/material/styles'
 interface Props {
   snippets: Array<Snippet>
 }
+
+const SnippetTitleLink = styled(Link)<LinkProps>(({ theme }) => ({
+  color: theme.palette.text.primary,
+  lineHeight: '2rem',
+  fontWeight: 600,
+  textDecorationThickness: '0.05rem !important',
+  fontSize: '1rem',
+  textUnderlineOffset: '6px',
+  textDecoration: 'none',
+  '&:hover': {
+    textDecoration: 'underline',
+  },
+}))
+
+const StyledListItem = styled(ListItem)<ListItemProps>(({ theme }) => ({
+  borderRadius: '8px',
+  marginBottom: '20px',
+  background: theme.palette.containerPrimary.main,
+  outline: '1px solid #333',
+}))
+
+const SnippetBodyText = styled(Typography)<TypographyProps>(({ theme }) => ({
+  color: '#888',
+  lineHeight: '1.2rem',
+  fontSize: '0.8rem',
+}))
 
 const SnippetItem = ({
   id,
@@ -34,7 +61,7 @@ const SnippetItem = ({
   }
 
   return (
-    <ListItem alignItems="flex-start">
+    <StyledListItem alignItems="flex-start">
       <ListItemAvatar>
         <Avatar
           component={IconButton}
@@ -49,12 +76,12 @@ const SnippetItem = ({
       <ListItemText
         primary={
           <Typography>
-            <Link to={routes.snippet({ id: id })}>{title}</Link>
+            <SnippetTitleLink to={routes.snippet({ id: id })}>{title}</SnippetTitleLink>
           </Typography>
         }
-        secondary={<Typography>{`${_newBody}`}</Typography>}
+        secondary={<SnippetBodyText>{`${_newBody}`}</SnippetBodyText>}
       />
-    </ListItem>
+    </StyledListItem>
   )
 }
 

@@ -43,7 +43,7 @@ const ProfileBio = ({ bio }: Props) => {
 
   return (
       <ClickAwayListener onClickAway={onClickAway}>
-        <Box style={{ position: 'relative', maxWidth: '420px', minWidth: '300px', width: '100%' }}>
+        <Box style={{  maxWidth: '420px', minWidth: '300px', width: '100%' }}>
           <TextField
             multiline
             rows={3}
@@ -58,12 +58,12 @@ const ProfileBio = ({ bio }: Props) => {
             onChange={onTextInput}
           />
           <Button
-            style={{ right: -70, position: 'absolute' }}
             onClick={onEditToggle}
             variant="text"
+            size={'small'}
           >
-            {edit && <Typography>Save</Typography>}
-            {!edit && <Typography>Edit</Typography>}
+            {edit && <Typography>save bio</Typography>}
+            {!edit && <Typography>edit bio</Typography>}
           </Button>
         </Box>
       </ClickAwayListener>

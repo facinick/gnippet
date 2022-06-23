@@ -43,9 +43,9 @@ export const Success = ({
   return (
     <div>
       <Stack spacing={2}>
-        <Typography> {snippetsHeaderText}</Typography>
+        <Typography variant={'h5'}> {snippetsHeaderText}</Typography>
         <SnippetsList snippets={votesSnippets} />
-        <Typography> {commentsHeaderText}</Typography>
+        <Typography variant={'h5'}> {commentsHeaderText}</Typography>
         <CommentsList comments={votesComments} />
       </Stack>
     </div>
