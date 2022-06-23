@@ -146,7 +146,7 @@ export const theme: AppTheme = {
       }),
       containerSecondary: palette.augmentColor({
         color: {
-          main: '#e7dff8',
+          main: 'rgb(250,250,250)',
           contrastText: '#1d192b',
         },
       }),
