@@ -47,12 +47,9 @@ export const Failure = ({ message, size }: {message: string, size: 'skinny' | 'c
   </Box>)
 }
 
-interface Error {
-  message: string
-}
 
 interface Props {
-  error?: Error
+  error?: boolean
   loading?: boolean
   empty?: boolean
   message?: string

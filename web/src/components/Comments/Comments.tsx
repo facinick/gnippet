@@ -1,4 +1,4 @@
-import { Stack, Divider, Typography } from '@mui/material'
+import { Stack, Divider, Typography, Box, Card } from '@mui/material'
 import { Comment as TComment } from 'types/graphql'
 import Comment from 'src/components/Comment'
 
@@ -13,14 +13,14 @@ const Comments = ({ comments }: Props) => {
 
   return (
     <>
-      <Stack spacing={5}>
+      <Stack spacing={3}>
         {comments.map((comment, index) => {
           isLastComment = index === numberOfComments - 1 ? true : false
           renderDivider = !isLastComment
           return (
             <React.Fragment key={comment.id}>
-              <Comment key={comment.id} comment={comment} />
-              {renderDivider && <Divider />}
+                <Comment key={comment.id} comment={comment} />
+                {renderDivider && <Divider />}
             </ React.Fragment>
           )
         })}

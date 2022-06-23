@@ -11,6 +11,7 @@ import Tooltip from '@mui/material/Tooltip'
 import PersonAdd from '@mui/icons-material/PersonAdd'
 import Settings from '@mui/icons-material/Settings'
 import Logout from '@mui/icons-material/Logout'
+import Login from '@mui/icons-material/Login'
 import { useAuth } from '@redwoodjs/auth/dist/useAuth'
 import PersonIcon from '@mui/icons-material/Person'
 import { navigate, routes } from '@redwoodjs/router'
@@ -36,12 +37,9 @@ export default function ProfileButton({ showThemeOptions }: Props) {
     navigate(routes.user({ username: currentUser?.username }))
 
   const open = Boolean(anchorEl)
+
   const handleProfileButtonClick = (event: React.MouseEvent<HTMLElement>) => {
-    if (!isAuthenticated) {
-      navigate(routes.login())
-    } else {
-      setAnchorEl(event.currentTarget)
-    }
+   setAnchorEl(event.currentTarget)
   }
   const handleProfileMenuClose = () => {
     setAnchorEl(null)
@@ -57,7 +55,17 @@ export default function ProfileButton({ showThemeOptions }: Props) {
     setAnchorEl(null)
   }
 
-  const tooltipText = isAuthenticated ? 'Account' : 'Login'
+   const handleLogin = (event) => {
+     navigate(routes.login())
+     setAnchorEl(null)
+   }
+
+   const handleSignup = (event) => {
+     navigate(routes.signup())
+     setAnchorEl(null)
+   }
+
+  const tooltipText = isAuthenticated ? 'Account' : 'Account'
 
   return (
     <React.Fragment>
@@ -120,13 +128,18 @@ export default function ProfileButton({ showThemeOptions }: Props) {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuList dense>
-          <MenuItem onClick={handleGotoProfile}>
-            <ListItemIcon>
-              <PersonIcon fontSize="small" />
-            </ListItemIcon>
-            Profile
-          </MenuItem>
-          <Divider />
+          {isAuthenticated && (
+            <>
+              <MenuItem onClick={handleGotoProfile}>
+                <ListItemIcon>
+                  <PersonIcon fontSize="small" />
+                </ListItemIcon>
+                Profile
+              </MenuItem>
+              <Divider />
+            </>
+          )}
+
           {showThemeOptions && (
             <MenuItem onClick={colorMode.toggleColorMode}>
               {theme.palette.mode === 'dark' && (
@@ -150,12 +163,33 @@ export default function ProfileButton({ showThemeOptions }: Props) {
               Theme Switch
             </MenuItem>
           )}
-          <MenuItem onClick={handleLogout}>
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            Logout
-          </MenuItem>
+
+          {!isAuthenticated && (
+            <MenuItem onClick={handleLogin}>
+              <ListItemIcon>
+                <Login fontSize="small" />
+              </ListItemIcon>
+              Login
+            </MenuItem>
+          )}
+
+          {!isAuthenticated && (
+            <MenuItem onClick={handleSignup}>
+              <ListItemIcon>
+                <Login fontSize="small" />
+              </ListItemIcon>
+              Signup
+            </MenuItem>
+          )}
+
+          {isAuthenticated && (
+            <MenuItem onClick={handleLogout}>
+              <ListItemIcon>
+                <Logout fontSize="small" />
+              </ListItemIcon>
+              Logout
+            </MenuItem>
+          )}
         </MenuList>
       </Menu>
     </React.Fragment>

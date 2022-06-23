@@ -40,14 +40,14 @@ export const Success = ({
   const yesComments: boolean = !noComments
   return (
     <>
-      <Stack spacing={5}>
+      <Stack spacing={2}>
         {snippet.comments.map((comment, index) => {
           isLastComment = (index === numberOfComments - 1) ? true : false
           renderDivider = !isLastComment
           return (
             <>
-            <Comment snippetId={snippetId} key={comment.id} comment={comment} />
-            { renderDivider && <Divider /> }
+              <Comment snippetId={snippetId} key={comment.id} comment={comment} />
+              { renderDivider && <Divider /> }
             </>
           )
         })}

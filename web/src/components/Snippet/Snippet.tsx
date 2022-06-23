@@ -61,7 +61,7 @@ const SnippetUi = ({
         <header>
           <Stack alignItems={'center'} spacing={1} direction={'row'}>
             {showBackButton && <BackButton />}
-            {showHeaderImage && imageUrl && <Avatar src={imageUrl} />}
+            {showHeaderImage && imageUrl && <Avatar style={{marginRight: 10}} src={imageUrl} />}
             <Link style={{ width: '100%' }} to={routes.snippet({ id: id })}>
               <Typography variant="h6">{title}</Typography>
             </Link>

@@ -2,9 +2,10 @@ import { theme as green } from './green'
 import { theme as blue } from './blue'
 import { theme as _default } from './default'
 import { theme as red } from './red'
-import {  Palette, PaletteColor } from '@mui/material/styles';
+
+import {  Palette, PaletteColor, ThemeOptions } from '@mui/material/styles';
 // import { Palette } from '@mui/material/styles';
-type DeepPartial<T> = {
+export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
 declare module "@mui/material/styles" {

@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export const truncate = (text: string, length: number): string => {
   if(text.length <= length) {
     return text
@@ -60,6 +62,31 @@ const _xDaysAgo = (time: any): string => {
 
 
   return time;
+}
+
+export const useReadingTime = ({ref}: {ref: React.RefObject<HTMLInputElement>}) => {
+
+  const [inputElement, setInputElement] = useState<React.RefObject<HTMLInputElement>>(ref)
+  const [wordsCount, setWordsCount] = useState(0)
+  const [readingTime, setReadingTime] = useState(0)
+  const [innerText, setInnerText] = useState(ref?.current?.innerText)
+  const wpm = 265
+
+  useEffect(() => {
+    setInputElement(ref)
+  }, [ref])
+
+
+  useEffect(() => {
+    const words = innerText.match(/\w+/g).length
+    setWordsCount(words)
+    setReadingTime(Math.ceil(words / wpm))
+  }, [innerText])
+
+  return {
+    wordsCount,
+    readingTime
+  }
 }
 
 export const xDaysAgo = (time: any): string => {

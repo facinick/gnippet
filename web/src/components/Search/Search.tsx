@@ -6,11 +6,11 @@ import Autocomplete from '@mui/material/Autocomplete'
 import throttle from 'lodash.throttle'
 import { formatPages, formatTags, formatUsers } from 'src/utils/searchResultsUtils';
 import { useTheme } from '@mui/material/styles';
-import { navigate } from '@redwoodjs/router';
+import { navigate, routes } from '@redwoodjs/router';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useAuth } from '@redwoodjs/auth/dist/useAuth';
-
+import Box from '@mui/material/Box';
 
 export const SearchQuery = gql`
   query FindSearchQuery($filter: String!) {
@@ -32,6 +32,10 @@ type SearchObject = {
   type: string;
   id: number | string;
   label: string;
+}
+
+const UserComponent = ({username}: {username: string}) => {
+
 }
 
 const Search = () => {
@@ -91,14 +95,13 @@ const Search = () => {
   const onSelect = (event: any, newValue: SearchObject | null) => {
     switch(newValue.type) {
       case 'users' : {
-          navigate(`/u/${newValue.id}`, { replace: true })
+          navigate(routes.user({username: newValue.id as string}))
         break;
       }
       case 'pages' : {
 
         break;
       }
-      break;
       case 'tags': {
 
         break;
@@ -119,6 +122,35 @@ const Search = () => {
         groupBy={(option) => option.type}
         options={options}
         autoComplete
+        renderOption={(props, option, { selected }) => (
+          <li {...props}>
+            <Box
+              component="span"
+              sx={{
+                width: 14,
+                height: 14,
+                flexShrink: 0,
+                borderRadius: '3px',
+                mr: 1,
+                mt: '2px',
+              }}
+              style={{ backgroundColor: 'red' }}
+            />
+            <Box
+              sx={{
+                flexGrow: 1,
+                '& span': {
+                  color:
+                    theme.palette.mode === 'light' ? '#586069' : '#8b949e',
+                },
+              }}
+            >
+              {option.label}
+              <br />
+            </Box>
+          </li>
+        )}
+
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);
         }}
