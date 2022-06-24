@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 //@ts-ignore
-import raw from 'src/build_time.txt'
+import raw from '../../build_time.txt'
 import CircularProgress from '@mui/material/CircularProgress'
 import { xDaysAgo } from 'src/utils/stringUtils'
 
