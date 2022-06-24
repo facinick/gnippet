@@ -8,11 +8,15 @@ export const LastUpdated = (): JSX.Element => {
   const [date, setDate] = useState('')
 
   useEffect(() => {
+    console.log(`fetching...`)
     fetch(raw)
       .then((response) => {
+         console.log(`fetched...`)
         return response.text()
       })
       .then((text) => {
+         console.log(`text is...`)
+         console.log(text)
         setDate(text)
       })
 
