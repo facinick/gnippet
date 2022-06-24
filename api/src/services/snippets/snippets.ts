@@ -5,8 +5,6 @@ import type {
   QueryResolvers,
   MutationResolvers,
   SnippetResolvers,
-  MutationsaveSnippetArgs,
-  MutationunsaveSnippetArgs,
 } from 'types/graphql'
 
 export const snippets: QueryResolvers['snippets'] = async ({ input }) => {
@@ -29,7 +27,6 @@ export const snippets: QueryResolvers['snippets'] = async ({ input }) => {
     orderBy = { 'score': 'desc' }
   }
 
-
   const where = input?.filter
     ? {
       OR: [
@@ -40,7 +37,7 @@ export const snippets: QueryResolvers['snippets'] = async ({ input }) => {
     : {}
 
   const count = await db.snippet.count()
-  //@ts-ignore
+
   const data = await db.snippet.findMany({ where, skip: input?.skip, take: input?.take, orderBy, include: { tags: true }})
   return {
     count,

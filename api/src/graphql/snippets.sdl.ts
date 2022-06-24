@@ -26,12 +26,6 @@ export const schema = gql`
     activity
     score
   }
-
-  enum SnippetSort {
-    asc
-    desc
-  }
-
   input SnippetQueryFilterAndPagination {
     filter: String
     skip: Int
@@ -63,20 +57,7 @@ export const schema = gql`
     tags: [ConnectOrCreateTagInput]
   }
 
-  input UpdateSnippetInput {
-    title: String
-    body: String
-    score: Int
-    authorId: Int
-    pageId: Int
-    imageUrl: String
-  }
-
   type Mutation {
     createSnippet(input: CreateSnippetInput!): Snippet! @requireAuth
-    updateSnippet(id: Int!, input: UpdateSnippetInput!): Snippet! @requireAuth
-    deleteSnippet(id: Int!): Snippet! @requireAuth
-    saveSnippet(id: Int!): Snippet! @requireAuth
-    unsaveSnippet(id: Int!): Snippet! @requireAuth
   }
 `

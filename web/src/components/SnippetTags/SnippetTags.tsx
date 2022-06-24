@@ -1,6 +1,6 @@
 import Chip from '@mui/material/Chip'
 import { Tag } from 'types/graphql'
-
+import TagIcon from '@mui/icons-material/Tag'
 interface Props {
   tags: Array<Pick<Tag, 'id' | 'name'>>
 }
@@ -16,6 +16,12 @@ const SnippetTags = ({ tags }: Props) => {
           <Chip
             color={'primary'}
             size="small"
+            sx={{
+              fontSize: 14,
+              fontWeight: 800,
+              textTransform: 'uppercase',
+            }}
+            icon={<TagIcon />}
             style={
               isFirstTag
                 ? { marginRight: 8 }
