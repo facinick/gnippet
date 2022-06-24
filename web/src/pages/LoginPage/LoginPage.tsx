@@ -1,5 +1,6 @@
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
+import DontHaveAnAccountLink from 'src/components/DontHaveAnAccountLink/DontHaveAnAccountLink'
 import LoginForm from 'src/components/LoginForm/LoginForm'
 
 const LoginPage = () => {
@@ -13,8 +14,7 @@ const LoginPage = () => {
         <LoginForm />
       </div>
       <div>
-        <span>Don&apos;t have an account?</span>{' '}
-        <Link to={routes.signup()}>Sign up!</Link>
+        <DontHaveAnAccountLink />
       </div>
     </>
   )
