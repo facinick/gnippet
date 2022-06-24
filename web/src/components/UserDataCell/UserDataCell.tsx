@@ -34,9 +34,9 @@ export const Success = ({ user }: CellSuccessProps<UserQuery, UserQueryVariables
 
   return (
     <Stack spacing={2}>
-      <Typography variant={'h5'}> {snippetsHeaderText}</Typography>
+      <Typography variant={'body1'}> {snippetsHeaderText}</Typography>
       <SnippetsList snippets={savedSnippets} />
-      <Typography variant={'h5'}> {commentsHeaderText}</Typography>
+      <Typography variant={'body1'}> {commentsHeaderText}</Typography>
       <CommentsList comments={savedComments} />
     </Stack>
   )

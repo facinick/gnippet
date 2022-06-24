@@ -29,9 +29,9 @@ export const Success = ({
 
   return (
   <Stack spacing={2}>
-    <Typography variant={'h5'}> {snippetsHeaderText}</Typography>
+    <Typography variant={'body1'}> {snippetsHeaderText}</Typography>
     <SnippetsList snippets={userSnippets}/>
-    <Typography variant={'h5'}> {commentsHeaderText}</Typography>
+    <Typography variant={'body1'}> {commentsHeaderText}</Typography>
     <CommentsList comments={userComments}/>
   </Stack>)
 }

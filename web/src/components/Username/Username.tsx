@@ -1,6 +1,6 @@
-import { Link, routes } from "@redwoodjs/router"
+import { Link, routes } from '@redwoodjs/router'
 
-import { LinkProps } from '@mui/material'
+import { LinkProps, Typography, TypographyProps } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 const UsernameLink = styled(Link)<LinkProps>(({ theme }) => ({
@@ -13,14 +13,21 @@ const UsernameLink = styled(Link)<LinkProps>(({ theme }) => ({
   },
 }))
 
+const UsernameDefault = styled(Typography)<TypographyProps>(({ theme }) => ({
+  color: theme.palette.text.primary,
+  textDecoration: 'none',
+}))
+
 interface Props {
   username: string
+  style?: 'link' | 'default'
 }
 
-const Username = ({ username }: Props) => {
-  return (
-    <UsernameLink to={routes.user({ username })}>@{username}</UsernameLink>
-  )
+const Username = ({ username, style }: Props) => {
+  if (style === 'default') {
+    return <UsernameDefault>{username}</UsernameDefault>
+  }
+  return <UsernameLink to={routes.user({ username })}>@{username}</UsernameLink>
 }
 
 export default Username

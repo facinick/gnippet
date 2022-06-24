@@ -19,6 +19,18 @@ import { navigate } from '@redwoodjs/router'
 import Meta from '../Meta/Meta'
 import ProfileBio from '../ProfileBio/ProfileBio'
 import Stack from '@mui/material/Stack'
+import UserCreatedAt from '../UserCreatedAt/UserCreatedAt'
+
+export const UserProfileQuery = gql`
+  query UserQueryByUsername($username: String!) {
+    user: userByUsername(username: $username) {
+      id
+      createdAt
+      isBanned
+      bio
+    }
+  }
+`
 
 enum Tab {
   ACTIVITY = 0,
@@ -67,6 +79,12 @@ const UserCell = ({ username, tab }: Props) => {
   const loadPrivateUserData =
     currentUser?.id && isAuthenticated && currentUser?.username === username
 
+  const userProfile = useQuery(UserProfileQuery, {
+    variables: {
+      username,
+    }
+  })
+
   const isCurrentUserProfile = username === currentUser?.username
 
   const [_tab, setTab] = useState<Tab>(isCurrentUserProfile ? Tab.ACTIVITY : getTab(tab))
@@ -110,12 +128,19 @@ const UserCell = ({ username, tab }: Props) => {
           item
           xs={12}
         >
-          <Stack alignItems={'center'} justifyContent={'center'} direction="column">
-          <Avatar
-            sx={{ width: 95, height: 95 }}
-            src={`https://avatars.dicebear.com/api/bottts/${username}.svg`}
-          />
-          <Username username={username} />
+          <Stack
+            alignItems={'center'}
+            justifyContent={'center'}
+            direction="column"
+          >
+            <Avatar
+              sx={{ width: 95, height: 95 }}
+              src={`https://avatars.dicebear.com/api/bottts/${username}.svg`}
+            />
+            <Username style={'default'} username={username} />
+            {userProfile?.data?.user?.createdAt && (
+              <UserCreatedAt createdAt={userProfile.data.user.createdAt} />
+            )}
           </Stack>
         </Grid>
         {/* user bio  */}
@@ -126,7 +151,10 @@ const UserCell = ({ username, tab }: Props) => {
           alignItems={'center'}
           xs={12}
         >
-          <ProfileBio bio="bio" />
+          <ProfileBio
+            userId={userProfile?.data?.user?.id}
+            bio={userProfile?.loading ? 'loading...' : userProfile?.data?.user?.bio || 'no bio'}
+          />
         </Grid>
         {/* user snippets  */}
         <Grid
@@ -147,7 +175,7 @@ const UserCell = ({ username, tab }: Props) => {
           >
             <Tabs
               // allowScrollButtonsMobile
-              variant="scrollable"
+              variant="fullWidth"
               scrollButtons="auto"
               value={_tab}
               onChange={handleTabChange}
@@ -188,12 +216,10 @@ const UserCell = ({ username, tab }: Props) => {
               <UserActivityCell username={username} fetchPrivateData={false} />
             )}
 
-
             {_tab === 1 && !loading && isCurrentUserProfile && (
               <UserDataCell id={currentUser?.id} fetchPrivateData={true} />
             )}
             {_tab === 1 && loading && <Meta loading={true} />}
-
 
             {_tab === 2 && !loading && isCurrentUserProfile && (
               <UserVotesCell id={currentUser?.id} fetchPrivateData={true} />

@@ -64,12 +64,12 @@ export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
 export const User: UserResolvers = {
   id: async (_obj, { root }) => {
     requireAuth({})
-    requireOwnerAccess({id: root.id})
+    // requireOwnerAccess({id: root.id})
     return  (await db.user.findUnique({ where: { id: root.id } })).id
   },
   isBanned: async (_obj, { root }) => {
     requireAuth({})
-    requireOwnerAccess({id: root.id})
+    // requireOwnerAccess({id: root.id})
     return  (await db.user.findUnique({ where: { id: root.id } })).isBanned
   },
   roles: async (_obj, { root }) => {
