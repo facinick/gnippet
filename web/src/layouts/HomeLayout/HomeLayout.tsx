@@ -4,6 +4,7 @@ import Search from 'src/components/Search/Search'
 import { Toaster } from '@redwoodjs/web/toast'
 import ThemeSwitch from 'src/components/ThemeSwitch/ThemeSwitch'
 import Stack from '@mui/material/Stack'
+import Divider from '@mui/material/Divider'
 import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
 import LinearProgress from '@mui/material/LinearProgress'
@@ -36,7 +37,7 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
         <LinearProgress color={'error'} variant="determinate" value={100} />
       )}
       <Toaster />
-      <Stack spacing={5}>
+      <Stack sx={{minHeight: '100%'}} justifyContent={'flex-start'} spacing={5}>
         <header style={{ padding: 10 }}>
           <Stack
             justifyContent={'space-evenly'}
@@ -55,8 +56,14 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
             <ProfileButton showThemeOptions={showThemeOptionsInProfileMenu} />
           </Stack>
         </header>
-        <main>{children}</main>
-        <Footer />
+        <main style={{flexGrow: 1}}>{children}</main>
+        <footer
+          style={{ borderTop: `0.01rem solid ${theme.palette.text.secondary}`, padding: 10, background: theme.palette.containerPrimary.main }}
+        >
+          <Stack alignItems={'center'}>
+            <Footer />
+          </Stack>
+        </footer>
       </Stack>
     </>
   )

@@ -20,8 +20,8 @@ export const theme: AppTheme = {
         },
       }),
       text: {
-        primary: '#e6e1e6',
-        secondary: '#e6e1e6',
+        primary: '#fff',
+        secondary: '#888',
       },
       background: {
         default: 'rgb(17,17,17)',
@@ -95,7 +95,7 @@ export const theme: AppTheme = {
       }),
       text: {
         primary: 'rgb(0,0,0)',
-        secondary: 'rgb(0,0,0)',
+        secondary: '#888',
       },
       background: {
         default: 'rgb(250,250,250)',
