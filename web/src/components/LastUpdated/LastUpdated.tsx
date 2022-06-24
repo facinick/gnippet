@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-//@ts-ignore
 import raw from '../../build_time.txt'
 import CircularProgress from '@mui/material/CircularProgress'
 import { xDaysAgo } from 'src/utils/stringUtils'
@@ -8,18 +7,17 @@ export const LastUpdated = (): JSX.Element => {
   const [date, setDate] = useState('')
 
   useEffect(() => {
-    console.log(`fetching...`)
+    console.log(`fetching..`)
     fetch(raw)
       .then((response) => {
-         console.log(`fetched...`)
+        console.log(`fetched...`)
         return response.text()
       })
       .then((text) => {
-         console.log(`text is...`)
-         console.log(text)
+        console.log(`text is...`)
+        console.log(text)
         setDate(text)
       })
-
   }, [])
 
   return (
