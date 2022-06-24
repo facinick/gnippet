@@ -20,7 +20,7 @@ import { styled } from '@mui/material/styles'
 
 const CommentTitleLink = styled(Link)<LinkProps>(({ theme }) => ({
   color: theme.palette.text.primary,
-  lineHeight: '2rem',
+  lineHeight: '1.5rem',
   fontWeight: 600,
   textDecorationThickness: '0.05rem !important',
   fontSize: '1rem',

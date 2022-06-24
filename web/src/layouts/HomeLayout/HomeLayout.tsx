@@ -13,6 +13,7 @@ import LogoutButton from 'src/components/LogoutButton/LogoutButton'
 import WifiStatus from 'src/components/WifiStatus/WifiStatus'
 import LoginButton from 'src/components/LoginButton/LoginButton'
 import ProfileButton from 'src/components/ProfileButton/ProfileButton'
+import Footer from 'src/components/Footer/Footer'
 import ThemeButtonGroup from 'src/components/ThemeButtonGroup/ThemeButtonGroup'
 import HomeButton from 'src/components/HomeButton/HomeButton'
 import Typography from '@mui/material/Typography'
@@ -36,18 +37,26 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
       )}
       <Toaster />
       <Stack spacing={5}>
-        <header style={{padding: 10}}>
-          <Stack justifyContent={'space-evenly'} alignItems={'center'} direction={'row'} spacing={2}>
+        <header style={{ padding: 10 }}>
+          <Stack
+            justifyContent={'space-evenly'}
+            alignItems={'center'}
+            direction={'row'}
+            spacing={2}
+          >
             <HomeButton />
-          <Search />
-            {showThemeOptionsInHeader && <>
-            <ThemeSwitch />
-            <ThemeShuffle /></>}
+            <Search />
+            {showThemeOptionsInHeader && (
+              <>
+                <ThemeSwitch />
+                <ThemeShuffle />
+              </>
+            )}
             <ProfileButton showThemeOptions={showThemeOptionsInProfileMenu} />
           </Stack>
         </header>
         <main>{children}</main>
-        <footer />
+        <Footer />
       </Stack>
     </>
   )

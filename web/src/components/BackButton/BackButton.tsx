@@ -6,12 +6,17 @@ import { back } from '@redwoodjs/router'
 
 const BackButton = () => {
 
-  const onCLick = () => {
+  const onCLick = (event) => {
+    event.preventDefault()
     back()
   }
 
   return (
-    <IconButton title={"Back"} onClick={onCLick} aria-label="back">
+    <IconButton
+      title={'Back'}
+      onClick={onCLick}
+      aria-label="back"
+    >
       <ArrowBackIcon color={'secondary'} />
     </IconButton>
   )
