@@ -1,5 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
+import AlreadyHaveAnAccountLink from 'src/components/AlreadyHaveAnAccountLink/AlreadyHaveAnAccountLink'
 import SignupForm from 'src/components/SignupForm/SignupForm'
 
 const SignupPage = () => {
@@ -13,8 +14,7 @@ const SignupPage = () => {
         <SignupForm />
       </div>
       <div>
-        <span>Already have an account?</span>{' '}
-        <Link to={routes.login()}>Login!</Link>
+        <AlreadyHaveAnAccountLink />
       </div>
     </>
   )

@@ -1,6 +1,7 @@
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import ForgotPasswordForm from 'src/components/ForgotPasswordForm/ForgotPasswordForm'
+import RememberItSuddenly from 'src/components/RememberItSuddenly/RememberItSuddenly'
 
 const ForgotPasswordPage = () => {
   return (
@@ -13,8 +14,7 @@ const ForgotPasswordPage = () => {
         <ForgotPasswordForm />
       </div>
       <div>
-        <span>Remember it suddenly?</span>{' '}
-        <Link to={routes.login()}>Login!</Link>
+        <RememberItSuddenly />
       </div>
     </>
   )

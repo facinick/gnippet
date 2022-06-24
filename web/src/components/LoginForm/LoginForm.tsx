@@ -166,13 +166,17 @@ const LoginForm = () => {
                   edge="end"
                   title={passwordVisible ? 'hide' : 'show'}
                 >
-                  {passwordVisible ? <VisibilityOff /> : <Visibility />}
+                  {passwordVisible ? (
+                    <VisibilityOff sx={{fontSize: 24}} />
+                  ) : (
+                    <Visibility sx={{fontSize: 24}} />
+                  )}
                 </IconButton>
               </InputAdornment>
             ),
           }}
         />
-        <ForgotPasswordLink />
+        {/* <ForgotPasswordLink /> */}
         <Button
           aria-label="Login"
           title={'Login'}

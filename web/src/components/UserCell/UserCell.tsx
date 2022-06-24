@@ -20,6 +20,7 @@ import Meta from '../Meta/Meta'
 import ProfileBio from '../ProfileBio/ProfileBio'
 import Stack from '@mui/material/Stack'
 import UserCreatedAt from '../UserCreatedAt/UserCreatedAt'
+import Box from '@mui/material/Box'
 
 export const UserProfileQuery = gql`
   query UserQueryByUsername($username: String!) {
@@ -151,10 +152,10 @@ const UserCell = ({ username, tab }: Props) => {
           alignItems={'center'}
           xs={12}
         >
-          <ProfileBio
+          {/* <ProfileBio
             userId={userProfile?.data?.user?.id}
-            bio={userProfile?.loading ? 'loading...' : userProfile?.data?.user?.bio || 'no bio'}
-          />
+            username={username}
+          /> */}
         </Grid>
         {/* user snippets  */}
         <Grid
@@ -173,36 +174,43 @@ const UserCell = ({ username, tab }: Props) => {
             md={12}
             sm={12}
           >
-            <Tabs
-              // allowScrollButtonsMobile
-              variant="fullWidth"
-              scrollButtons="auto"
-              value={_tab}
-              onChange={handleTabChange}
+            <Box
+              sx={{
+                bgcolor: 'background.paper',
+                // outline: `1px solid #888`
+              }}
             >
-              <MuiTab
-                iconPosition="end"
-                icon={<CreateIcon />}
-                aria-label="User Activity"
-                label="Activity"
-              />
-              <MuiTab
-                disabled={!loadPrivateUserData}
-                iconPosition="end"
-                icon={<BookmarksIcon />}
-                aria-label="User Saved Items"
-                label="Saved Stuff"
-              />
-              <MuiTab
-                disabled={!loadPrivateUserData}
-                iconPosition="end"
-                icon={
-                  <CompareArrowsIcon style={{ transform: 'rotate(90deg)' }} />
-                }
-                aria-label="User Saved Items"
-                label="Votes"
-              />
-            </Tabs>
+              <Tabs
+                // allowScrollButtonsMobile
+                variant="fullWidth"
+                scrollButtons="auto"
+                value={_tab}
+                onChange={handleTabChange}
+              >
+                <MuiTab
+                  iconPosition="top"
+                  icon={<CreateIcon />}
+                  aria-label="User Activity"
+                  label="Activity"
+                />
+                <MuiTab
+                  disabled={!loadPrivateUserData}
+                  iconPosition="top"
+                  icon={<BookmarksIcon />}
+                  aria-label="User Saved Items"
+                  label="Bookmarks"
+                />
+                <MuiTab
+                  disabled={!loadPrivateUserData}
+                  iconPosition="top"
+                  icon={
+                    <CompareArrowsIcon style={{ transform: 'rotate(90deg)' }} />
+                  }
+                  aria-label="User Saved Items"
+                  label="Votes"
+                />
+              </Tabs>
+            </Box>
           </Grid>
 
           <Grid

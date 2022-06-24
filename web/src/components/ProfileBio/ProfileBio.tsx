@@ -10,10 +10,12 @@ import {
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/dist/toast'
 import { useEffect, useMemo, useState } from 'react'
+import { useApolloClient } from '@apollo/client'
+import { UserProfileQuery } from '../UserCell/UserCell'
 
 interface Props {
-  bio: string
   userId: number
+  username: string
 }
 
 export const UpdateUserBioMutation = gql`
@@ -24,11 +26,27 @@ export const UpdateUserBioMutation = gql`
   }
 `
 
-const ProfileBio = ({ bio, userId }: Props) => {
+const ProfileBio = ({ userId, username }: Props) => {
   const [edit, toggleEdit] = React.useState<boolean>(false)
-  const [_bio, setBio] = React.useState<string>(bio)
+  const [_bio, setBio] = React.useState<string>('')
   const textAreaRef = React.useRef(null)
-  const [beforeChange, setBeforechange] = useState(bio)
+  const [beforeChange, setBeforechange] = useState('')
+  const client = useApolloClient()
+
+  const userVotesQueryResults = client.readQuery({
+    query: UserProfileQuery,
+    variables: {
+      username,
+    },
+  })
+
+  useEffect(() => {
+    if(userVotesQueryResults?.data) {
+      console.log(userVotesQueryResults?.data)
+      setBio(userVotesQueryResults?.data.user.bio)
+      setBeforechange(userVotesQueryResults?.data.user.bio)
+    }
+  }, [userVotesQueryResults])
 
   const [updateBio, { data, loading, error }] = useMutation(
     UpdateUserBioMutation,
@@ -41,10 +59,6 @@ const ProfileBio = ({ bio, userId }: Props) => {
       },
     }
   )
-
-  useEffect(() => {
-    setBio(bio)
-  }, [bio])
 
   const onEditToggle = () => {
     if (!edit) {
