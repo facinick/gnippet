@@ -16,7 +16,7 @@ const CopySnippetUrl = ({ id }: Props) => {
   }
 
   return (
-    <Button color={'primary'} onClick={onCopyLink}>
+    <Button title={'Copy URL'} color={'primary'} onClick={onCopyLink}>
       <LinkIcon />
     </Button>
   )

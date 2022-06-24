@@ -2,6 +2,7 @@ import { Link, routes } from '@redwoodjs/router'
 
 import { LinkProps, Typography, TypographyProps } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import { capitalizeFirstLetter } from 'src/utils/stringUtils'
 
 const UsernameLink = styled(Link)<LinkProps>(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -27,7 +28,14 @@ const Username = ({ username, style }: Props) => {
   if (style === 'default') {
     return <UsernameDefault>{username}</UsernameDefault>
   }
-  return <UsernameLink to={routes.user({ username })}>@{username}</UsernameLink>
+  return (
+    <UsernameLink
+      title={`Goto ${capitalizeFirstLetter(username)}'s Profile`}
+      to={routes.user({ username })}
+    >
+      @{username}
+    </UsernameLink>
+  )
 }
 
 export default Username

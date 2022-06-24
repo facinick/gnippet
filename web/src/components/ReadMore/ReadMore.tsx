@@ -17,7 +17,7 @@ interface Props {
 }
 
 const ReadMore = ({ route }: Props) => {
-  return <SnippetReadmoreLink to={route}>[read-more]</SnippetReadmoreLink>
+  return <SnippetReadmoreLink title={'Read More'} to={route}>[read-more]</SnippetReadmoreLink>
 }
 
 export default ReadMore

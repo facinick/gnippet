@@ -66,8 +66,27 @@ const Bookmark = ({ snippetId, commentId, entity }: Props) => {
 
   return (
     <>
-      {!currentVoteState && <CreateBookmark userId={currentUser?.id} disabled={false} entity={entity} commentId={commentId} snippetId={snippetId} />}
-      {currentVoteState && <DeleteBookmark currentBookmarkId={currentBookmarkId} userId={currentUser?.id} disabled={false} entity={entity} commentId={commentId} snippetId={snippetId} />}
+      {!currentVoteState && (
+        <CreateBookmark
+
+          userId={currentUser?.id}
+          disabled={false}
+          entity={entity}
+          commentId={commentId}
+          snippetId={snippetId}
+        />
+      )}
+      {currentVoteState && (
+        <DeleteBookmark
+
+          currentBookmarkId={currentBookmarkId}
+          userId={currentUser?.id}
+          disabled={false}
+          entity={entity}
+          commentId={commentId}
+          snippetId={snippetId}
+        />
+      )}
     </>
   )
 }

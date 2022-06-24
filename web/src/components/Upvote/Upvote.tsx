@@ -157,7 +157,16 @@ const Upvote = ({
   const theme = useTheme();
 
   return (
-    <Button color={currentVoteValue === 1 ? 'upvote' : 'inherit'} variant='text' size={'large'} type="button" disabled={loading || disabled} onClick={onClick} aria-label="upvote">
+    <Button
+      title={currentVoteValue === 1 ? 'Cancel Upvote' : 'Upvote'}
+      color={currentVoteValue === 1 ? 'upvote' : 'inherit'}
+      variant="text"
+      size={'large'}
+      type="button"
+      disabled={loading || disabled}
+      onClick={onClick}
+      aria-label="upvote"
+    >
       <ArrowUpwardIcon />
     </Button>
   )

@@ -11,7 +11,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useAuth } from '@redwoodjs/auth/dist/useAuth';
 import Box from '@mui/material/Box';
-
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import TagIcon from '@mui/icons-material/Tag'
 export const SearchQuery = gql`
   query FindSearchQuery($filter: String!) {
     users(input: { filter: $filter }) {
@@ -32,10 +34,6 @@ type SearchObject = {
   type: string;
   id: number | string;
   label: string;
-}
-
-const UserComponent = ({username}: {username: string}) => {
-
 }
 
 const Search = () => {
@@ -111,76 +109,64 @@ const Search = () => {
   }
 
   return (
-      <Autocomplete
-        id="app-search"
-        freeSolo
-        filterOptions={(x) => x}
-        getOptionLabel={(option) =>
-          typeof option === 'string' ? option : option.label
-        }
-        noOptionsText={'No results found'}
-        groupBy={(option) => option.type}
-        options={options}
-        autoComplete
-        renderOption={(props, option, { selected }) => (
-          <li {...props}>
-            <Box
-              component="span"
-              sx={{
-                width: 14,
-                height: 14,
-                flexShrink: 0,
-                borderRadius: '3px',
-                mr: 1,
-                mt: '2px',
-              }}
-              style={{ backgroundColor: 'red' }}
+    <Autocomplete
+      id="app-search"
+      freeSolo
+      filterOptions={(x) => x}
+      getOptionLabel={(option) =>
+        typeof option === 'string' ? option : option.label
+      }
+      noOptionsText={'No results found'}
+      groupBy={(option) => option.type}
+      options={options}
+      autoComplete
+      renderOption={(props, option, { selected }) => (
+        <li {...props}>
+          {option.type === 'users' && (
+            <Avatar
+              sx={{ width: 24, height: 24, mr: 1, mt: '2px' }}
+              src={`https://avatars.dicebear.com/api/bottts/${option.id}.svg`}
             />
-            <Box
-              sx={{
-                flexGrow: 1,
-                '& span': {
-                  color:
-                    theme.palette.mode === 'light' ? '#586069' : '#8b949e',
-                },
-              }}
-            >
-              {option.label}
-              <br />
-            </Box>
-          </li>
-        )}
-
-        onInputChange={(event, newInputValue) => {
-          setInputValue(newInputValue);
-        }}
-        onChange={onSelect}
-        loading={loading}
-        disableClearable={true}
-        size={'small'}
-        fullWidth
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            style={{
-              color: theme.palette.containerPrimary.contrastText,
-              backgroundColor: theme.palette.containerPrimary.main,
-            }}
-            ref={inputRef}
-            placeholder={searchHelperText}
-            InputProps={{
-              ...params.InputProps,
-              type: 'search',
-              endAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon color={'disabled'} />
-                </InputAdornment>
-              )
-            }}
-          />
-        )}
-      />
-  );
+          )}
+          {option.type === 'tags' && (
+            <TagIcon
+              sx={{ width: 24, height: 24, mr: 1, mt: '2px' }}
+            />
+          )}
+          <Typography>{option.label}</Typography>
+          <br />
+        </li>
+      )}
+      onInputChange={(event, newInputValue) => {
+        setInputValue(newInputValue)
+      }}
+      onChange={onSelect}
+      loading={loading}
+      disableClearable={true}
+      size={'small'}
+      fullWidth
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          style={{
+            color: theme.palette.containerPrimary.contrastText,
+            backgroundColor: theme.palette.containerPrimary.main,
+          }}
+          ref={inputRef}
+          placeholder={searchHelperText}
+          InputProps={{
+            ...params.InputProps,
+            type: 'search',
+            endAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon color={'disabled'} />
+              </InputAdornment>
+            ),
+          }}
+        />
+      )}
+    />
+  )
 };
 
 export default Search;

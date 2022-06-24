@@ -1,6 +1,6 @@
 {
-  "short_name": "Gnippet",
-  "name": "Gnippet",
+  "short_name": "fnick",
+  "name": "fnick",
   "icons": [
       {
           "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "black-transparent",
+  "background_color": "black-transparent"
 }

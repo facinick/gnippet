@@ -97,3 +97,8 @@ export const newTimeFormat = (time: any): string => {
   return (new Date(time)).toDateString()
 }
 
+export const capitalizeFirstLetter = (text: string): string => {
+  return text.charAt(0).toUpperCase() + text.slice(1)
+}
+
+
