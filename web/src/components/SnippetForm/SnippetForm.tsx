@@ -1,9 +1,6 @@
 import Stack from '@mui/material/Stack'
 import InputAdornment from '@mui/material/InputAdornment'
-import {
-  Form,
-  FormError,
-} from '@redwoodjs/forms'
+import { Form, FormError } from '@redwoodjs/forms'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useReactiveVar } from '@apollo/client'
 import PostAddIcon from '@mui/icons-material/PostAdd'
@@ -66,6 +63,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
   const sortBy = useReactiveVar(sortByVar)
 
   const formRef = useRef<HTMLFormElement>()
+  const [tagsRef, setTagsRef] = useState()
   const bodyRef = useRef<HTMLInputElement>()
   const imageRef = useRef<HTMLImageElement>()
   const theme = useTheme()
@@ -86,6 +84,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
   const [tags, setTags] = useState<Array<TagsSearchObject>>([])
   // ------------------------------------------------------------------
   const [validating, setValidating] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   const onTitleInput = (event) => {
     const value = event.target.value
@@ -233,6 +232,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
   })
 
   const onSubmit = async () => {
+    setSubmitting(true)
     setValidating(true)
     const isValid = await areInputsValid()
     setValidating(false)
@@ -240,11 +240,13 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
       return
     }
 
-    createSnippet({
+    await createSnippet({
       variables: { input: { pageId, authorId, body, title, tags, imageUrl } },
     })
     formRef.current.reset()
+    tagsRef.current.reset()
     resetImagePreview()
+    setSubmitting(false)
   }
 
   const resetImagePreview = () => {
@@ -269,10 +271,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
           size="small"
           label={'Title'}
         />
-        <Stack
-          direction={'row'}
-          spacing={0}
-        >
+        <Stack direction={'row'} spacing={0}>
           <img
             style={{
               display: 'none',
@@ -309,11 +308,15 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
           onInput={onImageUrlInput}
           size="small"
         />
-        <TagsCell setTags={setTags} />
+        <TagsCell
+          disable={submitting}
+          setTagsRef={setTagsRef}
+          setTags={setTags}
+        />
         <Box style={{ height: '4px' }} />
         <Stack direction={'row'} spacing={2}>
           <Button
-            style={{ borderRadius: '30px', width: '150px' }}
+            style={{ transition: 'width 0.1s ease-out', borderRadius: '30px', width: submitting ? '200px' : '150px' }}
             aria-label="Post Snippet"
             title={'Post Snippet'}
             endIcon={<PostAddIcon />}
@@ -323,14 +326,12 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
             disabled={loading || validating}
             type="submit"
           >
-            Submit
+            {submitting ? "Submitting..." : "Submit"}
           </Button>
           <i>
             <Typography variant="caption">as @{authorUsername}</Typography>
           </i>
-          <div>
-          {/* {wordsCount} */}
-          </div>
+          <div>{/* {wordsCount} */}</div>
         </Stack>
       </Stack>
     </Form>

@@ -1,5 +1,11 @@
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
-import React, { useEffect, useState } from 'react'
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react'
 import TextField, { TextFieldProps } from '@mui/material/TextField'
 import { Tag } from 'types/graphql'
 import { QUERY as TagsQuery } from 'src/components/TagsCell/TagsCell'
@@ -30,6 +36,7 @@ const filter = createFilterOptions<TagsSearchObject>()
 
 interface Props {
   setTags: (tags) => void
+  disable: boolean
 }
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
@@ -43,7 +50,8 @@ const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   },
 }))
 
-const TagSearchAndAdd = ({ setTags }: Props) => {
+const TagSearchAndAdd = forwardRef(({ setTags, disable }: Props, ref) => {
+  const autoCompleteRef = useRef()
   const [localTags, setLocalTags] = useState<
     Array<TagSearchId & TagSearchName>
   >([])
@@ -51,17 +59,38 @@ const TagSearchAndAdd = ({ setTags }: Props) => {
   const tagsWithoutTypename = localTags.map(({ __typename, ...rest }) => {
     return rest
   })
+
   const [options, setOptions] =
     React.useState<readonly TagsSearchObject[]>(tagsWithoutTypename)
-  const onSelect = (event: any, newValue: Array<TagsSearchObject> | null) => {
-    setTags(newValue)
-  }
 
   const client = useApolloClient()
 
   const data = client.readQuery({
     query: TagsQuery,
   })
+
+  const [values, setValues] = React.useState<string[]>([])
+
+  const onChange = (_, value) => {
+    setValues(value)
+    setTags(value)
+  }
+  const clearSelected = () => {
+    setValues([])
+  }
+
+  const reset = () => {
+    console.log(`done`)
+    clearSelected()
+    setTags([])
+  }
+
+  useImperativeHandle(ref, () => ({
+    reset() {
+      console.log(`calling resest`)
+      reset()
+    },
+  }))
 
   useEffect(() => {
     if (!data?.tags) {
@@ -82,7 +111,10 @@ const TagSearchAndAdd = ({ setTags }: Props) => {
       id="tags-filled"
       options={options}
       freeSolo
+      value={values}
+      disabled={disable}
       size="small"
+      ref={autoCompleteRef}
       filterSelectedOptions
       PaperComponent={({ children }) => <StyledPaper>{children}</StyledPaper>}
       getOptionLabel={(option) =>
@@ -120,7 +152,7 @@ const TagSearchAndAdd = ({ setTags }: Props) => {
         return filtered
       }}
       disableClearable
-      onChange={onSelect}
+      onChange={onChange}
       renderInput={(params) => (
         <StyledTextField
           {...params}
@@ -134,6 +166,6 @@ const TagSearchAndAdd = ({ setTags }: Props) => {
       )}
     />
   )
-}
+})
 
 export default TagSearchAndAdd
