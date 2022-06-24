@@ -8,7 +8,7 @@ export const LastUpdated = (): JSX.Element => {
   const [date, setDate] = useState('')
 
   useEffect(() => {
-    fetch('src/build_time.txt')
+    fetch(raw)
       .then((response) => {
         return response.text()
       })
