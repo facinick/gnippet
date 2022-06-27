@@ -95,6 +95,7 @@ export const TagSnippetsCell = ({ name }: Props) => {
             <React.Fragment key={snippet.id}>
               <Snippet
                 showBackButton={false}
+                showReadingTimeBottom={true}
                 showActivity={true}
                 key={snippet.id}
                 snippet={snippet}

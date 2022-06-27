@@ -1,7 +1,10 @@
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 import { _Snippet, _SnippetWithVotes, _Vote } from 'src/gql_objects/gqlObjects'
-import { readingTimeInMinutes, truncate as returnTruncatedText } from 'src/utils/stringUtils'
+import {
+  readingTimeInMinutes,
+  truncate as returnTruncatedText,
+} from 'src/utils/stringUtils'
 import CreatedAt from '../CreatedAt/CreatedAt'
 import Username from '../Username/Username'
 import Voting from '../Voting/Voting'
@@ -23,6 +26,7 @@ import FullSnippetBody from '../FullSnippetBody/FullSnippetBody'
 import CopySnippetUrl from '../CopySnippetUrl/CopySnippetUrl'
 import { LinkProps, TypographyProps } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import Box from '@mui/system/Box'
 
 type Props = {
   snippet: Omit<Snippet, 'authorId' | 'languages' | 'updatedAt' | 'votes'>
@@ -51,16 +55,7 @@ const SnippetTitleLink = styled(Link)<LinkProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,
   textDecorationThickness: '0.05rem !important',
   textUnderlineOffset: '10px',
-  textDecoration: 'none',
-  '&:hover': {
-    textDecoration: 'underline',
-  },
-}))
-
-const SnippetReadmoreLink = styled(Link)<LinkProps>(({ theme }) => ({
-  color: theme.palette.primary.main,
-  textDecorationThickness: '0.05rem !important',
-  textUnderlineOffset: '10px',
+  display: 'inline',
   textDecoration: 'none',
   '&:hover': {
     textDecoration: 'underline',
@@ -76,7 +71,7 @@ const SnippetUi = ({
   showComments,
   showCommentsForm,
   showCommentsHeader,
-  showReadingTimeBottom
+  showReadingTimeBottom,
 }: Props) => {
   const {
     id,
@@ -103,9 +98,13 @@ const SnippetUi = ({
             {showHeaderImage && imageUrl && (
               <Avatar style={{ marginRight: 10 }} src={imageUrl} />
             )}
-            <SnippetTitleLink to={routes.snippet({ id: id })}>
-              <SnippetTitleText variant="h6">{title}</SnippetTitleText>
-            </SnippetTitleLink>
+            <SnippetTitleText variant="h6">
+              <SnippetTitleLink to={routes.snippet({ id: id })}>
+                {title}
+              </SnippetTitleLink>
+              <Box style={{width: '10px'}} />
+              <CopySnippetUrl id={id} />
+            </SnippetTitleText>
           </Stack>
         </header>
         {truncate && (
@@ -162,7 +161,7 @@ const SnippetUi = ({
         <Stack direction={'row'} alignItems={'center'}>
           <Voting entity={'SNIPPET'} snippetId={id} score={score} />
           {isAuthenticated && <Bookmark entity={'SNIPPET'} snippetId={id} />}
-          <CopySnippetUrl id={id} />
+          {/* <CopySnippetUrl id={id} /> */}
           {showReadingTimeBottom && (
             <ReadingTime timeInMinutes={readingTimeInMinutes(body)} />
           )}
