@@ -39,7 +39,7 @@ export default function ProfileButton({ showThemeOptions }: Props) {
   const open = Boolean(anchorEl)
 
   const handleProfileButtonClick = (event: React.MouseEvent<HTMLElement>) => {
-   setAnchorEl(event.currentTarget)
+    setAnchorEl(event.currentTarget)
   }
   const handleProfileMenuClose = () => {
     setAnchorEl(null)
@@ -55,15 +55,15 @@ export default function ProfileButton({ showThemeOptions }: Props) {
     setAnchorEl(null)
   }
 
-   const handleLogin = (event) => {
-     navigate(routes.login())
-     setAnchorEl(null)
-   }
+  const handleLogin = (event) => {
+    navigate(routes.login())
+    setAnchorEl(null)
+  }
 
-   const handleSignup = (event) => {
-     navigate(routes.signup())
-     setAnchorEl(null)
-   }
+  const handleSignup = (event) => {
+    navigate(routes.signup())
+    setAnchorEl(null)
+  }
 
   const tooltipText = isAuthenticated ? 'Account' : 'Account'
 
@@ -129,16 +129,14 @@ export default function ProfileButton({ showThemeOptions }: Props) {
       >
         <MenuList dense>
           {isAuthenticated && (
-            <>
-              <MenuItem onClick={handleGotoProfile}>
-                <ListItemIcon>
-                  <PersonIcon fontSize="small" />
-                </ListItemIcon>
-                Profile
-              </MenuItem>
-              <Divider />
-            </>
+            <MenuItem onClick={handleGotoProfile}>
+              <ListItemIcon>
+                <PersonIcon fontSize="small" />
+              </ListItemIcon>
+              Profile
+            </MenuItem>
           )}
+          {isAuthenticated && <Divider />}
 
           {showThemeOptions && (
             <MenuItem onClick={colorMode.toggleColorMode}>
