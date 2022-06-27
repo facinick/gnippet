@@ -101,4 +101,14 @@ export const capitalizeFirstLetter = (text: string): string => {
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
+export const readingTimeInMinutes = (text: string) => {
+  const wpm = 225;
+  const words = text.trim().split(/\s+/).length;
+  const time = Math.ceil(words / wpm);
 
+  if (time < 1) {
+    return 1
+  }
+
+  return time
+}

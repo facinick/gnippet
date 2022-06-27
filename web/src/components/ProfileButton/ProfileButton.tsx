@@ -70,26 +70,28 @@ export default function ProfileButton({ showThemeOptions }: Props) {
   return (
     <React.Fragment>
       <Tooltip title={tooltipText}>
-        <IconButton
-          onClick={handleProfileButtonClick}
-          size="small"
-          disabled={loading}
-          aria-controls={open ? 'account-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          color={'primary'}
-        >
-          <Avatar
-            sx={{ width: 32, height: 32 }}
-            src={
-              isAuthenticated && currentUser?.username
-                ? `https://avatars.dicebear.com/api/bottts/${currentUser.username}.svg`
-                : undefined
-            }
+        <span>
+          <IconButton
+            onClick={handleProfileButtonClick}
+            size="small"
+            disabled={loading}
+            aria-controls={open ? 'account-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            color={'primary'}
           >
-            {!isAuthenticated && <PersonIcon />}
-          </Avatar>
-        </IconButton>
+            <Avatar
+              sx={{ width: 32, height: 32 }}
+              src={
+                isAuthenticated && currentUser?.username
+                  ? `https://avatars.dicebear.com/api/bottts/${currentUser.username}.svg`
+                  : undefined
+              }
+            >
+              {!isAuthenticated && <PersonIcon />}
+            </Avatar>
+          </IconButton>
+        </span>
       </Tooltip>
       <Menu
         anchorEl={anchorEl}

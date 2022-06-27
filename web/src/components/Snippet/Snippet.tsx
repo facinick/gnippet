@@ -1,7 +1,7 @@
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 import { _Snippet, _SnippetWithVotes, _Vote } from 'src/gql_objects/gqlObjects'
-import { truncate as returnTruncatedText } from 'src/utils/stringUtils'
+import { readingTimeInMinutes, truncate as returnTruncatedText } from 'src/utils/stringUtils'
 import CreatedAt from '../CreatedAt/CreatedAt'
 import Username from '../Username/Username'
 import Voting from '../Voting/Voting'
@@ -9,6 +9,7 @@ import Bookmark from '../Bookmark/Bookmark'
 import ReadMore from '../ReadMore/ReadMore'
 import Space from '../Space/Space'
 import BackButton from '../BackButton/BackButton'
+import ReadingTime from '../ReadingTime/ReadingTime'
 import Stack from '@mui/material/Stack'
 import SnippetTags from '../SnippetTags/SnippetTags'
 import CommentForm from '../CommentForm/CommentForm'
@@ -32,6 +33,7 @@ type Props = {
   showCommentsForm: boolean
   showCommentsHeader: boolean
   showHeaderImage: boolean
+  showReadingTimeBottom: boolean
 }
 
 const SnippetTitleText = styled(Typography)<TypographyProps>(({ theme }) => ({
@@ -74,6 +76,7 @@ const SnippetUi = ({
   showComments,
   showCommentsForm,
   showCommentsHeader,
+  showReadingTimeBottom
 }: Props) => {
   const {
     id,
@@ -160,6 +163,9 @@ const SnippetUi = ({
           <Voting entity={'SNIPPET'} snippetId={id} score={score} />
           {isAuthenticated && <Bookmark entity={'SNIPPET'} snippetId={id} />}
           <CopySnippetUrl id={id} />
+          {showReadingTimeBottom && (
+            <ReadingTime timeInMinutes={readingTimeInMinutes(body)} />
+          )}
         </Stack>
         {rendertags && <SnippetTags tags={tags} />}
         {isAuthenticated && showCommentsForm && (

@@ -47,6 +47,17 @@ export const Success = ({
 }: CellSuccessProps<FindSnippetQuery, FindSnippetQueryVariables>) => {
 
   return (
-    <><Snippet showHeaderImage={false} showCommentsHeader={true} showCommentsForm={true} showComments={true} showBackButton={true} showActivity={false} truncate={false} key={snippet.id} snippet={snippet} /></>
+      <Snippet
+        showReadingTimeBottom={false}
+        showHeaderImage={false}
+        showCommentsHeader={true}
+        showCommentsForm={true}
+        showComments={true}
+        showBackButton={true}
+        showActivity={false}
+        truncate={false}
+        key={snippet.id}
+        snippet={snippet}
+      />
   )
 }
