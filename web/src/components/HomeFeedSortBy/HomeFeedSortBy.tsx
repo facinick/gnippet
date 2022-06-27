@@ -1,27 +1,42 @@
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material'
-import { useReactiveVar } from '@apollo/client';
-import { setSortBy, sortByVar } from 'src/localStore/homeFeedSortBy';
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  MenuList,
+  NativeSelect,
+  Menu,
+} from '@mui/material'
+import { useReactiveVar } from '@apollo/client'
+import { setSortBy, sortByVar } from 'src/localStore/homeFeedSortBy'
+
+import { MenuItemProps, Select, SelectProps } from '@mui/material'
+import { styled } from '@mui/material/styles'
 
 const HomeFeedSortBy = () => {
+  const sortBy = useReactiveVar(sortByVar)
 
-  const sortBy = useReactiveVar(sortByVar);
-
-  const handleChange = (event, stuff) => {
-    setSortBy({field: stuff.props.value})
+  const handleChange = (event) => {
+    setSortBy({ field: event.target.value })
   }
 
   return (
-    <FormControl size={'small'} style={{maxWidth: '200px'}}>
-      <InputLabel >Sort By</InputLabel>
-      <Select
+    <FormControl size={'small'} style={{ maxWidth: '200px' }}>
+      <InputLabel variant="standard" htmlFor="native-home-feed-sort-by">
+        Sort By
+      </InputLabel>
+      <NativeSelect
         value={sortBy}
-        label="Sort By"
         onChange={handleChange}
+        inputProps={{
+          name: 'Sort By',
+          id: 'native-home-feed-sort-by',
+          sx: {},
+        }}
       >
-        <MenuItem value={'new'}>new</MenuItem>
-        <MenuItem value={'activity'}>activity</MenuItem>
-        <MenuItem value={'score'}>score</MenuItem>
-      </Select>
+        <option value={'new'}>new</option>
+        <option value={'activity'}>activity</option>
+        <option value={'score'}>score</option>
+      </NativeSelect>
     </FormControl>
   )
 }

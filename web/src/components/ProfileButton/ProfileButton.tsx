@@ -7,6 +7,7 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
+import CircularProgress from '@mui/material/CircularProgress'
 import Tooltip from '@mui/material/Tooltip'
 import PersonAdd from '@mui/icons-material/PersonAdd'
 import Settings from '@mui/icons-material/Settings'
@@ -21,10 +22,18 @@ import { ColorModeContext } from 'src/theme/ThemeProvider'
 import ColorLensIcon from '@mui/icons-material/ColorLens'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
-
+import { MenuItemProps, MenuProps, MenuListProps } from '@mui/material'
+import { styled } from '@mui/material/styles'
 interface Props {
   showThemeOptions: boolean
 }
+
+const StyledMenuItem = styled(MenuItem)<MenuItemProps>(({ theme }) => ({
+  '&:hover': {
+    color: theme.palette.primary.contrastText,
+    background: theme.palette.primary.main,
+  },
+}))
 
 export default function ProfileButton({ showThemeOptions }: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -90,6 +99,18 @@ export default function ProfileButton({ showThemeOptions }: Props) {
             >
               {!isAuthenticated && <PersonIcon />}
             </Avatar>
+            {loading && (
+              <CircularProgress
+                size={38}
+                sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  marginTop: '-19px',
+                  marginLeft: '-19px',
+                }}
+              />
+            )}
           </IconButton>
         </span>
       </Tooltip>
@@ -111,6 +132,7 @@ export default function ProfileButton({ showThemeOptions }: Props) {
             },
             '& .MuiList-root': {
               padding: '2px',
+              bgcolor: 'containerPrimary.main',
             },
             '&:before': {
               content: '""',
@@ -120,7 +142,7 @@ export default function ProfileButton({ showThemeOptions }: Props) {
               right: 14,
               width: 10,
               height: 10,
-              bgcolor: 'background.paper',
+              bgcolor: 'containerPrimary.main',
               transform: 'translateY(-50%) rotate(45deg)',
               zIndex: 0,
             },
@@ -131,17 +153,17 @@ export default function ProfileButton({ showThemeOptions }: Props) {
       >
         <MenuList dense>
           {isAuthenticated && (
-            <MenuItem onClick={handleGotoProfile}>
+            <StyledMenuItem onClick={handleGotoProfile}>
               <ListItemIcon>
                 <PersonIcon fontSize="small" />
               </ListItemIcon>
               Profile
-            </MenuItem>
+            </StyledMenuItem>
           )}
           {isAuthenticated && <Divider />}
 
           {showThemeOptions && (
-            <MenuItem onClick={colorMode.toggleColorMode}>
+            <StyledMenuItem onClick={colorMode.toggleColorMode}>
               {theme.palette.mode === 'dark' && (
                 <ListItemIcon>
                   <LightModeIcon fontSize="small" />
@@ -153,42 +175,42 @@ export default function ProfileButton({ showThemeOptions }: Props) {
                 </ListItemIcon>
               )}
               {theme.palette.mode === 'light' ? 'Dark Mode' : 'Light Mode'}
-            </MenuItem>
+            </StyledMenuItem>
           )}
           {showThemeOptions && (
-            <MenuItem onClick={colorMode.shuffleColorTheme}>
+            <StyledMenuItem onClick={colorMode.shuffleColorTheme}>
               <ListItemIcon>
                 <ColorLensIcon fontSize="small" />
               </ListItemIcon>
               Theme Switch
-            </MenuItem>
+            </StyledMenuItem>
           )}
 
           {!isAuthenticated && (
-            <MenuItem onClick={handleLogin}>
+            <StyledMenuItem onClick={handleLogin}>
               <ListItemIcon>
                 <Login fontSize="small" />
               </ListItemIcon>
               Login
-            </MenuItem>
+            </StyledMenuItem>
           )}
 
           {!isAuthenticated && (
-            <MenuItem onClick={handleSignup}>
+            <StyledMenuItem onClick={handleSignup}>
               <ListItemIcon>
                 <Login fontSize="small" />
               </ListItemIcon>
               Signup
-            </MenuItem>
+            </StyledMenuItem>
           )}
 
           {isAuthenticated && (
-            <MenuItem onClick={handleLogout}>
+            <StyledMenuItem onClick={handleLogout}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>
               Logout
-            </MenuItem>
+            </StyledMenuItem>
           )}
         </MenuList>
       </Menu>

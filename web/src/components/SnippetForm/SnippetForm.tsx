@@ -20,6 +20,7 @@ import { styled } from '@mui/material/styles'
 import { useTheme } from '@emotion/react'
 import { ITEMS_PER_PAGE, sortByVar } from 'src/localStore/homeFeedSortBy'
 import { useReadingTime } from 'src/utils/stringUtils'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,
@@ -318,7 +319,11 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
         <Box style={{ height: '4px' }} />
         <Stack direction={'row'} spacing={2}>
           <Button
-            style={{ transition: 'width 0.1s ease-out', borderRadius: '30px', width: submitting ? '200px' : '150px' }}
+            style={{
+              transition: 'width 0.1s ease-out',
+              borderRadius: '30px',
+              width: submitting ? '200px' : '150px',
+            }}
             aria-label="Post Snippet"
             title={'Post Snippet'}
             endIcon={<PostAddIcon />}
@@ -328,7 +333,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
             disabled={loading || validating}
             type="submit"
           >
-            {submitting ? "Submitting..." : "Submit"}
+            {submitting ? 'Submitting...' : 'Submit'}
           </Button>
           <i>
             <Typography variant="caption">as @{authorUsername}</Typography>

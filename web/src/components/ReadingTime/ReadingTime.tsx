@@ -10,7 +10,7 @@ interface Props {
 
 const ReadingTime = ({ timeInMinutes }: Props) => {
 
-  const minsText = timeInMinutes === 1 ? "m" : "m"
+  const minsText = timeInMinutes === 1 ? "minute" : "minutes"
 
   return (
     <Box
@@ -32,10 +32,10 @@ const ReadingTime = ({ timeInMinutes }: Props) => {
       >
         <AccessTimeIcon />
       </IconButton>
-      <Typography style={{fontSize: '14px'}}>
+      <Typography style={{ fontSize: '14px' }}>
         {timeInMinutes}
         {/* <Space /> */}
-        {minsText}
+        {Array.from(minsText)[0]}
       </Typography>
     </Box>
   )
