@@ -1,6 +1,7 @@
 import { LinkProps, TypographyProps } from '@mui/material'
 import { Link, routes } from '@redwoodjs/router'
 import { styled } from '@mui/material/styles'
+// import ReadMoreIcon from '@mui/icons-material/ReadMore';
 
 const SnippetReadmoreLink = styled(Link)<LinkProps>(({ theme }) => ({
   color: theme.palette.primary.main,

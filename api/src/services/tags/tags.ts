@@ -48,9 +48,92 @@ export const deleteTag: MutationResolvers['deleteTag'] = ({ id }) => {
   })
 }
 
+
+export const tagByName = ({ name }) => {
+  return db.tag.findUnique({
+    where: { name },
+  })
+}
+
 export const Tag: TagResolvers = {
-  snippets: (_obj, { root }) =>
-    db.tag.findUnique({ where: { id: root.id } }).snippets(),
+  snippets: async (_obj, { root }) => {
+
+    const take = _obj.input?.take
+    const name = root.name
+    const nextCursor = _obj.input?.nextCursor
+    const skip = nextCursor === null ? 0 : 1
+
+
+    console.log(
+      `asking for: ${take} snippets, starting from ${nextCursor} skipping ${skip}`
+    )
+
+    // const snippetsByTag = await db.snippet.findMany({
+    //   take,
+    //   cursor: nextCursor === null ? undefined : {
+    //     id: nextCursor
+    //   },
+    //   skip,
+    //   where: {
+    //     tags: {
+    //       some: {
+    //         name,
+    //       },
+    //     },
+    //   },
+    //   include: {
+    //     tags: true,
+    //     comments: true,
+    //     author: true,
+    //   },
+    // })
+
+    const snippetsByTag = (await db.tag.findUnique({
+      where: {
+        name,
+      },
+      include: {
+        snippets: {
+          take,
+          cursor:
+            nextCursor === null
+              ? undefined
+              : {
+                  id: nextCursor,
+                },
+          skip,
+          include: {
+            tags: true,
+            comments: true,
+            author: true,
+          },
+          orderBy: {
+            createdAt: 'desc'
+          }
+        },
+      },
+    })).snippets
+
+    // all the snippets in db
+    const count = await db.snippet.count()
+
+    // results we could find... [0 - take]
+    const nResults = snippetsByTag.length
+
+    const lastResult = nResults >= 1 ? snippetsByTag[nResults - 1] : null
+
+    const myCursor = lastResult ? lastResult.id : nextCursor
+
+    console.log(`nextCursor: ${myCursor} nResults: ${nResults}`)
+
+    const response = {
+      nextCursor: myCursor,
+      count,
+      data: snippetsByTag,
+    }
+
+    return response
+  }
 }
 
 // export const requireTagCreatorAccess = async ({id}: {id: typeof context.currentUser.id}) => {

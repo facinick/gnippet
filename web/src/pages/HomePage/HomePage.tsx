@@ -7,13 +7,20 @@ import Container from '@mui/material/Container'
 import CardContent from '@mui/material/CardContent'
 import Stack from '@mui/material/Stack'
 import { navigate, useLocation } from '@redwoodjs/router'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { USER_VOTES_QUERY, USER_BOOKMARKS_QUERY } from '../Queries/queries'
 import { useLazyQuery } from '@apollo/client'
 import Card, { CardProps } from '@mui/material/Card'
 import { useReactiveVar } from '@apollo/client'
 import { styled } from '@mui/material/styles'
-import { setSortBy, sortByVar } from 'src/localStore/homeFeedSortBy'
+import {
+  DEFAULT_HOME_FEEED_SORT_BY,
+  HomeFeedSortBy,
+  ITEMS_PER_PAGE,
+  homeFeedSortByValues,
+  setSortBy,
+  sortByVar,
+} from 'src/localStore/homeFeedSortBy'
 import {
   Accordion,
   AccordionSummary,
@@ -22,11 +29,6 @@ import {
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-const CreateSnippetCard = styled(Card)<CardProps>(({ theme }) => ({
-  color: theme.palette.containerPrimary.contrastText,
-  backgroundColor: theme.palette.containerPrimary.main,
-}))
-
 const CreateSnippetAccordian = styled(Accordion)<AccordionProps>(
   ({ theme }) => ({
     color: theme.palette.containerPrimary.contrastText,
@@ -34,29 +36,35 @@ const CreateSnippetAccordian = styled(Accordion)<AccordionProps>(
   })
 )
 
-const HomePage = ({ page }: { page?: number }) => {
+const getOrderByFromURL = (pathname: string): string | undefined => {
+  return pathname.split('/')?.[1]
+}
+
+const getRequestedOrderBy = (pathname: string): HomeFeedSortBy => {
+  const orderByFromURL = getOrderByFromURL(pathname) as HomeFeedSortBy
+  return homeFeedSortByValues.includes(orderByFromURL)
+    ? orderByFromURL
+    : DEFAULT_HOME_FEEED_SORT_BY
+}
+
+const HomePage = ({ page = 0 }: { page?: number }) => {
   const { isAuthenticated, currentUser } = useAuth()
-  const _page = !isNaN(page) ? Number(page) : 0
-  const _skip = !isNaN(page) ? Number(page) * 5 : 0
   const { pathname } = useLocation()
-  const sortBy = pathname.split('/')[1]
-  const _sortBy =
-    sortBy === 'activity' || sortBy === 'new' || sortBy === 'score'
-      ? sortBy
-      : 'new'
-  const _take = 5
-  const isHomePage = _page === 0
+  const skip = page * ITEMS_PER_PAGE
+  const sortBy = useMemo(() => getRequestedOrderBy(pathname), [pathname])
+  const isHomePage = page === 0
   const showSnippetForm = isAuthenticated && isHomePage
 
   useEffect(() => {
-    setSortBy({ field: _sortBy })
+    setSortBy({ field: sortBy })
   }, [])
 
-  const esortBy = useReactiveVar(sortByVar)
-
+  // upon change of sort by from select component
+  // navigate to new sortby URL
+  const selectedSortByOption = useReactiveVar(sortByVar)
   useEffect(() => {
-    navigate(`/${esortBy}/${_page}`)
-  }, [esortBy])
+    navigate(`/${selectedSortByOption}/${page}`)
+  }, [selectedSortByOption])
 
   const [getLoggedInUserVotesData] = useLazyQuery(USER_VOTES_QUERY)
 
@@ -98,10 +106,10 @@ const HomePage = ({ page }: { page?: number }) => {
           )}
           {/******** All Posts ********/}
           <SnippetsCell
-            sortBy={_sortBy}
-            page={_page}
-            skip={_skip}
-            take={_take}
+            sortBy={sortBy}
+            page={page}
+            skip={skip}
+            take={ITEMS_PER_PAGE}
           />
         </Stack>
       </Container>

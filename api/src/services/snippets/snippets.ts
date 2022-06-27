@@ -5,27 +5,37 @@ import type {
   QueryResolvers,
   MutationResolvers,
   SnippetResolvers,
+  SnippetOrderByInput,
 } from 'types/graphql'
+
+
+const getPrismaOrderByForSnippetsQuery = (orderBy: SnippetOrderByInput) => {
+  let orderByObject
+
+  if (orderBy === 'new') {
+    orderByObject = { createdAt: 'desc' }
+  }
+
+  if (orderBy === 'activity') {
+    orderByObject = [
+      {
+        comments: {
+          _count: 'desc',
+        },
+      },
+    ]
+  }
+
+  if (orderBy === 'score') {
+    orderByObject = { score: 'desc' }
+  }
+
+  return orderByObject
+}
 
 export const snippets: QueryResolvers['snippets'] = async ({ input }) => {
 
-  let orderBy
-
-  if(input.orderBy === 'new') {
-    orderBy = { 'createdAt': 'desc' }
-  }
-
-  if(input.orderBy === 'activity') {
-    orderBy = [{
-      comments: {
-        _count: 'desc'
-      }
-    }]
-  }
-
-  if(input.orderBy === 'score') {
-    orderBy = { 'score': 'desc' }
-  }
+  const orderBy = getPrismaOrderByForSnippetsQuery(input.orderBy)
 
   const where = input?.filter
     ? {

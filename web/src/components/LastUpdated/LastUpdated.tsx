@@ -16,16 +16,16 @@ export const LastUpdated = (): JSX.Element => {
   const [date, setDate] = useState(1656065516)
   const theme = useTheme()
   useEffect(() => {
-    console.log(`date fetching..`)
+    // console.log(`date fetching..`)
     fetch(raw)
       .then((response) => {
-        console.log(`date fetched...`)
+        // console.log(`date fetched...`)
         return response.text()
       })
       .then((text) => {
-        console.log(`date parsed...`)
-        console.log(text)
-        console.log(date)
+        // console.log(`date parsed...`)
+        // console.log(text)
+        // console.log(date)
       })
   }, [])
 

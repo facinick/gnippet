@@ -7,35 +7,61 @@ export const cache: InMemoryCache = new InMemoryCache({
     Query: {
       fields: {
         isOnline: {
-          read () {
-            return onlineStatusVar();
-          }
+          read() {
+            return onlineStatusVar()
+          },
         },
         homeFeedSortBy: {
-          read () {
-            return sortByVar();
-          }
+          read() {
+            return sortByVar()
+          },
         },
-        // snippets: {
-        //   merge(existing = [], incoming: any[]) {
-        //     return [...incoming];
+        // tagByName: {
+        //   merge(existing, incoming, { args: { name }, readField }) {
+        //     console.log(`merge -----------`)
+        //     console.log(`existing`)
+        //     console.log(existing)
+        //     console.log(`incoming`)
+        //     console.log(incoming)
+        //     if (!incoming && existing) {
+        //       return existing
+        //     }
+        //     return incoming
+        //     // console.log(readField(incoming.__ref))
+        //     // const existingSnippets = existing?.snippets?.data || []
+        //     // const incomingSnippets =  incoming.snippets.data
+        //     // const merged = {
+        //     //   ...incoming,
+        //     //   snippets: {
+        //     //     ...incoming.snippets,
+        //     //     data: [...existingSnippets, ...incomingSnippets],
+        //     //   },
+        //     // }
+        //     // console.log(merged)
+        //     return incoming
+        //   },
+        //   read(existing, { args: { name }, readField }) {
+        //     console.log(`read -----------`)
+        //     console.log(`existing`)
+        //     console.log(existing)
+        //     return existing
         //   },
         // },
-      }
+      },
     },
     User: {
       fields: {
         votes: {
           merge(existing = [], incoming: any[]) {
-            return [...incoming];
+            return [...incoming]
           },
         },
         bookmarks: {
           merge(existing = [], incoming: any[]) {
-            return [...incoming];
+            return [...incoming]
           },
         },
       },
     },
-  }
-});
+  },
+})

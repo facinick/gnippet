@@ -24,7 +24,7 @@ import { LinkProps, TypographyProps } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 type Props = {
-  snippet: Omit<Snippet, 'authorId | languages | updatedAt | votes'>
+  snippet: Omit<Snippet, 'authorId' | 'languages' | 'updatedAt' | 'votes'>
   truncate: boolean
   showActivity: boolean
   showBackButton: boolean

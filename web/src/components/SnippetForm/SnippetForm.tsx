@@ -18,7 +18,7 @@ import TagsCell from 'src/components/TagsCell'
 import TextField, { TextFieldProps } from '@mui/material/TextField'
 import { styled } from '@mui/material/styles'
 import { useTheme } from '@emotion/react'
-import { sortByVar } from 'src/localStore/homeFeedSortBy'
+import { ITEMS_PER_PAGE, sortByVar } from 'src/localStore/homeFeedSortBy'
 import { useReadingTime } from 'src/utils/stringUtils'
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
@@ -185,7 +185,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
         query: SnippetsQuery,
         variables: {
           skip: 0,
-          take: 5,
+          take: ITEMS_PER_PAGE,
           sortBy: sortBy,
         },
       })
@@ -212,7 +212,9 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
         })
       }
 
-      let newSnippets = [createSnippet].concat(snippets.data).slice(0, 5)
+      let newSnippets = [createSnippet]
+        .concat(snippets.data)
+        .slice(0, ITEMS_PER_PAGE)
 
       cache.writeQuery({
         query: SnippetsQuery,
@@ -224,7 +226,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
         },
         variables: {
           skip: 0,
-          take: 5,
+          take: ITEMS_PER_PAGE,
           sortBy: sortBy,
         },
       })

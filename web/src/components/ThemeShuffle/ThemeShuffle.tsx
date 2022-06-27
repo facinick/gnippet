@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton';
 const ThemeShuffle = () => {
   const colorMode = React.useContext(ColorModeContext)
   return (
-    <IconButton style={{borderRadius: '50px', border: 'none'}} onClick={colorMode.shuffleColorTheme}>
+    <IconButton title={'Change Theme'} style={{borderRadius: '50px', border: 'none'}} onClick={colorMode.shuffleColorTheme}>
       <ColorLensIcon color={'secondary'} />
     </IconButton>
   )

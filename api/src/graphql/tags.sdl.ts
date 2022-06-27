@@ -1,10 +1,20 @@
 export const schema = gql`
+  type AllSnippetsForTagResponse {
+    data: [Snippet]!
+    count: Int!
+    nextCursor: Int
+  }
+  input TagSnippetsInput {
+    nextCursor: Int
+    take: Int!
+  }
+
   type Tag {
     id: Int!
     name: String!
     createdAt: DateTime!
     updatedAt: DateTime!
-    snippets: [Snippet]!
+    snippets(input: TagSnippetsInput): AllSnippetsForTagResponse!
   }
 
   input TagOrderByInput {
@@ -24,7 +34,8 @@ export const schema = gql`
   }
   type Query {
     tags(input: TagQueryFilterAndPagination): [Tag]! @skipAuth
-    # tag(id: Int!): Tag @requireAuth
+    tag(id: Int!): Tag @skipAuth
+    tagByName(name: String!): Tag @skipAuth
   }
 
   input CreateTagInput {

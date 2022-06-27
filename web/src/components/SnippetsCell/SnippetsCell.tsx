@@ -8,6 +8,7 @@ import Pagination from '@mui/material/Pagination'
 import { navigate } from '@redwoodjs/router'
 import Meta from '../Meta/Meta'
 import HomeFeedSortBy from 'src/components/HomeFeedSortBy/HomeFeedSortBy'
+import { ITEMS_PER_PAGE } from 'src/localStore/homeFeedSortBy'
 
 export const QUERY = gql`
   query SnippetsQuery($skip: Int!, $take: Int!, $sortBy: SnippetOrderByInput!) {
@@ -72,9 +73,8 @@ export const Success = ({
 
   const spacing = 5
 
-  const snippetsPerPage = 5
   const totalSnippets = snippets.count
-  const totalPages = Math.ceil(totalSnippets / snippetsPerPage)
+  const totalPages = Math.ceil(totalSnippets / ITEMS_PER_PAGE)
   const empty = totalSnippets === 0
 
   const handleChange = (event, value) => {

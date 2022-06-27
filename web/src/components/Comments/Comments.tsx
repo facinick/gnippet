@@ -19,7 +19,7 @@ const Comments = ({ comments }: Props) => {
           renderDivider = !isLastComment
           return (
             <React.Fragment key={comment.id}>
-                <Comment key={comment.id} comment={comment} />
+                <Comment snippetId={comment.snippetId} key={comment.id} comment={comment} />
                 {renderDivider && <Divider />}
             </ React.Fragment>
           )

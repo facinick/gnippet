@@ -1,8 +1,9 @@
 import Chip from '@mui/material/Chip'
-import { Tag } from 'types/graphql'
+import { Tag as GTag } from 'types/graphql'
 import TagIcon from '@mui/icons-material/Tag'
+import Tag from '../Tag/Tag'
 interface Props {
-  tags: Array<Pick<Tag, 'id' | 'name'>>
+  tags: Array<Pick<GTag, 'id' | 'name'>>
 }
 
 const SnippetTags = ({ tags }: Props) => {
@@ -13,15 +14,8 @@ const SnippetTags = ({ tags }: Props) => {
         const isFirstTag = index === 0
         const isLastTag = index === n - 1
         return (
-          <Chip
-            color={'primary'}
-            size="small"
-            sx={{
-              fontSize: 14,
-              fontWeight: 800,
-              textTransform: 'uppercase',
-            }}
-            icon={<TagIcon />}
+          <Tag
+            key={name}
             style={
               isFirstTag
                 ? { marginRight: 8 }
@@ -29,9 +23,7 @@ const SnippetTags = ({ tags }: Props) => {
                 ? {}
                 : { marginRight: 8 }
             }
-            id={name}
-            key={name}
-            label={name}
+            name={name}
           />
         )
       })}
