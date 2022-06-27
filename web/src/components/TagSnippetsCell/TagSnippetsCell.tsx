@@ -11,6 +11,7 @@ import CachedIcon from '@mui/icons-material/Cached'
 import { useState } from 'react'
 import Meta from '../Meta/Meta'
 import { toast } from '@redwoodjs/web/dist/toast'
+import { POSTS_PER_TAGS_PAGE } from 'src/admin/settings'
 export const QUERY = gql`
   query FindTagByNameQuery($take: Int!, $nextCursor: Int, $name: String!) {
     tagByName(name: $name) {
@@ -56,7 +57,7 @@ export const TagSnippetsCell = ({ name }: Props) => {
   const [noMoreResults, setNoMoreResults] = useState(false)
   const { data, loading, error, fetchMore } = useQuery(QUERY, {
     variables: {
-      take: 3,
+      take: POSTS_PER_TAGS_PAGE,
       nextCursor: null,
       name,
     },
@@ -113,7 +114,7 @@ export const TagSnippetsCell = ({ name }: Props) => {
         onClick={() => {
           fetchMore({
             variables: {
-              take: 3,
+              take: POSTS_PER_TAGS_PAGE,
               name,
               nextCursor: data.tagByName.snippets.nextCursor,
             },
@@ -137,7 +138,7 @@ export const TagSnippetsCell = ({ name }: Props) => {
                 fetchMoreResult.tagByName.snippets.nextCursor
               ) {
                 setNoMoreResults(true)
-                 toast("No more posts to load!")
+                toast('No more posts to load!')
               }
 
               if (!fetchMoreResult) return prev

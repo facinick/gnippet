@@ -1,6 +1,7 @@
 import { makeVar } from "@apollo/client";
+import { POSTS_PER_HOME_PAGE } from "src/admin/settings";
 
-export const ITEMS_PER_PAGE = 2
+export const ITEMS_PER_PAGE = POSTS_PER_HOME_PAGE
 
 export const DEFAULT_HOME_FEEED_SORT_BY = 'new'
 
