@@ -55,6 +55,7 @@ const SnippetTitleLink = styled(Link)<LinkProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,
   textDecorationThickness: '0.05rem !important',
   textUnderlineOffset: '10px',
+  marginRight: '10px',
   display: 'inline',
   textDecoration: 'none',
   '&:hover': {
@@ -102,7 +103,7 @@ const SnippetUi = ({
               <SnippetTitleLink to={routes.snippet({ id: id })}>
                 {title}
               </SnippetTitleLink>
-              <Box style={{width: '10px'}} />
+              {/* <Box style={{width: '10px'}} /> */}
               <CopySnippetUrl id={id} />
             </SnippetTitleText>
           </Stack>
