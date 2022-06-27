@@ -152,8 +152,8 @@ const Search = () => {
         <TextField
           {...params}
           style={{
-            color: theme.palette.containerPrimary.contrastText,
-            backgroundColor: theme.palette.containerPrimary.main,
+            // color: theme.palette.containerPrimary.contrastText,
+            // backgroundColor: theme.palette.containerPrimary.main,
           }}
           ref={inputRef}
           placeholder={searchHelperText}

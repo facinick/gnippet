@@ -179,7 +179,7 @@ const SnippetUi = ({
         {showCommentsHeader && (
           <CommentsHeader numberOfComments={comments.length} />
         )}
-        {showComments && <Comments comments={comments} />}
+        {showComments && <Comments snippetId={id} comments={comments} />}
       </Stack>
     </article>
   )

@@ -1,15 +1,29 @@
-import { Stack, Divider, Typography, Box, Card } from '@mui/material'
+import { Stack, Divider, Typography, Box, Card, ClickAwayListener } from '@mui/material'
 import { Comment as TComment } from 'types/graphql'
 import Comment from 'src/components/Comment'
-
+import { useReactiveVar } from '@apollo/client'
+import { replyToCommentIdVar, setReplyToParentCommentId } from 'src/localStore/commentReplyForm'
+import CommentReplyForm from '../CommentReplyForm/CommentReplyForm'
+import { useAuth } from '@redwoodjs/auth'
 interface Props {
   comments: Array<TComment>
+  snippetId: number
 }
 
-const Comments = ({ comments }: Props) => {
+const Comments = ({ comments, snippetId }: Props) => {
+  const replyToCommentId = useReactiveVar(replyToCommentIdVar)
+
+  const { currentUser, isAuthenticated } = useAuth()
+  const showReplyToCommentForm = currentUser?.id && isAuthenticated
+
   const numberOfComments = comments.length
   let isLastComment: boolean = false
   let renderDivider: boolean = false
+
+  // const handleClickAway = () => {
+  //   console.log(`closing`)
+  //   setReplyToParentCommentId({ field: -1 })
+  // }
 
   return (
     <>
@@ -17,11 +31,31 @@ const Comments = ({ comments }: Props) => {
         {comments.map((comment, index) => {
           isLastComment = index === numberOfComments - 1 ? true : false
           renderDivider = !isLastComment
+          const _showReplyToCommentForm =
+            replyToCommentId === comment.id && showReplyToCommentForm
+
+          console.log(comment)
           return (
             <React.Fragment key={comment.id}>
-                <Comment snippetId={comment.snippetId} key={comment.id} comment={comment} />
-                {renderDivider && <Divider />}
-            </ React.Fragment>
+              {/* <ClickAwayListener onClickAway={handleClickAway}>
+                <> */}
+              <Comment
+                snippetId={snippetId}
+                key={comment.id}
+                comment={comment}
+              />
+              {_showReplyToCommentForm && (
+                <CommentReplyForm
+                  authorId={currentUser.id}
+                  authorUsername={currentUser.username}
+                  snippetId={snippetId}
+                  parentCommentId={comment.id}
+                />
+              )}
+              {renderDivider && <Divider />}
+              {/* </>
+              </ClickAwayListener> */}
+            </React.Fragment>
           )
         })}
       </Stack>

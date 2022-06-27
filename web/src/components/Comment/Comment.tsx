@@ -3,24 +3,51 @@ import CreatedAt from '../CreatedAt/CreatedAt'
 import Username from '../Username/Username'
 import Voting from '../Voting/Voting'
 import { Comment as TComment, Snippet } from 'types/graphql'
-import { Stack, Typography } from '@mui/material'
+import { Stack, Typography, Button } from '@mui/material'
 import Bookmark from '../Bookmark/Bookmark'
 import { DeepPartial } from 'src/theme'
 import Space from '../Space/Space'
-
+import { useReactiveVar } from '@apollo/client'
+import { replyToCommentIdVar } from 'src/localStore/commentReplyForm'
+import ReplyIcon from '@mui/icons-material/Reply'
+import {
+  setReplyToParentCommentId,
+  closeReplyForm,
+} from 'src/localStore/commentReplyForm'
 type Props = {
   comment: DeepPartial<
     Pick<
       TComment,
-      'id' | 'score' | 'activity' | 'author' | 'body' | 'createdAt'
+      | 'id'
+      | 'score'
+      | 'activity'
+      | 'author'
+      | 'body'
+      | 'createdAt'
+      | 'parentCommentId'
     >
   >
   snippetId: Snippet[keyof Pick<Snippet, 'id'>]
 }
 
 const Comment = ({ comment, snippetId }: Props) => {
-  const { id, score, activity, author, body, createdAt } = comment
+  const { id, score, activity, author, body, createdAt, parentCommentId } =
+    comment
   const { isAuthenticated } = useAuth()
+
+  const replyToCommentId = useReactiveVar(replyToCommentIdVar)
+
+  const replyFormIsOpen = replyToCommentId === id
+
+  const replyButtonText = replyFormIsOpen ? 'Cancel Reply' : 'Reply'
+
+  const toggleReplyToCommentForm = () => {
+    if (replyFormIsOpen) {
+      closeReplyForm()
+    } else {
+      setReplyToParentCommentId({ field: id })
+    }
+  }
 
   return (
     <article key={id}>
@@ -54,6 +81,10 @@ const Comment = ({ comment, snippetId }: Props) => {
           {isAuthenticated && (
             <Bookmark snippetId={snippetId} entity={'COMMENT'} commentId={id} />
           )}
+          <Button onClick={toggleReplyToCommentForm}>
+            <ReplyIcon />
+            {replyButtonText}
+          </Button>
         </Stack>
       </Stack>
     </article>

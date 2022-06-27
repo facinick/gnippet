@@ -17,6 +17,22 @@ export const schema = gql`
     activity: Int!
   }
 
+  enum MutationType {
+    CREATED
+    UPDATED
+    DELETED
+  }
+
+  type CommentSubscriptionResponse {
+    mutation: MutationType!
+    node: Comment!
+  }
+  input CommentSubscriptionInput {
+    snippetId: Int!
+  }
+  type Subscription {
+    commentAdded(input: CommentSubscriptionInput!): CommentSubscriptionResponse!
+  }
   input CommentOrderByInput {
     createdAt: CommentSort
     updatedAt: CommentSort

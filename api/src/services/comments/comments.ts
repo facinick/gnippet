@@ -5,6 +5,7 @@ import type {
   QueryResolvers,
   MutationResolvers,
   CommentResolvers,
+  SubscriptionResolver,
 } from 'types/graphql'
 
 // no auth restriction
@@ -19,6 +20,21 @@ export const comments: QueryResolvers['comments'] = ({ input }) => {
     : {}
   return db.comment.findMany({ where, skip: input?.skip, take: input?.take, orderBy: input?.orderBy, })
 }
+
+// export const commentAdded = async ({ input }) => {
+
+//   const comment = await db.subscription.comment({
+//     where: {
+//       snippetId: input.snippetId,
+//       mutation_in: ['CREATED'],
+//     }
+//   })
+
+//   return {
+//     mutation: 'CREATED',
+//     node: comment,
+//   }
+// }
 
 // no auth restriction
 // no access restriction

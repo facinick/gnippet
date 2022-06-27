@@ -1,8 +1,25 @@
-import type { FindSnippetQuery, FindSnippetQueryVariables } from 'types/graphql'
+import type {
+  FindSnippetQuery,
+  FindSnippetQueryVariables,
+} from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import Snippet from '../Snippet/Snippet'
 import { _Vote } from 'src/gql_objects/gqlObjects'
 import Meta from '../Meta/Meta'
+
+const COMMENTS_SUBSCRIPTION = gql`
+  subscription OnCommentAdded($id: Int!) {
+    commentAdded(input: { snippetId: $id }) {
+      id
+      body
+      score
+      author {
+        username
+      }
+      createdAt
+    }
+  }
+`
 
 export const QUERY = gql`
   query FindSnippetQuery($id: Int!) {

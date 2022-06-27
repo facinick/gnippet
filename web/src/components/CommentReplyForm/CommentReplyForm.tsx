@@ -5,17 +5,25 @@ import { QUERY as COMMENTS_QUERY } from 'src/components/CommentsCell'
 import { useRef, useState } from 'react'
 import { Button } from '@mui/material'
 import { _Snippet, _SnippetWithVotes, _Vote } from 'src/gql_objects/gqlObjects'
-import {
-  Form,
-  FormError,
-} from '@redwoodjs/forms'
+import { Form, FormError } from '@redwoodjs/forms'
 import Typography from '@mui/material/Typography'
-import AddCommentIcon from '@mui/icons-material/AddComment'
-import { styled } from '@mui/material/styles';
-import TextField, { TextFieldProps } from '@mui/material/TextField';
+import { styled } from '@mui/material/styles'
+import TextField, { TextFieldProps } from '@mui/material/TextField'
+import ReplyIcon from '@mui/icons-material/Reply'
+
+const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
+  color: theme.palette.containerSecondary.contrastText,
+  backgroundColor: theme.palette.containerSecondary.main,
+  '& .MuiInputBase-root': {
+    color: theme.palette.containerSecondary.contrastText,
+  },
+  '& .MuiInputLabel-root': {
+    color: theme.palette.containerSecondary.contrastText,
+  },
+}))
 
 const CREATE = gql`
-  mutation CreateCommentMutation($input: CreateCommentInput!) {
+  mutation ReplyCommentMutation($input: CreateCommentInput!) {
     createComment(input: $input) {
       id
       body
@@ -29,29 +37,18 @@ const CREATE = gql`
   }
 `
 
-const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
-  color: theme.palette.containerSecondary.contrastText,
-  backgroundColor: theme.palette.containerSecondary.main,
-  "& .MuiInputBase-root": {
-    color: theme.palette.containerSecondary.contrastText,
-  },
-  "& .MuiInputLabel-root": {
-    color: theme.palette.containerSecondary.contrastText,
-  }
-}));
-
 interface Props {
   authorId: number
-  snippetId: number
-  parentCommentId?: number
   authorUsername: string
+  snippetId: number
+  parentCommentId: number
 }
 
-const CommentForm = ({
+const CommentReplyForm = ({
   authorId,
+  authorUsername,
   snippetId,
   parentCommentId,
-  authorUsername,
 }: Props) => {
   const formRef = useRef<HTMLFormElement>()
 
@@ -108,64 +105,50 @@ const CommentForm = ({
     },
   })
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!areInputsValid()) {
       return
     }
 
-    createComment({
+    await createComment({
       variables: { input: { parentCommentId, snippetId, authorId, body } },
     })
+
     formRef.current.reset()
   }
 
-  //////
-
   return (
-    <React.Fragment>
-      <Stack
-        padding={'15px 0px'}
-        alignItems={'center'}
-        justifyContent={'space-between'}
-        direction={'row'}
-      >
-        <Typography variant="h6">Add Comment</Typography>
-        <i>
-          <Typography variant="caption">as @{authorUsername}</Typography>
-        </i>
+    <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
+      <FormError error={error} />
+
+      <Stack direction="column" spacing={1}>
+        <StyledTextField
+          label="Comment"
+          disabled={loading}
+          error={bodyError}
+          helperText={bodyError ? bodyErrorMessage : ''}
+          required
+          onInput={onBodyInput}
+          multiline
+          size="small"
+          rows={2}
+        />
+
+        <Button
+          aria-label="Add Comment"
+          title={'Add Comment'}
+          size={'small'}
+          endIcon={<ReplyIcon />}
+          variant="contained"
+          onSubmit={onSubmit}
+          disabled={loading}
+          type="submit"
+        >
+          {`Reply to ${authorUsername}`}
+        </Button>
       </Stack>
-      <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
-        <FormError error={error} />
-
-        <Stack direction="column" spacing={1}>
-          <StyledTextField
-            label="Comment"
-            disabled={loading}
-            error={bodyError}
-            helperText={bodyError ? bodyErrorMessage : ''}
-            required
-            onInput={onBodyInput}
-            multiline
-            size="small"
-            rows={4}
-          />
-
-          <Button
-            aria-label="Add Comment"
-            title={'Add Comment'}
-            endIcon={<AddCommentIcon />}
-            size={'small'}
-            variant="contained"
-            onSubmit={onSubmit}
-            disabled={loading}
-            type="submit"
-          >
-            Submit
-          </Button>
-        </Stack>
-      </Form>
-    </React.Fragment>
+    </Form>
   )
 }
 
-export default CommentForm
+export default CommentReplyForm
