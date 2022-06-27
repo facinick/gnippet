@@ -18,10 +18,10 @@ const SnippetTags = ({ tags }: Props) => {
             key={name}
             style={
               isFirstTag
-                ? { marginRight: 8 }
+                ? { marginRight: 8, marginBottom: 8 }
                 : isLastTag
-                ? {}
-                : { marginRight: 8 }
+                ? { marginBottom: 8 }
+                : { marginRight: 8, marginBottom: 8 }
             }
             name={name}
           />
