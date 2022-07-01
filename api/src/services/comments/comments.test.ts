@@ -1,9 +1,5 @@
 import {
-  comments,
-  comment,
-  createComment,
-  updateComment,
-  deleteComment,
+  comment, comments, createComment, deleteComment, updateComment
 } from './comments'
 import type { StandardScenario } from './comments.scenarios'
 

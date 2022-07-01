@@ -1,24 +1,14 @@
-import CardContent from '@mui/material/CardContent'
-import Card from '@mui/material/Card'
-import Container from '@mui/material/Container'
-import Stack from '@mui/material/Stack'
-import { Link, routes } from '@redwoodjs/router'
-import { MetaTags, useMutation } from '@redwoodjs/web'
-import SnippetCell from 'src/components/SnippetCell'
-import { useAuth } from '@redwoodjs/auth'
-import { useEffect } from 'react'
-import { USER_VOTES_QUERY, USER_BOOKMARKS_QUERY } from '../Queries/queries'
 import { useLazyQuery } from '@apollo/client'
-import { generateAndGetFingerprint, generateAndGetIDedFingerprint } from 'src/3rdParty/fingerprint'
+import Container from '@mui/material/Container'
+import { useAuth } from '@redwoodjs/auth'
+import { MetaTags, useMutation } from '@redwoodjs/web'
+import { useEffect } from 'react'
+import { generateAndGetIDedFingerprint } from 'src/3rdParty/fingerprint'
+import SnippetCell from 'src/components/SnippetCell'
 import FingerprintStorage from 'src/utils/fingerprintStorage'
+import { VIEW_COUNT_MUTATION } from '../../graphql/mutations'
+import { USER_BOOKMARKS_QUERY, USER_VOTES_QUERY } from '../../graphql/queries'
 
-const VIEW_COUNT_MUTATION = gql`
-  mutation FindViewCountQuery($id: Int!, $fingerprintId: String!) {
-    increaseViewCount(id: $id, input: { fingerprintId: $fingerprintId }) {
-      viewCount
-    }
-  }
-`
 interface Props {
   id: number
 }

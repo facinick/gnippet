@@ -1,8 +1,6 @@
 import { db } from 'src/lib/db'
 import type {
-  QueryResolvers,
-  MutationResolvers,
-  LanguageResolvers,
+  LanguageResolvers, MutationResolvers, QueryResolvers
 } from 'types/graphql'
 
 export const languages: QueryResolvers['languages'] = () => {

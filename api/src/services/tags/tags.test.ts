@@ -1,4 +1,4 @@
-import { tags, tag, createTag, updateTag, deleteTag } from './tags'
+import { createTag, deleteTag, tag, tags, updateTag } from './tags'
 import type { StandardScenario } from './tags.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances

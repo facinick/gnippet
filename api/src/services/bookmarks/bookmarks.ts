@@ -1,9 +1,7 @@
 import { requireAuth } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 import type {
-  QueryResolvers,
-  MutationResolvers,
-  BookmarkResolvers,
+  BookmarkResolvers, MutationResolvers
 } from 'types/graphql'
 
 export const bookmarks = ({ input }) => {

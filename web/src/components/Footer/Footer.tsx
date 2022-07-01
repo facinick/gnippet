@@ -1,9 +1,7 @@
-import { LastUpdated } from '../LastUpdated/LastUpdated'
-import Stack from '@mui/material/Stack'
 import Container from '@mui/material/Container'
+import Stack from '@mui/material/Stack'
 import CreatedBy from '../CreatedBy/CreatedBy'
-import Grid from '@mui/material/Grid'
-import { useTheme } from '@mui/material'
+import { LastUpdated } from '../LastUpdated/LastUpdated'
 
 const Footer = () => {
   return (

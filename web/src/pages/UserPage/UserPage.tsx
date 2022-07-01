@@ -1,6 +1,4 @@
-import Avatar from '@mui/material/Avatar'
 import Container from '@mui/material/Container'
-import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import UserCell from 'src/components/UserCell/UserCell'
 

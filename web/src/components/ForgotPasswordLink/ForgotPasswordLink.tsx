@@ -1,7 +1,6 @@
-import { Link, routes } from '@redwoodjs/router'
-
-import { LinkProps, Typography, TypographyProps } from '@mui/material'
+import { LinkProps } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import { Link, routes } from '@redwoodjs/router'
 
 const StyledForgotPasswordLink = styled(Link)<LinkProps>(({ theme }) => ({
   color: theme.palette.primary.main,
@@ -13,7 +12,6 @@ const StyledForgotPasswordLink = styled(Link)<LinkProps>(({ theme }) => ({
     textDecoration: 'underline',
   },
   fontSize: '14px',
-  // margin: `5px 0px`,
 }))
 
 const ForgotPasswordLink = () => {

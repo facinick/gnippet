@@ -1,9 +1,5 @@
 import {
-  languages,
-  language,
-  createLanguage,
-  updateLanguage,
-  deleteLanguage,
+  createLanguage, deleteLanguage, language, languages, updateLanguage
 } from './languages'
 import type { StandardScenario } from './languages.scenarios'
 

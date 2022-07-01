@@ -1,5 +1,4 @@
-import { requireAuth } from 'src/lib/auth'
-import { users, user, createUser, updateUser, deleteUser } from './users'
+import { createUser, deleteUser, updateUser, user, users } from './users'
 import type { StandardScenario } from './users.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances

@@ -1,33 +1,25 @@
-import { MetaTags } from '@redwoodjs/web'
-import SnippetsCell from 'src/components/SnippetsCell'
-import { useAuth } from '@redwoodjs/auth'
-import SnippetForm from 'src/components/SnippetForm/SnippetForm'
 import Container from '@mui/material/Container'
+import { useAuth } from '@redwoodjs/auth'
+import { MetaTags } from '@redwoodjs/web'
+import SnippetForm from 'src/components/SnippetForm/SnippetForm'
+import SnippetsCell from 'src/components/SnippetsCell'
 // import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
+import { useLazyQuery, useReactiveVar } from '@apollo/client'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import {
+  Accordion, AccordionDetails,
+  AccordionProps, AccordionSummary
+} from '@mui/material'
 import Stack from '@mui/material/Stack'
+import { styled } from '@mui/material/styles'
 import { navigate, useLocation } from '@redwoodjs/router'
 import { useEffect, useMemo } from 'react'
-import { USER_VOTES_QUERY, USER_BOOKMARKS_QUERY } from '../Queries/queries'
-import { useLazyQuery } from '@apollo/client'
-import Card, { CardProps } from '@mui/material/Card'
-import { useReactiveVar } from '@apollo/client'
-import { styled } from '@mui/material/styles'
 import {
   DEFAULT_HOME_FEEED_SORT_BY,
-  HomeFeedSortBy,
-  ITEMS_PER_PAGE,
-  homeFeedSortByValues,
-  setSortBy,
-  sortByVar,
+  HomeFeedSortBy, homeFeedSortByValues, ITEMS_PER_PAGE, setSortBy,
+  sortByVar
 } from 'src/localStore/homeFeedSortBy'
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  AccordionProps,
-} from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { USER_BOOKMARKS_QUERY, USER_VOTES_QUERY } from '../../graphql/queries'
 
 const CreateSnippetAccordian = styled(Accordion)<AccordionProps>(
   ({ theme }) => ({

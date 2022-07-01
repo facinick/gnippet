@@ -1,9 +1,5 @@
 import {
-  bookmarks,
-  bookmark,
-  createBookmark,
-  updateBookmark,
-  deleteBookmark,
+  bookmark, bookmarks, createBookmark, deleteBookmark, updateBookmark
 } from './bookmarks'
 import type { StandardScenario } from './bookmarks.scenarios'
 

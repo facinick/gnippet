@@ -2,10 +2,7 @@ import { ForbiddenError } from '@redwoodjs/graphql-server'
 import { requireAuth } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 import type {
-  QueryResolvers,
-  MutationResolvers,
-  CommentResolvers,
-  SubscriptionResolver,
+  CommentResolvers, MutationResolvers, QueryResolvers
 } from 'types/graphql'
 
 // no auth restriction

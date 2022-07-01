@@ -1,6 +1,6 @@
-import { Link, routes } from '@redwoodjs/router'
 import { LinkProps, Typography, TypographyProps } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import { Link, routes } from '@redwoodjs/router'
 import Space from '../Space/Space'
 
 const StyledSignupLink = styled(Link)<LinkProps>(({ theme }) => ({

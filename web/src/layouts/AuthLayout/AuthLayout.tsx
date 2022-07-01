@@ -1,11 +1,9 @@
 import Container from '@mui/material/Container'
 import Stack from '@mui/material/Stack'
-import { Link, routes } from '@redwoodjs/router'
-import { Toaster } from '@redwoodjs/web/toast'
-import ThemeSwitch from 'src/components/ThemeSwitch/ThemeSwitch'
-import HomeButton from 'src/components/HomeButton/HomeButton'
-import Footer from 'src/components/Footer/Footer'
 import { useTheme } from '@mui/material/styles'
+import { Toaster } from '@redwoodjs/web/toast'
+import Footer from 'src/components/Footer/Footer'
+import HomeButton from 'src/components/HomeButton/HomeButton'
 
 type HomeLayoutProps = {
   children?: React.ReactNode

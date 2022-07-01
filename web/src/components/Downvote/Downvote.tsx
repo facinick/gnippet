@@ -2,29 +2,10 @@ import IconButton from '@mui/material/IconButton'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { useAuth } from '@redwoodjs/auth'
-import { USER_VOTES_QUERY } from 'src/pages/Queries/queries'
-import { QUERY as SNIPPET_QUERY } from 'src/components/SnippetCell'
-import { QUERY as COMMENTS_QUERY } from 'src/components/CommentsCell'
+import { USER_VOTES_QUERY } from 'src/graphql/queries'
+import { DOWNVOTE_MUTATION } from 'src/graphql/mutations'
 import { EntityType } from 'types/graphql'
 import { Button } from '@mui/material'
-
-const DOWNVOTE = gql`
-  mutation downvoteMutation($input: VotingInput) {
-    downvote(input: $input) {
-      vote {
-        id
-        value
-        entityType
-        userId
-        commentId
-        snippetId
-      }
-      cudAction
-      score
-    }
-  }
-`
 
 interface Props {
   snippetId: number
@@ -47,7 +28,7 @@ const Downvote = ({
   currentVoteId,
   score
 }: Props) => {
-  const [downvote, { loading }] = useMutation(DOWNVOTE, {
+  const [downvote, { loading }] = useMutation(DOWNVOTE_MUTATION, {
     update(cache, { data: { downvote } }) {
       const { score, cudAction, vote } = downvote
       const { userId, snippetId, commentId, id, value } = vote
@@ -56,14 +37,14 @@ const Downvote = ({
         query: USER_VOTES_QUERY,
         variables: {
           userId,
-        }
+        },
       })
 
-      if(!userVotesQueryResults) {
+      if (!userVotesQueryResults) {
         return
       }
 
-       //@ts-ignore
+      //@ts-ignore
       let cachedVotes = userVotesQueryResults.votes
 
       //modify snippet score
@@ -117,7 +98,7 @@ const Downvote = ({
           throw new Error(`Unexpected value for cudAction: ${cudAction}`)
       }
 
-      if(cudAction === 'DELETED') {
+      if (cudAction === 'DELETED') {
         cache.evict({ id: `Vote:${id}` })
       }
 
@@ -130,7 +111,6 @@ const Downvote = ({
           userId,
         },
       })
-
     },
     onCompleted: ({ downvote }) => {
       if (

@@ -1,4 +1,4 @@
-import { pages, page, createPage, updatePage, deletePage } from './pages'
+import { createPage, deletePage, page, pages, updatePage } from './pages'
 import type { StandardScenario } from './pages.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances

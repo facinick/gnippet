@@ -1,10 +1,8 @@
-import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
-import { isAuthenticated, requireAuth } from 'src/lib/auth'
+import { ForbiddenError } from '@redwoodjs/graphql-server'
+import { requireAuth } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 import type {
-  QueryResolvers,
-  MutationResolvers,
-  UserResolvers,
+  MutationResolvers, QueryResolvers, UserResolvers
 } from 'types/graphql'
 
 // Public Route

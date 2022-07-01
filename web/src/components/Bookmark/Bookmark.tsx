@@ -1,11 +1,7 @@
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import Downvote from '../Downvote/Downvote'
-import Upvote from '../Upvote/Upvote'
 import { useApolloClient } from '@apollo/client'
-import { USER_BOOKMARKS_QUERY, USER_VOTES_QUERY } from 'src/pages/Queries/queries'
-import { useState, useEffect } from 'react'
 import { useAuth } from '@redwoodjs/auth'
+import { useEffect, useState } from 'react'
+import { USER_BOOKMARKS_QUERY } from 'src/graphql/queries'
 import CreateBookmark from '../CreateBookmark/CreateBookmark'
 import DeleteBookmark from '../DeleteBookmark/DeleteBookmark'
 

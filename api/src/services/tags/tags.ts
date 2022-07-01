@@ -1,9 +1,7 @@
 import { requireAuth } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 import type {
-  QueryResolvers,
-  MutationResolvers,
-  TagResolvers,
+  MutationResolvers, QueryResolvers, TagResolvers
 } from 'types/graphql'
 
 export const tags: QueryResolvers['tags'] = async({ input }) => {

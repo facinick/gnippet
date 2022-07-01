@@ -1,4 +1,4 @@
-import { xDaysAgo, newTimeFormat } from 'src/utils/stringUtils'
+import { newTimeFormat, xDaysAgo } from 'src/utils/stringUtils';
 
 interface Props {
   createdAt: string;

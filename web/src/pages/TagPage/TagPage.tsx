@@ -1,11 +1,11 @@
-import { MetaTags } from '@redwoodjs/web'
-import { TagSnippetsCell } from 'src/components/TagSnippetsCell/TagSnippetsCell'
-import { Container, Stack, Typography, Box } from '@mui/material'
 import { useLazyQuery } from '@apollo/client'
+import { Box, Container, Typography } from '@mui/material'
 import { useAuth } from '@redwoodjs/auth'
+import { MetaTags } from '@redwoodjs/web'
 import { useEffect } from 'react'
-import { USER_VOTES_QUERY, USER_BOOKMARKS_QUERY } from '../Queries/queries'
 import Space from 'src/components/Space/Space'
+import { TagSnippetsCell } from 'src/components/TagSnippetsCell/TagSnippetsCell'
+import { USER_BOOKMARKS_QUERY, USER_VOTES_QUERY } from '../../graphql/queries'
 
 const TagPage = ({name} : {name: string}) => {
 

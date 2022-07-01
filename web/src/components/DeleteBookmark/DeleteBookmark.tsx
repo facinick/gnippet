@@ -1,17 +1,11 @@
-import IconButton from '@mui/material/IconButton'
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
+import { Button, useTheme } from '@mui/material'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import {
-  CREATE_BOOKMARK_MUTATION,
   DELETE_BOOKMARK_MUTATION,
-  USER_BOOKMARKS_QUERY,
-  USER_VOTES_QUERY,
-} from 'src/pages/Queries/queries'
-import { QUERY as SNIPPET_QUERY } from 'src/components/SnippetCell'
-import { QUERY as COMMENTS_QUERY } from 'src/components/CommentsCell'
+  USER_BOOKMARKS_QUERY
+} from 'src/graphql/queries'
 import { EntityType } from 'types/graphql'
-import { Button, useTheme } from '@mui/material'
 
 import BookmarkIcon from '@mui/icons-material/Bookmark'
 interface Props {

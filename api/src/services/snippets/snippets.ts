@@ -1,12 +1,8 @@
-import { ServerError } from 'src/error/ServerError';
-import { requireAuth } from 'src/lib/auth'
-import { db } from 'src/lib/db'
+import { requireAuth } from 'src/lib/auth';
+import { db } from 'src/lib/db';
 import type {
-  QueryResolvers,
-  MutationResolvers,
-  SnippetResolvers,
-  SnippetOrderByInput,
-} from 'types/graphql'
+  MutationResolvers, QueryResolvers, SnippetOrderByInput, SnippetResolvers
+} from 'types/graphql';
 
 
 const getPrismaOrderByForSnippetsQuery = (orderBy: SnippetOrderByInput) => {

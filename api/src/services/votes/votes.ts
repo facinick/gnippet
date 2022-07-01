@@ -2,12 +2,8 @@ import { ServerError } from 'src/error/ServerError'
 import { requireAuth } from 'src/lib/auth'
 import { db } from 'src/lib/db'
 import type {
-  VoteResolvers,
-  MutationupdateVoteArgs,
-  MutationcreateVoteArgs,
-  MutationdeleteVoteArgs,
-  MutationupvoteArgs,
-  CUDAction,
+  CUDAction, MutationcreateVoteArgs,
+  MutationdeleteVoteArgs, MutationupdateVoteArgs, MutationupvoteArgs, VoteResolvers
 } from 'types/graphql'
 
 export const votes = ({ input }) => {

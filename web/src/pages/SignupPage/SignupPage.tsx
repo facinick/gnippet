@@ -1,4 +1,3 @@
-import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import AlreadyHaveAnAccountLink from 'src/components/AlreadyHaveAnAccountLink/AlreadyHaveAnAccountLink'
 import SignupForm from 'src/components/SignupForm/SignupForm'

@@ -1,16 +1,12 @@
+import { useApolloClient } from '@apollo/client'
 import {
   Box,
   Button,
-  ClickAwayListener,
-  Stack,
-  TextField,
-  ToggleButton,
-  Typography,
+  ClickAwayListener, TextField, Typography
 } from '@mui/material'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/dist/toast'
-import { useEffect, useMemo, useState } from 'react'
-import { useApolloClient } from '@apollo/client'
+import { useEffect, useState } from 'react'
 import { UserProfileQuery } from '../UserCell/UserCell'
 
 interface Props {

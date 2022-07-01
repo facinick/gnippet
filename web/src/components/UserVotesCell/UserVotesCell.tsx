@@ -2,7 +2,7 @@ import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 import {
   USER_DATA_QUERY,
   USER_DATA_QUERY_BY_USERNAME,
-} from 'src/pages/Queries/queries'
+} from 'src/graphql/queries'
 import { UserQuery, UserQueryVariables } from 'types/graphql'
 import CommentsList from '../CommentsList/CommentsList'
 import SnippetsList from '../SnippetsList/SnippetsList'

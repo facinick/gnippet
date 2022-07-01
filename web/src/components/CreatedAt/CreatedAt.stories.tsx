@@ -1,5 +1,5 @@
 import CreatedAt from './CreatedAt'
-import { pastDateString, nowDateString, futureDateString } from './CreatedAt.test'
+import { futureDateString, nowDateString, pastDateString } from './CreatedAt.test'
 
 export const past = () => {
   return <CreatedAt createdAt={pastDateString} />

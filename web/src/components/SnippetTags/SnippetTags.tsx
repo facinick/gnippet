@@ -1,6 +1,4 @@
-import Chip from '@mui/material/Chip'
 import { Tag as GTag } from 'types/graphql'
-import TagIcon from '@mui/icons-material/Tag'
 import Tag from '../Tag/Tag'
 interface Props {
   tags: Array<Pick<GTag, 'id' | 'name'>>

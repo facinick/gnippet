@@ -1,5 +1,5 @@
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
-import { USER_DATA_QUERY } from 'src/pages/Queries/queries'
+import { USER_DATA_QUERY } from 'src/graphql/queries'
 import { UserQueryVariables, UserQuery } from 'types/graphql'
 import CommentsList from '../CommentsList/CommentsList'
 import SnippetsList from '../SnippetsList/SnippetsList'

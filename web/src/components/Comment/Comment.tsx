@@ -1,19 +1,15 @@
+import { useReactiveVar } from '@apollo/client'
+import ReplyIcon from '@mui/icons-material/Reply'
+import { Button, Stack, Typography } from '@mui/material'
 import { useAuth } from '@redwoodjs/auth'
+import { closeReplyForm, replyToCommentIdVar, setReplyToParentCommentId } from 'src/localStore/commentReplyForm'
+import { DeepPartial } from 'src/theme'
+import { Comment as TComment, Snippet } from 'types/graphql'
+import Bookmark from '../Bookmark/Bookmark'
 import CreatedAt from '../CreatedAt/CreatedAt'
+import Space from '../Space/Space'
 import Username from '../Username/Username'
 import Voting from '../Voting/Voting'
-import { Comment as TComment, Snippet } from 'types/graphql'
-import { Stack, Typography, Button } from '@mui/material'
-import Bookmark from '../Bookmark/Bookmark'
-import { DeepPartial } from 'src/theme'
-import Space from '../Space/Space'
-import { useReactiveVar } from '@apollo/client'
-import { replyToCommentIdVar } from 'src/localStore/commentReplyForm'
-import ReplyIcon from '@mui/icons-material/Reply'
-import {
-  setReplyToParentCommentId,
-  closeReplyForm,
-} from 'src/localStore/commentReplyForm'
 type Props = {
   comment: DeepPartial<
     Pick<

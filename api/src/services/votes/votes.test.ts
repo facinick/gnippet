@@ -1,4 +1,4 @@
-import { votes, vote, createVote, updateVote, deleteVote } from './votes'
+import { createVote, deleteVote, updateVote, vote, votes } from './votes'
 import type { StandardScenario } from './votes.scenarios'
 
 // Generated boilerplate tests do not account for all circumstances

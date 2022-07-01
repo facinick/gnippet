@@ -1,9 +1,5 @@
 import {
-  snippets,
-  snippet,
-  createSnippet,
-  updateSnippet,
-  deleteSnippet,
+  createSnippet, deleteSnippet, snippet, snippets, updateSnippet
 } from './snippets'
 import type { StandardScenario } from './snippets.scenarios'
 
