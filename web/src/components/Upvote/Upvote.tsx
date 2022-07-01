@@ -15,6 +15,7 @@ interface Props {
   score: number
   currentVoteId: number
   disabled: boolean
+  size: 'large' | 'small'
 }
 
 const Upvote = ({
@@ -25,6 +26,7 @@ const Upvote = ({
   commentId,
   userId,
   disabled,
+  size,
   score,
 }: Props) => {
   const [upvote, { loading }] = useMutation(UPVOTE_MUTATION, {
@@ -139,7 +141,7 @@ const Upvote = ({
       title={currentVoteValue === 1 ? 'Cancel Upvote' : 'Upvote'}
       color={currentVoteValue === 1 ? 'upvote' : 'inherit'}
       variant="text"
-      size={'large'}
+      size={size}
       type="button"
       disabled={loading || disabled}
       onClick={onClick}

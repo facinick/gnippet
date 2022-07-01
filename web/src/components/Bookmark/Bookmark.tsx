@@ -9,9 +9,10 @@ interface Props {
   snippetId: number
   commentId?: number
   entity: 'COMMENT' | 'SNIPPET'
+  size: 'large' | 'small'
 }
 
-const Bookmark = ({ snippetId, commentId, entity }: Props) => {
+const Bookmark = ({ snippetId, commentId, entity, size }: Props) => {
   const { isAuthenticated, currentUser } = useAuth()
   const [currentVoteState, setCurrentBookmarkState] = useState<boolean>(false)
   const [currentBookmarkId, setCurrentBookmarkId] = useState<number>(0)
@@ -68,6 +69,7 @@ const Bookmark = ({ snippetId, commentId, entity }: Props) => {
           userId={currentUser?.id}
           disabled={false}
           entity={entity}
+          size={size}
           commentId={commentId}
           snippetId={snippetId}
         />
@@ -79,6 +81,7 @@ const Bookmark = ({ snippetId, commentId, entity }: Props) => {
           userId={currentUser?.id}
           disabled={false}
           entity={entity}
+          size={size}
           commentId={commentId}
           snippetId={snippetId}
         />

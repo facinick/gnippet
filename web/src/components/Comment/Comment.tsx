@@ -38,7 +38,7 @@ const Comment = ({ comment, snippetId, children }: Props) => {
 
   const replyFormIsOpen = replyToCommentId === id
 
-  const replyButtonText = replyFormIsOpen ? 'Cancel Reply' : 'Reply'
+  const replyButtonText = replyFormIsOpen ? 'Cancel' : 'Reply'
 
   const toggleReplyToCommentForm = () => {
     if (replyFormIsOpen) {
@@ -72,15 +72,25 @@ const Comment = ({ comment, snippetId, children }: Props) => {
 
         <Stack direction={'row'}>
           <Voting
+            size={'small'}
             commentId={id}
             entity={'COMMENT'}
             snippetId={snippetId}
             score={score}
           />
           {isAuthenticated && (
-            <Bookmark snippetId={snippetId} entity={'COMMENT'} commentId={id} />
+            <Bookmark
+              size={'small'}
+              snippetId={snippetId}
+              entity={'COMMENT'}
+              commentId={id}
+            />
           )}
-          <Button onClick={toggleReplyToCommentForm}>
+          <Button
+            color={replyFormIsOpen ? 'error' : 'primary'}
+            size={'small'}
+            onClick={toggleReplyToCommentForm}
+          >
             <ReplyIcon />
             {replyButtonText}
           </Button>

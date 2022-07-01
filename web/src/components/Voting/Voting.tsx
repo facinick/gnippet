@@ -35,9 +35,10 @@ interface Props {
   snippetId: number
   commentId?: number
   entity: 'COMMENT' | 'SNIPPET'
+  size: 'large' | 'small'
 }
 
-const Voting = ({ snippetId, commentId, score, entity }: Props) => {
+const Voting = ({ snippetId, commentId, score, entity, size }: Props) => {
   const { isAuthenticated, currentUser } = useAuth()
   const [currentVoteValue, setCurrentVoteValue] = useState<0 | 1 | -1>(0)
   const [currentVoteId, setCurrentVoteId] = useState<number>(0)
@@ -96,6 +97,7 @@ const Voting = ({ snippetId, commentId, score, entity }: Props) => {
           disabled={!isAuthenticated}
           snippetId={snippetId}
           currentVoteId={currentVoteId}
+          size={size}
         />
 
         <VotesCount vote={currentVoteValue}>{score}</VotesCount>
@@ -109,6 +111,7 @@ const Voting = ({ snippetId, commentId, score, entity }: Props) => {
           disabled={!isAuthenticated}
           snippetId={snippetId}
           currentVoteId={currentVoteId}
+          size={size}
         />
       </Stack>
     </>

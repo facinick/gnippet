@@ -15,6 +15,7 @@ interface Props {
   currentVoteId: number
   score: number
   disabled: boolean
+  size: 'large' | 'small'
 }
 
 const Downvote = ({
@@ -25,7 +26,8 @@ const Downvote = ({
   disabled,
   currentVoteValue,
   currentVoteId,
-  score
+  size,
+  score,
 }: Props) => {
   const [downvote, { loading }] = useMutation(DOWNVOTE_MUTATION, {
     update(cache, { data: { downvote } }) {
@@ -171,7 +173,7 @@ const Downvote = ({
       title={currentVoteValue === -1 ? 'Cancel Downvote' : 'Downvote'}
       color={currentVoteValue === -1 ? 'downvote' : 'inherit'}
       variant="text"
-      size={'large'}
+      size={size}
       disabled={loading || disabled}
       onClick={onClick}
       aria-label="downvote"

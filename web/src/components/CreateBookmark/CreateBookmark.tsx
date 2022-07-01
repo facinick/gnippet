@@ -1,17 +1,16 @@
-import IconButton from '@mui/material/IconButton'
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
+import { Button, useTheme } from '@mui/material'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { CREATE_BOOKMARK_MUTATION, USER_BOOKMARKS_QUERY } from 'src/graphql/queries'
 import { EntityType } from 'types/graphql'
-import { Button, useTheme } from '@mui/material'
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 interface Props {
   snippetId: number
   entity: EntityType
   commentId?: number
   userId: number
   disabled: boolean
+  size: 'large' | 'small'
 }
 
 const CreateBookmark = ({
@@ -19,6 +18,7 @@ const CreateBookmark = ({
   entity,
   commentId,
   userId,
+  size,
   disabled,
 }: Props) => {
   const [createBookmark, { loading }] = useMutation(CREATE_BOOKMARK_MUTATION, {
@@ -73,7 +73,7 @@ const CreateBookmark = ({
   const theme = useTheme();
 
   return (
-    <Button title={'Bookmark'} color={'primary'} variant='text' size={'large'} type="button" disabled={loading || disabled} onClick={onClick} aria-label="bookmark">
+    <Button title={'Bookmark'} color={'primary'} variant='text' size={size} type="button" disabled={loading || disabled} onClick={onClick} aria-label="bookmark">
       <BookmarkBorderIcon />
     </Button>
   )

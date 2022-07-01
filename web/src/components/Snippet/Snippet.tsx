@@ -178,8 +178,15 @@ const SnippetUi = ({
           </Typography>
         )}
         <Stack direction={'row'} alignItems={'center'}>
-          <Voting entity={'SNIPPET'} snippetId={id} score={score} />
-          {isAuthenticated && <Bookmark entity={'SNIPPET'} snippetId={id} />}
+          <Voting
+            size={'large'}
+            entity={'SNIPPET'}
+            snippetId={id}
+            score={score}
+          />
+          {isAuthenticated && (
+            <Bookmark size={'large'}  entity={'SNIPPET'} snippetId={id} />
+          )}
           {showReadingTimeBottom && (
             <ReadingTime timeInMinutes={readingTimeInMinutes(body)} />
           )}

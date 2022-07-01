@@ -15,6 +15,7 @@ interface Props {
   userId: number
   disabled: boolean
   currentBookmarkId: number
+  size: 'large' | 'small'
 }
 
 const DeleteBookmark = ({
@@ -22,6 +23,7 @@ const DeleteBookmark = ({
   entity,
   commentId,
   userId,
+  size,
   disabled,
   currentBookmarkId,
 }: Props) => {
@@ -77,7 +79,7 @@ const DeleteBookmark = ({
       color={'primary'}
       variant="text"
       title={'Remove Bookmark'}
-      size={'large'}
+      size={size}
       type="button"
       disabled={loading || disabled}
       onClick={onClick}
