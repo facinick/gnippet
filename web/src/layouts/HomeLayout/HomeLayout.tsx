@@ -11,7 +11,6 @@ import Search from 'src/components/Search/Search'
 import ThemeShuffle from 'src/components/ThemeShuffle/ThemeShuffle'
 import ThemeSwitch from 'src/components/ThemeSwitch/ThemeSwitch'
 import { onlineStatusVar } from 'src/localStore/onlineStatus'
-import { zigzag } from 'src/styles/backgrounds'
 
 type HomeLayoutProps = {
   children?: React.ReactNode
@@ -23,12 +22,6 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
   const showThemeOptionsInHeader = useMediaQuery(theme.breakpoints.up('sm'));
   const showThemeOptionsInProfileMenu = !showThemeOptionsInHeader
 
-  console.log(
-    zigzag({
-      color: theme.palette.containerPrimary.contrastText,
-      background: theme.palette.containerPrimary.main,
-    })
-  )
   return (
     <>
       {!isOnline && (

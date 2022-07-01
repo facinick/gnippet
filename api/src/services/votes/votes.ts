@@ -42,7 +42,6 @@ export const deleteVote = ({ id }: MutationdeleteVoteArgs) => {
 
 export const upvote = async ({ input }: MutationupvoteArgs) => {
 
-  console.log(Date.now())
   requireAuth({})
 
   const { snippetId, commentId, entityType } = input
@@ -66,7 +65,6 @@ export const upvote = async ({ input }: MutationupvoteArgs) => {
   let upsertedVote
   let updatedEntity
 
-  console.log(Date.now())
   // a vote exists,
   // user is trying to [cancel an upvote] -1
   // or [reverse a downvote] +2
@@ -139,8 +137,6 @@ export const upvote = async ({ input }: MutationupvoteArgs) => {
           })
   }
 
-  console.log(`running transaction: ${Date.now()}`)
-
   const [responseVote, responseEntity] = await db.$transaction([
     upsertedVote,
     updatedEntity,
@@ -151,7 +147,6 @@ export const upvote = async ({ input }: MutationupvoteArgs) => {
     cudAction,
     score: responseEntity.score,
   }
-  console.log(Date.now())
 
   return response
 }

@@ -115,13 +115,11 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
       setImageUrlErrorMessage('')
       setImageUrlIsValid(true)
       isValid = true
-      console.log(`image is valid`)
     } catch (error) {
       setImageUrlError(true)
       setImageUrlErrorMessage('image url is invalid')
       setImageUrlIsValid(false)
       isValid = false
-      console.log(`image is invalid`)
     } finally {
       setImagineUrlValidating(false)
     }

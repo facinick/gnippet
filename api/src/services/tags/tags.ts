@@ -61,11 +61,6 @@ export const Tag: TagResolvers = {
     const nextCursor = _obj.input?.nextCursor
     const skip = nextCursor === null ? 0 : 1
 
-
-    console.log(
-      `asking for: ${take} snippets, starting from ${nextCursor} skipping ${skip}`
-    )
-
     // const snippetsByTag = await db.snippet.findMany({
     //   take,
     //   cursor: nextCursor === null ? undefined : {
@@ -121,8 +116,6 @@ export const Tag: TagResolvers = {
     const lastResult = nResults >= 1 ? snippetsByTag[nResults - 1] : null
 
     const myCursor = lastResult ? lastResult.id : nextCursor
-
-    console.log(`nextCursor: ${myCursor} nResults: ${nResults}`)
 
     const response = {
       nextCursor: myCursor,
