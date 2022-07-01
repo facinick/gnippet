@@ -36,6 +36,11 @@ export const LastUpdated = (): JSX.Element => {
       direction={'row'}
       alignItems="center"
       justifyContent={'flex-start'}
+      sx={{
+        padding: '0px 14px',
+        borderRadius: '20px',
+        background: theme.palette.containerPrimary.main
+      }}
     >
       {!date && (
         <CircularProgress

@@ -1,8 +1,7 @@
-import { Stack, styled, useTheme } from '@mui/material'
 import CopyrightIcon from '@mui/icons-material/Copyright'
 import {
-  Typography,
-  TypographyProps,
+  Stack, styled, Typography,
+  TypographyProps, useTheme
 } from '@mui/material'
 import Space from '../Space/Space'
 
@@ -19,6 +18,11 @@ const CreatedBy = () => {
         direction={'row'}
         alignItems="center"
         justifyContent={'flex-end'}
+        sx={{
+          padding: '0px 14px',
+          borderRadius: '20px',
+          background: theme.palette.containerPrimary.main,
+        }}
       >
         <CreatedAtText>{'facinick'}</CreatedAtText>
         <Space />
