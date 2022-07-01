@@ -1,7 +1,6 @@
-import { useTheme } from '@mui/material/styles'
-import { ColorModeContext } from 'src/theme/ThemeProvider'
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import IconButton from '@mui/material/IconButton';
+import { ColorModeContext } from 'src/theme/ThemeProvider';
 const ThemeShuffle = () => {
   const colorMode = React.useContext(ColorModeContext)
   return (

@@ -1,15 +1,15 @@
+import { useApolloClient } from '@apollo/client'
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete'
+import TextField, { TextFieldProps } from '@mui/material/TextField'
 import React, {
   forwardRef,
   useEffect,
   useImperativeHandle,
   useRef,
-  useState,
+  useState
 } from 'react'
-import TextField, { TextFieldProps } from '@mui/material/TextField'
-import { Tag } from 'types/graphql'
 import { QUERY as TagsQuery } from 'src/components/TagsCell/TagsCell'
-import { useApolloClient } from '@apollo/client'
+import { Tag } from 'types/graphql'
 
 import Chip, { ChipProps } from '@mui/material/Chip'
 import Paper, { PaperProps } from '@mui/material/Paper'

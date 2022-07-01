@@ -1,16 +1,10 @@
+import { useReactiveVar } from '@apollo/client'
 import {
   FormControl,
-  InputLabel,
-  MenuItem,
-  MenuList,
-  NativeSelect,
-  Menu,
+  InputLabel, NativeSelect
 } from '@mui/material'
-import { useReactiveVar } from '@apollo/client'
 import { setSortBy, sortByVar } from 'src/localStore/homeFeedSortBy'
 
-import { MenuItemProps, Select, SelectProps } from '@mui/material'
-import { styled } from '@mui/material/styles'
 
 const HomeFeedSortBy = () => {
   const sortBy = useReactiveVar(sortByVar)

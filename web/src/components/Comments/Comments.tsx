@@ -1,13 +1,13 @@
-import { Stack, Divider, Typography, Box, Card, ClickAwayListener } from '@mui/material'
-import { Comment as TComment } from 'types/graphql'
-import Comment from 'src/components/Comment'
 import { useReactiveVar } from '@apollo/client'
-import { replyToCommentIdVar, closeReplyForm } from 'src/localStore/commentReplyForm'
-import CommentReplyForm from '../CommentReplyForm/CommentReplyForm'
+import { Divider, Stack } from '@mui/material'
 import { useAuth } from '@redwoodjs/auth'
 import { useEffect } from 'react'
+import Comment from 'src/components/Comment'
+import { closeReplyForm, replyToCommentIdVar } from 'src/localStore/commentReplyForm'
+import { Comment as GQL_Comment } from 'types/graphql'
+import CommentReplyForm from '../CommentReplyForm/CommentReplyForm'
 interface Props {
-  comments: Array<TComment>
+  comments: Array<Pick<GQL_Comment, 'body' | 'id'>>
   snippetId: number
 }
 
@@ -20,11 +20,6 @@ const Comments = ({ comments, snippetId }: Props) => {
   const numberOfComments = comments.length
   let isLastComment: boolean = false
   let renderDivider: boolean = false
-
-  // const handleClickAway = () => {
-  //   console.log(`closing`)
-  //   setReplyToParentCommentId({ field: -1 })
-  // }
 
   useEffect(() => {
     closeReplyForm()
@@ -41,8 +36,6 @@ const Comments = ({ comments, snippetId }: Props) => {
 
           return (
             <React.Fragment key={comment.id}>
-              {/* <ClickAwayListener onClickAway={handleClickAway}>
-                <> */}
               <Comment
                 snippetId={snippetId}
                 key={comment.id}
@@ -57,8 +50,6 @@ const Comments = ({ comments, snippetId }: Props) => {
                 />
               )}
               {renderDivider && <Divider />}
-              {/* </>
-              </ClickAwayListener> */}
             </React.Fragment>
           )
         })}

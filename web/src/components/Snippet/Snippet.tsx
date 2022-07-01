@@ -9,7 +9,7 @@ import {
   readingTimeInMinutes,
   truncate as returnTruncatedText
 } from 'src/utils/stringUtils'
-import { Snippet } from 'types/graphql'
+import { Comment, Snippet, Tag } from 'types/graphql'
 import BackButton from '../BackButton/BackButton'
 import Bookmark from '../Bookmark/Bookmark'
 import CommentForm from '../CommentForm/CommentForm'
@@ -27,8 +27,19 @@ import Username from '../Username/Username'
 import ViewCount from '../ViewCount/ViewCount'
 import Voting from '../Voting/Voting'
 
+type SnippetData = Pick<
+  Snippet,
+  'imageUrl' | 'viewCount' | 'createdAt' | 'id' | 'title' | 'score' | 'body'
+>
+
+type AuthorUsername = { author: Pick<Snippet['author'], 'username'> }
+
+type TagsAll = { tags: Array<Pick<Tag, 'name' | 'id'>> }
+
+type CommentsAll = { comments: Array<Pick<Comment, 'body' | 'id'> & AuthorUsername> }
+
 type Props = {
-  snippet: Omit<Snippet, 'authorId' | 'languages' | 'updatedAt' | 'votes'>
+  snippet: SnippetData & AuthorUsername & TagsAll & CommentsAll
   truncate: boolean
   showActivity: boolean
   showBackButton: boolean
@@ -106,7 +117,6 @@ const SnippetUi = ({
               <SnippetTitleLink to={routes.snippet({ id: id })}>
                 {title}
               </SnippetTitleLink>
-              {/* <Box style={{width: '10px'}} /> */}
               <CopySnippetUrl id={id} />
             </SnippetTitleText>
           </Stack>
@@ -166,7 +176,6 @@ const SnippetUi = ({
         <Stack direction={'row'} alignItems={'center'}>
           <Voting entity={'SNIPPET'} snippetId={id} score={score} />
           {isAuthenticated && <Bookmark entity={'SNIPPET'} snippetId={id} />}
-          {/* <CopySnippetUrl id={id} /> */}
           {showReadingTimeBottom && (
             <ReadingTime timeInMinutes={readingTimeInMinutes(body)} />
           )}

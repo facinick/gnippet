@@ -1,24 +1,21 @@
 import {
   Button,
   TextField,
-  TextFieldProps,
-  OutlinedInputProps,
+  TextFieldProps
 } from '@mui/material'
 import Stack from '@mui/material/Stack'
-import { useAuth } from '@redwoodjs/auth'
-import { Form, FormError } from '@redwoodjs/forms'
 import { styled } from '@mui/material/styles'
-import { Link, navigate, routes } from '@redwoodjs/router'
+import { useAuth } from '@redwoodjs/auth'
+import { Form } from '@redwoodjs/forms'
+import { navigate, routes } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/toast'
-import OutlinedInput from '@mui/material/OutlinedInput'
 
-import { useEffect, useRef, useState } from 'react'
 import { Login } from '@mui/icons-material'
-import IconButton from '@mui/material/IconButton'
-import InputAdornment from '@mui/material/InputAdornment'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import ForgotPasswordLink from '../ForgotPasswordLink/ForgotPasswordLink'
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import { useEffect, useRef, useState } from 'react'
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,

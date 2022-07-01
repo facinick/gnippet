@@ -1,4 +1,4 @@
-import { Loading, Empty, Failure, Success } from './SnippetCell'
+import { Empty, Failure, Loading, Success } from './SnippetCell'
 import { standard } from './SnippetCell.mock'
 
 export const loading = () => {

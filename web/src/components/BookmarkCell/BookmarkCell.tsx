@@ -1,5 +1,5 @@
+import type { CellFailureProps, CellSuccessProps } from '@redwoodjs/web'
 import type { FindBookmarkQuery, FindBookmarkQueryVariables } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
   query FindBookmarkQuery($id: Int!) {

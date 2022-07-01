@@ -1,8 +1,7 @@
-import Typography from "@mui/material/Typography"
-import IconButton from "@mui/material/IconButton"
-import Space from "../Space/Space"
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import Box from "@mui/material/Box"
+import IconButton from "@mui/material/IconButton"
+import Typography from "@mui/material/Typography"
 
 interface Props {
   timeInMinutes: number

@@ -1,7 +1,7 @@
+import LinkIcon from '@mui/icons-material/Link'
 import { Button } from '@mui/material'
 import { routes } from '@redwoodjs/router'
 import { toast } from '@redwoodjs/web/dist/toast'
-import LinkIcon from '@mui/icons-material/Link'
 
 interface CopySnippetUrl {
   id: number

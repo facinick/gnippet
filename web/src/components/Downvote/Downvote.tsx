@@ -1,11 +1,10 @@
-import IconButton from '@mui/material/IconButton'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+import { Button } from '@mui/material'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { USER_VOTES_QUERY } from 'src/graphql/queries'
 import { DOWNVOTE_MUTATION } from 'src/graphql/mutations'
+import { USER_VOTES_QUERY } from 'src/graphql/queries'
 import { EntityType } from 'types/graphql'
-import { Button } from '@mui/material'
 
 interface Props {
   snippetId: number

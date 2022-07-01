@@ -1,12 +1,12 @@
+import { useApolloClient } from '@apollo/client'
 import Stack from '@mui/material/Stack'
+import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
+import { useAuth } from '@redwoodjs/auth'
+import { useEffect, useState } from 'react'
+import { USER_VOTES_QUERY } from 'src/graphql/queries'
 import Downvote from '../Downvote/Downvote'
 import Upvote from '../Upvote/Upvote'
-import { useApolloClient } from '@apollo/client'
-import { USER_VOTES_QUERY } from 'src/graphql/queries'
-import { useState, useEffect } from 'react'
-import { useAuth } from '@redwoodjs/auth'
-import { styled } from '@mui/material/styles'
 
 import { TypographyProps } from '@mui/material'
 

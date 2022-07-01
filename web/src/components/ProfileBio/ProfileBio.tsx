@@ -7,7 +7,7 @@ import {
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/dist/toast'
 import { useEffect, useState } from 'react'
-import { UserProfileQuery } from '../UserCell/UserCell'
+import { UserProfileQuery } from 'src/graphql/queries'
 
 interface Props {
   userId: number

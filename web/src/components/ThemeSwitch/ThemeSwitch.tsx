@@ -1,8 +1,8 @@
-import { useTheme } from '@mui/material/styles'
-import { ColorModeContext } from 'src/theme/ThemeProvider'
-import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
+import LightModeIcon from '@mui/icons-material/LightMode'
+import { useTheme } from '@mui/material/styles'
 import ToggleButton from '@mui/material/ToggleButton'
+import { ColorModeContext } from 'src/theme/ThemeProvider'
 
 const ThemeSwitch = () => {
   const theme = useTheme()
