@@ -9,7 +9,7 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,
   display: `inline-block`,
   margin: `8px 10px 0px 30px`,
-  width: `5px`,
+  width: `2px`,
   background: `#bdbdbd`,
 }))
 
