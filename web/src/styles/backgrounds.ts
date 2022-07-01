@@ -16,3 +16,10 @@ background-color: ${background};
 opacity: 1;
 background-image: radial-gradient(${color} 0.5px, ${background} 0.5px);
 background-size: 10px 10px;`
+
+export const polkav2 = ({ color, background }: Props) => `
+background-color: ${background};
+opacity: 0.8;
+background-image:  radial-gradient(${color} 0.5px, transparent 0.5px), radial-gradient(${color} 0.5px, ${background} 0.5px);
+background-size: 20px 20px;
+background-position: 0 0,10px 10px;`

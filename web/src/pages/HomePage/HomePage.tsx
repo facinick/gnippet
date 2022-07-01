@@ -7,8 +7,10 @@ import SnippetsCell from 'src/components/SnippetsCell'
 import { useLazyQuery, useReactiveVar } from '@apollo/client'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
-  Accordion, AccordionDetails,
-  AccordionProps, AccordionSummary
+  Accordion,
+  AccordionDetails,
+  AccordionProps,
+  AccordionSummary
 } from '@mui/material'
 import Stack from '@mui/material/Stack'
 import { styled } from '@mui/material/styles'
@@ -16,15 +18,23 @@ import { navigate, useLocation } from '@redwoodjs/router'
 import { useEffect, useMemo } from 'react'
 import {
   DEFAULT_HOME_FEEED_SORT_BY,
-  HomeFeedSortBy, homeFeedSortByValues, ITEMS_PER_PAGE, setSortBy,
+  HomeFeedSortBy,
+  homeFeedSortByValues,
+  ITEMS_PER_PAGE,
+  setSortBy,
   sortByVar
 } from 'src/localStore/homeFeedSortBy'
+import { polkav2 } from 'src/styles/backgrounds'
 import { USER_BOOKMARKS_QUERY, USER_VOTES_QUERY } from '../../graphql/queries'
 
 const CreateSnippetAccordian = styled(Accordion)<AccordionProps>(
   ({ theme }) => ({
     color: theme.palette.containerPrimary.contrastText,
-    backgroundColor: theme.palette.containerPrimary.main,
+    backgroundColor: polkav2({
+      color: theme.palette.containerPrimary.contrastText,
+      background: theme.palette.containerPrimary.main,
+    }),
+    borderRadius: '20px !important',
   })
 )
 

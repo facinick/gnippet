@@ -1,26 +1,22 @@
-import Stack from '@mui/material/Stack'
-import InputAdornment from '@mui/material/InputAdornment'
-import { Form, FormError } from '@redwoodjs/forms'
-import useMediaQuery from '@mui/material/useMediaQuery'
 import { useReactiveVar } from '@apollo/client'
+import { useTheme } from '@emotion/react'
 import PostAddIcon from '@mui/icons-material/PostAdd'
+import { CircularProgress, Typography } from '@mui/material'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import InputAdornment from '@mui/material/InputAdornment'
+import Stack from '@mui/material/Stack'
+import { styled } from '@mui/material/styles'
+import TextField, { TextFieldProps } from '@mui/material/TextField'
+import { Form, FormError } from '@redwoodjs/forms'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
-import { createRef, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { QUERY as SnippetsQuery } from 'src/components/SnippetsCell/SnippetsCell'
-import { QUERY as TagsQuery } from 'src/components/TagsCell/TagsCell'
-import Button from '@mui/material/Button'
-import Box from '@mui/material/Box'
-import Paper from '@mui/material/Paper'
-import { CircularProgress, Typography } from '@mui/material'
-import { TagsSearchObject } from '../TagSearchAndAdd/TagSearchAndAdd'
 import TagsCell from 'src/components/TagsCell'
-import TextField, { TextFieldProps } from '@mui/material/TextField'
-import { styled } from '@mui/material/styles'
-import { useTheme } from '@emotion/react'
+import { QUERY as TagsQuery } from 'src/components/TagsCell/TagsCell'
 import { ITEMS_PER_PAGE, sortByVar } from 'src/localStore/homeFeedSortBy'
-import { useReadingTime } from 'src/utils/stringUtils'
-import LoadingButton from '@mui/lab/LoadingButton'
+import { TagsSearchObject } from '../TagSearchAndAdd/TagSearchAndAdd'
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,
@@ -247,7 +243,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
       variables: { input: { pageId, authorId, body, title, tags, imageUrl } },
     })
     formRef.current.reset()
-    tagsRef.current.reset()
+    tagsRef?.current.reset()
     resetImagePreview()
     setSubmitting(false)
   }
