@@ -2,36 +2,39 @@ import { useReactiveVar } from '@apollo/client'
 import ReplyIcon from '@mui/icons-material/Reply'
 import { Button, Stack, Typography } from '@mui/material'
 import { useAuth } from '@redwoodjs/auth'
-import { closeReplyForm, replyToCommentIdVar, setReplyToParentCommentId } from 'src/localStore/commentReplyForm'
-import { DeepPartial } from 'src/theme'
-import { Comment as TComment, Snippet } from 'types/graphql'
+import CommentReplyForm from 'src/components/CommentReplyForm'
+import {
+  closeReplyForm,
+  replyToCommentIdVar,
+  setReplyToParentCommentId
+} from 'src/localStore/commentReplyForm'
+import { Children } from 'src/types/children'
+import { Comment as GQL_Comment, Snippet } from 'types/graphql'
 import Bookmark from '../Bookmark/Bookmark'
 import CreatedAt from '../CreatedAt/CreatedAt'
 import Space from '../Space/Space'
 import Username from '../Username/Username'
 import Voting from '../Voting/Voting'
-type Props = {
-  comment: DeepPartial<
-    Pick<
-      TComment,
-      | 'id'
-      | 'score'
-      | 'activity'
-      | 'author'
-      | 'body'
-      | 'createdAt'
-      | 'parentCommentId'
-    >
-  >
-  snippetId: Snippet[keyof Pick<Snippet, 'id'>]
-}
 
-const Comment = ({ comment, snippetId }: Props) => {
+type AuthorUsername = { author: Pick<GQL_Comment['author'], 'username'> }
+
+type Props = {
+  comment: Pick<
+    GQL_Comment,
+    'id' | 'score' | 'activity' | 'body' | 'createdAt' | 'parentCommentId'
+  > &
+    AuthorUsername
+  snippetId: Snippet[keyof Pick<Snippet, 'id'>]
+} & Children
+
+const Comment = ({ comment, snippetId, children }: Props) => {
   const { id, score, activity, author, body, createdAt, parentCommentId } =
     comment
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, currentUser } = useAuth()
 
   const replyToCommentId = useReactiveVar(replyToCommentIdVar)
+  const showReplyToCommentForm =
+    currentUser?.id && isAuthenticated && replyToCommentId === comment.id
 
   const replyFormIsOpen = replyToCommentId === id
 
@@ -82,6 +85,15 @@ const Comment = ({ comment, snippetId }: Props) => {
             {replyButtonText}
           </Button>
         </Stack>
+        {showReplyToCommentForm && (
+          <CommentReplyForm
+            authorId={currentUser?.id}
+            authorUsername={currentUser?.username}
+            snippetId={snippetId}
+            parentCommentId={comment.id}
+          />
+        )}
+        {children}
       </Stack>
     </article>
   )

@@ -1,24 +1,24 @@
-import Stack from '@mui/material/Stack'
-import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/toast'
-import { QUERY as COMMENTS_QUERY } from 'src/components/CommentsCell'
-import { useRef, useState } from 'react'
+import ReplyIcon from '@mui/icons-material/Reply'
 import { Button } from '@mui/material'
-import { _Snippet, _SnippetWithVotes, _Vote } from 'src/gql_objects/gqlObjects'
-import { Form, FormError } from '@redwoodjs/forms'
-import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
 import { styled } from '@mui/material/styles'
 import TextField, { TextFieldProps } from '@mui/material/TextField'
-import ReplyIcon from '@mui/icons-material/Reply'
-import { useReactiveVar } from '@apollo/client'
+import { Form, FormError } from '@redwoodjs/forms'
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
+import { useRef, useState } from 'react'
+import { QUERY as COMMENTS_QUERY } from 'src/components/CommentsCell'
 import {
-  replyToCommentIdVar,
-  closeReplyForm,
+  closeReplyForm
 } from 'src/localStore/commentReplyForm'
+import { polka } from 'src/styles/backgrounds'
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   color: theme.palette.containerSecondary.contrastText,
-  backgroundColor: theme.palette.containerSecondary.main,
+  backgroundColor: polka({
+    color: '#4057FF',
+    background: theme.palette.containerSecondary.main,
+  }),
   '& .MuiInputBase-root': {
     color: theme.palette.containerSecondary.contrastText,
   },

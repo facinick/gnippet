@@ -1,18 +1,18 @@
-import Stack from '@mui/material/Stack'
-import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/toast'
-import { QUERY as COMMENTS_QUERY } from 'src/components/CommentsCell'
-import { useRef, useState } from 'react'
+import AddCommentIcon from '@mui/icons-material/AddComment'
 import { Button } from '@mui/material'
-import { _Snippet, _SnippetWithVotes, _Vote } from 'src/gql_objects/gqlObjects'
+import Stack from '@mui/material/Stack'
+import { styled } from '@mui/material/styles'
+import TextField, { TextFieldProps } from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import {
   Form,
-  FormError,
+  FormError
 } from '@redwoodjs/forms'
-import Typography from '@mui/material/Typography'
-import AddCommentIcon from '@mui/icons-material/AddComment'
-import { styled } from '@mui/material/styles';
-import TextField, { TextFieldProps } from '@mui/material/TextField';
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
+import { useRef, useState } from 'react'
+import { QUERY as COMMENTS_QUERY } from 'src/components/CommentsCell'
+import { polka } from 'src/styles/backgrounds'
 
 const CREATE = gql`
   mutation CreateCommentMutation($input: CreateCommentInput!) {
@@ -31,14 +31,17 @@ const CREATE = gql`
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   color: theme.palette.containerSecondary.contrastText,
-  backgroundColor: theme.palette.containerSecondary.main,
-  "& .MuiInputBase-root": {
+  backgroundColor: polka({
+    color: '#4057FF',
+    background: theme.palette.containerSecondary.main,
+  }),
+  '& .MuiInputBase-root': {
     color: theme.palette.containerSecondary.contrastText,
   },
-  "& .MuiInputLabel-root": {
+  '& .MuiInputLabel-root': {
     color: theme.palette.containerSecondary.contrastText,
-  }
-}));
+  },
+}))
 
 interface Props {
   authorId: number

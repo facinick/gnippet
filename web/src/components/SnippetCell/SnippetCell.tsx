@@ -24,10 +24,11 @@ export const QUERY = gql`
         id
         name
       }
-      comments(input: { orderBy: { createdAt: desc }} ) {
+      comments(input: { orderBy: { createdAt: desc } }) {
         id
         body
         score
+        parentCommentId
         author {
           username
         }

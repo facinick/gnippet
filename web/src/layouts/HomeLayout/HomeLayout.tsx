@@ -11,6 +11,8 @@ import Search from 'src/components/Search/Search'
 import ThemeShuffle from 'src/components/ThemeShuffle/ThemeShuffle'
 import ThemeSwitch from 'src/components/ThemeSwitch/ThemeSwitch'
 import { onlineStatusVar } from 'src/localStore/onlineStatus'
+import { zigzag } from 'src/styles/backgrounds'
+
 type HomeLayoutProps = {
   children?: React.ReactNode
 }
@@ -21,6 +23,12 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
   const showThemeOptionsInHeader = useMediaQuery(theme.breakpoints.up('sm'));
   const showThemeOptionsInProfileMenu = !showThemeOptionsInHeader
 
+  console.log(
+    zigzag({
+      color: theme.palette.containerPrimary.contrastText,
+      background: theme.palette.containerPrimary.main,
+    })
+  )
   return (
     <>
       {!isOnline && (
@@ -48,7 +56,11 @@ const HomeLayout = ({ children }: HomeLayoutProps) => {
         </header>
         <main style={{flexGrow: 1}}>{children}</main>
         <footer
-          style={{ borderTop: `0.01rem solid ${theme.palette.text.secondary}`, padding: 10, background: theme.palette.containerPrimary.main }}
+          style={{
+            borderTop: `0.01rem solid ${theme.palette.text.secondary}`,
+            padding: 10,
+            background: theme.palette.containerPrimary.main
+          }}
         >
           <Stack alignItems={'center'}>
             <Footer />

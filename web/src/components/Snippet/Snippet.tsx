@@ -36,7 +36,11 @@ type AuthorUsername = { author: Pick<Snippet['author'], 'username'> }
 
 type TagsAll = { tags: Array<Pick<Tag, 'name' | 'id'>> }
 
-type CommentsAll = { comments: Array<Pick<Comment, 'body' | 'id'> & AuthorUsername> }
+type CommentsAll = {
+  comments: Array<
+    Pick<Comment, 'body' | 'id' | 'parentCommentId'> & AuthorUsername
+  >
+}
 
 type Props = {
   snippet: SnippetData & AuthorUsername & TagsAll & CommentsAll
