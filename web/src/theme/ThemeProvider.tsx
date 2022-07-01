@@ -1,6 +1,6 @@
 import CssBaseline from '@mui/material/CssBaseline'
 import GlobalStyles from '@mui/material/GlobalStyles'
-import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { createTheme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useEffect } from 'react'
 import { color as ThemeColors } from './index'
@@ -38,7 +38,7 @@ export default function ToggleColorMode(props: ThemeProviderProps) {
   )
 
   const _theme = React.useMemo(
-    () => createTheme(ThemeColors[theme][mode]),
+    () => createTheme(ThemeColors[theme][mode] as ThemeOptions),
     [mode, theme]
   )
 

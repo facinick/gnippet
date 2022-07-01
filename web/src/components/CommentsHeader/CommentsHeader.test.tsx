@@ -8,7 +8,7 @@ import CommentsHeader from './CommentsHeader'
 describe('CommentsHeader', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<CommentsHeader />)
+      render(<CommentsHeader numberOfComments={0} />)
     }).not.toThrow()
   })
 })

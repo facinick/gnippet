@@ -1,13 +1,11 @@
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import { Stack } from '@mui/material'
+import Typography from '@mui/material/Typography'
+import type { CellFailureProps, CellSuccessProps } from '@redwoodjs/web'
+import Meta from 'src/components/Meta/Meta'
 import { USER_DATA_QUERY } from 'src/graphql/queries'
-import { UserQueryVariables, UserQuery } from 'types/graphql'
+import { UserQuery, UserQueryVariables } from 'types/graphql'
 import CommentsList from '../CommentsList/CommentsList'
 import SnippetsList from '../SnippetsList/SnippetsList'
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Meta from 'src/components/Meta/Meta'
-import { Stack } from '@mui/material'
 
 export const QUERY = USER_DATA_QUERY
 
@@ -15,7 +13,9 @@ export const Loading = () => <Meta loading={true}/>
 
 export const Empty = () => <Meta empty={true} message={'Your bookmarks shall appear here!'}/>
 
-export const Failure = ({ error }: UserQueryVariables) => <Meta error={true} message={error.message} />
+export const Failure = ({ error }: CellFailureProps<UserQueryVariables>) => (
+  <Meta error={true} message={error.message} />
+)
 
 export const Success = ({ user }: CellSuccessProps<UserQuery, UserQueryVariables>) => {
 

@@ -1,22 +1,28 @@
-import * as React from 'react'
+import { LinkProps, ListItemProps, TypographyProps } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
+import Box from '@mui/material/Box'
+import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
-import Divider from '@mui/material/Divider'
-import ListItemText from '@mui/material/ListItemText'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
-import Avatar from '@mui/material/Avatar'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import { Snippet } from 'types/graphql'
-import Username from '../Username/Username'
-import { Link, navigate, routes } from '@redwoodjs/router'
-import { truncate } from 'src/utils/stringUtils'
-import CardContent from '@mui/material/CardContent'
-import Card from '@mui/material/Card'
-import Paper from '@mui/material/Paper'
-import Box from '@mui/material/Box'
-import { LinkProps, TypographyProps, ListItemProps } from '@mui/material'
+import ListItemText from '@mui/material/ListItemText'
 import { styled } from '@mui/material/styles'
+import Typography from '@mui/material/Typography'
+import { Link, navigate, routes } from '@redwoodjs/router'
+import * as React from 'react'
+import { truncate } from 'src/utils/stringUtils'
+import { Comment as GQL_Comment } from 'types/graphql'
+
+type AuthorUsername = { author: Pick<GQL_Comment['author'], 'username'> }
+
+type SnippetIdTitle = { snippet: Pick<GQL_Comment['snippet'], 'id' | 'title'> }
+
+type CommentData = Pick<GQL_Comment, 'body' | 'id'> &
+  SnippetIdTitle &
+  AuthorUsername
+interface Props {
+  comments: Array<CommentData>
+}
 
 const CommentTitleLink = styled(Link)<LinkProps>(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -43,16 +49,8 @@ const CommentBodyText = styled(Typography)<TypographyProps>(({ theme }) => ({
   lineHeight: '1.2rem',
   fontSize: '0.8rem',
 }))
-interface Props {
-  comments: Array<Comment>
-}
 
-const CommenttItem = ({
-  id,
-  body,
-  author,
-  snippet,
-}: Pick<Comment, 'id' | 'body' | 'author' | 'snippet'>) => {
+const CommenttItem = ({ id, body, author, snippet }: CommentData) => {
   const authorUsername = author.username
 
   let _newBody = body

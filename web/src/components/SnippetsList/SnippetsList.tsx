@@ -1,24 +1,20 @@
-import * as React from 'react'
+import { LinkProps, ListItemProps, TypographyProps } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
+import Box from '@mui/material/Box'
+import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
-import Divider from '@mui/material/Divider'
-import ListItemText from '@mui/material/ListItemText'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
-import Avatar from '@mui/material/Avatar'
+import ListItemText from '@mui/material/ListItemText'
+import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import { Snippet } from 'types/graphql'
-import Username from '../Username/Username'
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { truncate } from 'src/utils/stringUtils'
-import CardContent from '@mui/material/CardContent'
-import Card from '@mui/material/Card'
-import Paper from '@mui/material/Paper'
-import Box from '@mui/material/Box'
-import { LinkProps, TypographyProps, ListItemProps } from '@mui/material'
-import { styled } from '@mui/material/styles'
+import { Snippet } from 'types/graphql'
+
+type AuthorUsername = { author: Pick<Snippet['author'], 'username'> }
 interface Props {
-  snippets: Array<Snippet>
+  snippets: Array<Pick<Snippet, 'title' | 'body' | 'id'> & AuthorUsername>
 }
 
 const SnippetTitleLink = styled(Link)<LinkProps>(({ theme }) => ({
@@ -52,7 +48,7 @@ const SnippetItem = ({
   title,
   body,
   author,
-}: Pick<Snippet, 'id' | 'title' | 'body' | 'author'>) => {
+}: Pick<Snippet, 'id' | 'title' | 'body'> & AuthorUsername) => {
   const authorUsername = author.username
 
   let _newBody = body
@@ -76,7 +72,9 @@ const SnippetItem = ({
       <ListItemText
         primary={
           <Typography>
-            <SnippetTitleLink to={routes.snippet({ id: id })}>{title}</SnippetTitleLink>
+            <SnippetTitleLink to={routes.snippet({ id: id })}>
+              {title}
+            </SnippetTitleLink>
           </Typography>
         }
         secondary={<SnippetBodyText>{`${_newBody}`}</SnippetBodyText>}

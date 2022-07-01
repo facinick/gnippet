@@ -238,3 +238,14 @@ export const DELETE_BOOKMARK_MUTATION = gql`
     }
   }
 `
+
+export const UserProfileQuery = gql`
+  query UserProfileQueryByUsername($username: String!) {
+    user: userByUsername(username: $username) {
+      id
+      createdAt
+      isBanned
+      bio
+    }
+  }
+`

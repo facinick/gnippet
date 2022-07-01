@@ -1,19 +1,19 @@
 import { AuthProvider } from '@redwoodjs/auth'
 
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
-import { StyledEngineProvider } from '@mui/material/styles'
-import ThemeProvider from './theme/ThemeProvider'
-import FatalErrorPage from 'src/pages/FatalErrorPage'
-import Routes from 'src/Routes'
-import { cache } from 'src/localStore/cache'
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
+import { StyledEngineProvider } from '@mui/material/styles'
+import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+import { useEffect } from 'react'
+import { cache } from 'src/localStore/cache'
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import Routes from 'src/Routes'
 import './index.css'
 import { goOffline, goOnline } from './localStore/onlineStatus'
-import { useEffect } from 'react'
+import ThemeProvider from './theme/ThemeProvider'
 
 const App = () => {
   useEffect(() => {
@@ -27,6 +27,7 @@ const App = () => {
   }, [])
 
   return (
+    // @ts-ignore
     <FatalErrorBoundary page={FatalErrorPage}>
       <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
         <AuthProvider type="dbAuth">

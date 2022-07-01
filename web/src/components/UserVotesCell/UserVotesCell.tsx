@@ -1,16 +1,13 @@
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import { Stack } from '@mui/material'
+import Typography from '@mui/material/Typography'
+import type { CellFailureProps, CellSuccessProps } from '@redwoodjs/web'
 import {
-  USER_DATA_QUERY,
-  USER_DATA_QUERY_BY_USERNAME,
+  USER_DATA_QUERY
 } from 'src/graphql/queries'
 import { UserQuery, UserQueryVariables } from 'types/graphql'
 import CommentsList from '../CommentsList/CommentsList'
-import SnippetsList from '../SnippetsList/SnippetsList'
-import CircularProgress from '@mui/material/CircularProgress'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
 import Meta from '../Meta/Meta'
-import { Stack } from '@mui/material'
+import SnippetsList from '../SnippetsList/SnippetsList'
 
 export const QUERY = USER_DATA_QUERY
 
@@ -20,7 +17,7 @@ export const Empty = () => (
   <Meta empty={true} message={'Your creations shall appear here!'} />
 )
 
-export const Failure = ({ error }: UserQueryVariables) => (
+export const Failure = ({ error }: CellFailureProps<UserQueryVariables>) => (
   <Meta error={true} message={error.message} />
 )
 

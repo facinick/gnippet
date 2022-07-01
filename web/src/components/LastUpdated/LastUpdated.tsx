@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
-import raw from '../../build_time.txt'
-import CircularProgress from '@mui/material/CircularProgress'
-import { xDaysAgo } from 'src/utils/stringUtils'
 import { Stack, styled, useTheme } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
+import { useEffect, useState } from 'react'
+import { xDaysAgo } from 'src/utils/stringUtils'
+//@ts-ignore
+import raw from '../../build_time.txt'
 
 import { Typography, TypographyProps } from '@mui/material'
 

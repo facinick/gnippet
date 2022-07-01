@@ -8,7 +8,7 @@ import Voting from './Voting'
 describe('Voting', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<Voting />)
+      render(<Voting score={0} snippetId={0} entity={'COMMENT'} />)
     }).not.toThrow()
   })
 })

@@ -1,33 +1,31 @@
+import { LinkProps, TypographyProps } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
+import Stack from '@mui/material/Stack'
+import { styled } from '@mui/material/styles'
+import Typography from '@mui/material/Typography'
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
-import { _Snippet, _SnippetWithVotes, _Vote } from 'src/gql_objects/gqlObjects'
 import {
   readingTimeInMinutes,
-  truncate as returnTruncatedText,
+  truncate as returnTruncatedText
 } from 'src/utils/stringUtils'
-import CreatedAt from '../CreatedAt/CreatedAt'
-import Username from '../Username/Username'
-import Voting from '../Voting/Voting'
-import Bookmark from '../Bookmark/Bookmark'
-import ReadMore from '../ReadMore/ReadMore'
-import Space from '../Space/Space'
+import { Snippet } from 'types/graphql'
 import BackButton from '../BackButton/BackButton'
-import ReadingTime from '../ReadingTime/ReadingTime'
-import Stack from '@mui/material/Stack'
-import SnippetTags from '../SnippetTags/SnippetTags'
+import Bookmark from '../Bookmark/Bookmark'
 import CommentForm from '../CommentForm/CommentForm'
 import Comments from '../Comments/Comments'
-import { Snippet } from 'types/graphql'
-import Typography from '@mui/material/Typography'
-import Avatar from '@mui/material/Avatar'
-import NumberOfComments from '../NumberOfComments/NumberOfComments'
 import CommentsHeader from '../CommentsHeader/CommentsHeader'
-import FullSnippetBody from '../FullSnippetBody/FullSnippetBody'
 import CopySnippetUrl from '../CopySnippetUrl/CopySnippetUrl'
-import { LinkProps, TypographyProps } from '@mui/material'
-import { styled } from '@mui/material/styles'
-import Box from '@mui/system/Box'
+import CreatedAt from '../CreatedAt/CreatedAt'
+import FullSnippetBody from '../FullSnippetBody/FullSnippetBody'
+import NumberOfComments from '../NumberOfComments/NumberOfComments'
+import ReadingTime from '../ReadingTime/ReadingTime'
+import ReadMore from '../ReadMore/ReadMore'
+import SnippetTags from '../SnippetTags/SnippetTags'
+import Space from '../Space/Space'
+import Username from '../Username/Username'
 import ViewCount from '../ViewCount/ViewCount'
+import Voting from '../Voting/Voting'
 
 type Props = {
   snippet: Omit<Snippet, 'authorId' | 'languages' | 'updatedAt' | 'votes'>
@@ -103,6 +101,7 @@ const SnippetUi = ({
             {showHeaderImage && imageUrl && (
               <Avatar style={{ marginRight: 10 }} src={imageUrl} />
             )}
+            {/* @ts-ignore */}
             <SnippetTitleText component={'h1'} variant="h6">
               <SnippetTitleLink to={routes.snippet({ id: id })}>
                 {title}
@@ -132,6 +131,7 @@ const SnippetUi = ({
             <Space />
             {'by'}
             <Space />
+            {/* @ts-ignore */}
             <SnippetAuthorNameText variant="body1" component="i">
               {<Username username={author.username} />}
             </SnippetAuthorNameText>
