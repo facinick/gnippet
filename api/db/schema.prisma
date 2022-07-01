@@ -41,6 +41,7 @@ model Snippet {
   updatedAt DateTime   @updatedAt
   pageId    Int?
   activity  Int        @default(0)
+  viewCount Int        @default(0)
   // prisma relations
   author    User       @relation("author", fields: [authorId], references: [id])
   languages Language[]
@@ -48,7 +49,15 @@ model Snippet {
   comments  Comment[]
   votes     Vote[]
   bookmarks Bookmark[]
+  visitors  Visitor[]
   page      Page?      @relation(fields: [pageId], references: [id])
+}
+
+model Visitor {
+  id            Int     @id @default(autoincrement())
+  fingerprintId String  @unique
+  snippetId     Int
+  snippet       Snippet @relation(fields: [snippetId], references: [id])
 }
 
 model Page {

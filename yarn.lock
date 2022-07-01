@@ -2456,6 +2456,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fingerprintjs/fingerprintjs@npm:^3.3.3":
+  version: 3.3.3
+  resolution: "@fingerprintjs/fingerprintjs@npm:3.3.3"
+  dependencies:
+    tslib: ^2.0.1
+  checksum: 2fd9c32fa57e57163719bd2d7a3605ec0625d4f90555fbc340817bc9b759ae8fcacee9439f18ed3d87a97b971eef7182d11e13125bed0e746de01de2ca5c910e
+  languageName: node
+  linkType: hard
+
 "@fontsource/roboto@npm:^4.5.7":
   version: 4.5.7
   resolution: "@fontsource/roboto@npm:4.5.7"
@@ -24515,6 +24524,7 @@ __metadata:
   dependencies:
     "@emotion/react": ^11.9.0
     "@emotion/styled": ^11.8.1
+    "@fingerprintjs/fingerprintjs": ^3.3.3
     "@fontsource/roboto": ^4.5.7
     "@mui/icons-material": ^5.8.0
     "@mui/lab": ^5.0.0-alpha.84

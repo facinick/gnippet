@@ -2,9 +2,10 @@ import { Stack, Divider, Typography, Box, Card, ClickAwayListener } from '@mui/m
 import { Comment as TComment } from 'types/graphql'
 import Comment from 'src/components/Comment'
 import { useReactiveVar } from '@apollo/client'
-import { replyToCommentIdVar, setReplyToParentCommentId } from 'src/localStore/commentReplyForm'
+import { replyToCommentIdVar, closeReplyForm } from 'src/localStore/commentReplyForm'
 import CommentReplyForm from '../CommentReplyForm/CommentReplyForm'
 import { useAuth } from '@redwoodjs/auth'
+import { useEffect } from 'react'
 interface Props {
   comments: Array<TComment>
   snippetId: number
@@ -25,6 +26,10 @@ const Comments = ({ comments, snippetId }: Props) => {
   //   setReplyToParentCommentId({ field: -1 })
   // }
 
+  useEffect(() => {
+    closeReplyForm()
+  }, [])
+
   return (
     <>
       <Stack spacing={3}>
@@ -34,7 +39,6 @@ const Comments = ({ comments, snippetId }: Props) => {
           const _showReplyToCommentForm =
             replyToCommentId === comment.id && showReplyToCommentForm
 
-          console.log(comment)
           return (
             <React.Fragment key={comment.id}>
               {/* <ClickAwayListener onClickAway={handleClickAway}>

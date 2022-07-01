@@ -10,6 +10,11 @@ import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
 import TextField, { TextFieldProps } from '@mui/material/TextField'
 import ReplyIcon from '@mui/icons-material/Reply'
+import { useReactiveVar } from '@apollo/client'
+import {
+  replyToCommentIdVar,
+  closeReplyForm,
+} from 'src/localStore/commentReplyForm'
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   color: theme.palette.containerSecondary.contrastText,
@@ -78,7 +83,9 @@ const CommentReplyForm = ({
 
   const [createComment, { loading, error }] = useMutation(CREATE, {
     onCompleted: () => {
-      toast.success('Comment Created!')
+      toast.success('Replied!')
+      formRef.current.reset()
+      closeReplyForm()
     },
     update(cache, { data: { createComment } }) {
       const { snippet } = cache.readQuery({
@@ -110,11 +117,9 @@ const CommentReplyForm = ({
       return
     }
 
-    await createComment({
+    createComment({
       variables: { input: { parentCommentId, snippetId, authorId, body } },
     })
-
-    formRef.current.reset()
   }
 
   return (

@@ -7,20 +7,6 @@ import Snippet from '../Snippet/Snippet'
 import { _Vote } from 'src/gql_objects/gqlObjects'
 import Meta from '../Meta/Meta'
 
-const COMMENTS_SUBSCRIPTION = gql`
-  subscription OnCommentAdded($id: Int!) {
-    commentAdded(input: { snippetId: $id }) {
-      id
-      body
-      score
-      author {
-        username
-      }
-      createdAt
-    }
-  }
-`
-
 export const QUERY = gql`
   query FindSnippetQuery($id: Int!) {
     snippet(id: $id) {
@@ -30,6 +16,7 @@ export const QUERY = gql`
       createdAt
       activity
       imageUrl
+      viewCount
       score
       author {
         username
@@ -67,6 +54,7 @@ export const Success = ({
       <Snippet
         showReadingTimeBottom={false}
         showHeaderImage={false}
+        showViewCount={true}
         showCommentsHeader={true}
         showCommentsForm={true}
         showComments={true}

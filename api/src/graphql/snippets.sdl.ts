@@ -8,6 +8,7 @@ export const schema = gql`
     updatedAt: DateTime!
     imageUrl: String
     pageId: Int
+    viewCount: Int!
     # savedBy: [User]!
     author: User!
     languages: [Language]!
@@ -39,7 +40,8 @@ export const schema = gql`
   }
 
   type Query {
-    snippets(input: SnippetQueryFilterAndPagination): AllSnippetsResponse @skipAuth
+    snippets(input: SnippetQueryFilterAndPagination): AllSnippetsResponse
+      @skipAuth
     snippet(id: Int!): Snippet @skipAuth
   }
 
@@ -57,7 +59,17 @@ export const schema = gql`
     tags: [ConnectOrCreateTagInput]
   }
 
+  type ViewCountResponse {
+    viewCount: Int
+  }
+
+  input ViewCountInput {
+    fingerprintId: String!
+  }
+
   type Mutation {
     createSnippet(input: CreateSnippetInput!): Snippet! @requireAuth
+    increaseViewCount(id: Int!, input: ViewCountInput!): ViewCountResponse
+      @skipAuth
   }
 `

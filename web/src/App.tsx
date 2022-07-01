@@ -27,7 +27,6 @@ const App = () => {
   }, [])
 
   return (
-    //@ts-ignore
     <FatalErrorBoundary page={FatalErrorPage}>
       <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
         <AuthProvider type="dbAuth">

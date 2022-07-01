@@ -33,6 +33,42 @@ const getPrismaOrderByForSnippetsQuery = (orderBy: SnippetOrderByInput) => {
   return orderByObject
 }
 
+export const increaseViewCount = async ({ id, input }) => {
+
+  const { fingerprintId } = input
+
+  const visited = await db.visitor.findMany({
+    where: {
+      fingerprintId,
+      snippetId: id,
+    }
+  })
+
+  // user did visit, return
+  if (visited.length > 0) {
+    return null
+  }
+
+  // user is new apparently, inc viewCount and return
+  else {
+    await db.snippet.update({
+      where: { id },
+      data: {
+        viewCount: {
+          increment: 1,
+        },
+        visitors: {
+          create: {
+            fingerprintId
+          }
+        }
+      },
+    })
+
+    return null
+  }
+}
+
 export const snippets: QueryResolvers['snippets'] = async ({ input }) => {
 
   const orderBy = getPrismaOrderByForSnippetsQuery(input.orderBy)

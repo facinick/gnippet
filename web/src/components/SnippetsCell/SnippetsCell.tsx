@@ -100,6 +100,7 @@ export const Success = ({
                 showActivity={true}
                 key={snippet.id}
                 snippet={snippet}
+                showViewCount={false}
                 showReadingTimeBottom={true}
                 showComments={false}
                 showCommentsForm={false}

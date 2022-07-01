@@ -27,6 +27,7 @@ import CopySnippetUrl from '../CopySnippetUrl/CopySnippetUrl'
 import { LinkProps, TypographyProps } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Box from '@mui/system/Box'
+import ViewCount from '../ViewCount/ViewCount'
 
 type Props = {
   snippet: Omit<Snippet, 'authorId' | 'languages' | 'updatedAt' | 'votes'>
@@ -38,6 +39,7 @@ type Props = {
   showCommentsHeader: boolean
   showHeaderImage: boolean
   showReadingTimeBottom: boolean
+  showViewCount: boolean
 }
 
 const SnippetTitleText = styled(Typography)<TypographyProps>(({ theme }) => ({
@@ -73,6 +75,7 @@ const SnippetUi = ({
   showCommentsForm,
   showCommentsHeader,
   showReadingTimeBottom,
+  showViewCount,
 }: Props) => {
   const {
     id,
@@ -82,6 +85,7 @@ const SnippetUi = ({
     body,
     createdAt,
     tags,
+    viewCount,
     comments,
     imageUrl,
   } = snippet
@@ -99,7 +103,7 @@ const SnippetUi = ({
             {showHeaderImage && imageUrl && (
               <Avatar style={{ marginRight: 10 }} src={imageUrl} />
             )}
-            <SnippetTitleText variant="h6">
+            <SnippetTitleText component={'h1'} variant="h6">
               <SnippetTitleLink to={routes.snippet({ id: id })}>
                 {title}
               </SnippetTitleLink>
@@ -166,6 +170,7 @@ const SnippetUi = ({
           {showReadingTimeBottom && (
             <ReadingTime timeInMinutes={readingTimeInMinutes(body)} />
           )}
+          {showViewCount && <ViewCount viewCount={viewCount} />}
         </Stack>
         {rendertags && <SnippetTags tags={tags} />}
         {isAuthenticated && showCommentsForm && (

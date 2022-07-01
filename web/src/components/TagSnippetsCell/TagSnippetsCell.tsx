@@ -97,6 +97,7 @@ export const TagSnippetsCell = ({ name }: Props) => {
                 showBackButton={false}
                 showReadingTimeBottom={true}
                 showActivity={true}
+                showViewCount={false}
                 key={snippet.id}
                 snippet={snippet}
                 showComments={false}
