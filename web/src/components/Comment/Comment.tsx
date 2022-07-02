@@ -60,11 +60,11 @@ const Comment = ({ comment, snippetId, children }: Props) => {
           {'-'}
           <Space />
           <Typography variant="body2" component="i">
-            {<CreatedAt createdAt={createdAt} />}
+            <CreatedAt createdAt={createdAt} />
             <Space />
             {'by'}
             <Space />
-            {<Username username={author.username} />}
+            <Username username={author.username} />
           </Typography>
           <Space />
         </Typography>
@@ -85,14 +85,16 @@ const Comment = ({ comment, snippetId, children }: Props) => {
               commentId={id}
             />
           )}
-          <Button
-            color={replyFormIsOpen ? 'error' : 'secondary'}
-            size={'small'}
-            title={`Reply ${capitalizeFirstLetter(author.username)}`}
-            onClick={toggleReplyToCommentForm}
-          >
-            <ReplyIcon />
-          </Button>
+          {isAuthenticated && (
+            <Button
+              color={replyFormIsOpen ? 'error' : 'secondary'}
+              size={'small'}
+              title={`Reply ${capitalizeFirstLetter(author.username)}`}
+              onClick={toggleReplyToCommentForm}
+            >
+              <ReplyIcon />
+            </Button>
+          )}
         </Stack>
         {showReplyToCommentForm && (
           <CommentReplyForm
