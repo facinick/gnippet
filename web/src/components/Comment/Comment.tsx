@@ -92,7 +92,7 @@ const Comment = ({ comment, snippetId, children }: Props) => {
             onClick={toggleReplyToCommentForm}
           >
             <ReplyIcon />
-            {replyButtonText}
+            {/* {replyButtonText} */}
           </Button>
         </Stack>
         {showReplyToCommentForm && (
