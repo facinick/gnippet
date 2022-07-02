@@ -76,7 +76,7 @@ const DeleteBookmark = ({
 
   return (
     <Button
-      color={'primary'}
+      color={'secondary'}
       variant="text"
       title={'Remove Bookmark'}
       size={size}

@@ -9,6 +9,7 @@ import {
   setReplyToParentCommentId
 } from 'src/localStore/commentReplyForm'
 import { Children } from 'src/types/children'
+import { capitalizeFirstLetter } from 'src/utils/stringUtils'
 import { Comment as GQL_Comment, Snippet } from 'types/graphql'
 import Bookmark from '../Bookmark/Bookmark'
 import CreatedAt from '../CreatedAt/CreatedAt'
@@ -37,8 +38,6 @@ const Comment = ({ comment, snippetId, children }: Props) => {
     currentUser?.id && isAuthenticated && replyToCommentId === comment.id
 
   const replyFormIsOpen = replyToCommentId === id
-
-  const replyButtonText = replyFormIsOpen ? 'Cancel' : 'Reply'
 
   const toggleReplyToCommentForm = () => {
     if (replyFormIsOpen) {
@@ -87,12 +86,12 @@ const Comment = ({ comment, snippetId, children }: Props) => {
             />
           )}
           <Button
-            color={replyFormIsOpen ? 'error' : 'primary'}
+            color={replyFormIsOpen ? 'error' : 'secondary'}
             size={'small'}
+            title={`Reply ${capitalizeFirstLetter(author.username)}`}
             onClick={toggleReplyToCommentForm}
           >
             <ReplyIcon />
-            {/* {replyButtonText} */}
           </Button>
         </Stack>
         {showReplyToCommentForm && (

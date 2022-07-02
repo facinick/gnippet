@@ -73,7 +73,7 @@ const CreateBookmark = ({
   const theme = useTheme();
 
   return (
-    <Button title={'Bookmark'} color={'primary'} variant='text' size={size} type="button" disabled={loading || disabled} onClick={onClick} aria-label="bookmark">
+    <Button title={'Bookmark'} color={'secondary'} variant='text' size={size} type="button" disabled={loading || disabled} onClick={onClick} aria-label="bookmark">
       <BookmarkBorderIcon />
     </Button>
   )
