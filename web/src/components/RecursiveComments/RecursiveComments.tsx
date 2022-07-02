@@ -75,7 +75,7 @@ export const RecursiveComments = ({ comment, snippetId }: Props) => {
       {hasChildComments && (
         <Stack direction={'row'}>
           <StyledBox />
-          {nestedComments}
+          <>{nestedComments}</>
         </Stack>
       )}
     </Comment>
