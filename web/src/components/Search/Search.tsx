@@ -1,22 +1,21 @@
-import React, { useState } from 'react'
-import { useLazyQuery, gql } from '@apollo/client'
-import TextField from '@mui/material/TextField'
+import { gql, useLazyQuery } from '@apollo/client'
+import SearchIcon from '@mui/icons-material/Search'
+import TagIcon from '@mui/icons-material/Tag'
 import Autocomplete from '@mui/material/Autocomplete'
+import Avatar from '@mui/material/Avatar'
+import InputAdornment from '@mui/material/InputAdornment'
+import { useTheme } from '@mui/material/styles'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import { useAuth } from '@redwoodjs/auth/dist/useAuth'
+import { navigate, routes } from '@redwoodjs/router'
 import throttle from 'lodash.throttle'
+import React from 'react'
 import {
   formatPages,
   formatTags,
-  formatUsers,
+  formatUsers
 } from 'src/utils/searchResultsUtils'
-import { useTheme } from '@mui/material/styles'
-import { navigate, routes } from '@redwoodjs/router'
-import SearchIcon from '@mui/icons-material/Search'
-import InputAdornment from '@mui/material/InputAdornment'
-import { useAuth } from '@redwoodjs/auth/dist/useAuth'
-import Box from '@mui/material/Box'
-import Avatar from '@mui/material/Avatar'
-import Typography from '@mui/material/Typography'
-import TagIcon from '@mui/icons-material/Tag'
 export const SearchQuery = gql`
   query FindSearchQuery($filter: String!) {
     users(input: { filter: $filter }) {
@@ -52,8 +51,8 @@ const Search = () => {
 
   const searchHelperText =
     isAuthenticated && currentUser?.username
-      ? `hi @${currentUser?.username}, search users`
-      : 'search users'
+      ? `hi @${currentUser?.username}, search users and tags`
+      : 'search users and tags'
 
   const fetch = React.useMemo(
     () =>
