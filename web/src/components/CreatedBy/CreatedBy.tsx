@@ -24,7 +24,7 @@ const CreatedBy = () => {
           background: theme.palette.containerPrimary.main,
         }}
       >
-        <CreatedAtText>{'facinick'}</CreatedAtText>
+        <CreatedAtText>{'by facinick'}</CreatedAtText>
         <Space />
         <CopyrightIcon
           sx={{ fontSize: 14, color: theme.palette.text.secondary }}
