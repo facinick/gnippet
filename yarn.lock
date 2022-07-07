@@ -7917,6 +7917,9 @@ __metadata:
   dependencies:
     "@redwoodjs/api": 1.4.0
     "@redwoodjs/graphql-server": 1.4.0
+    graphql-redis-subscriptions: ^2.4.2
+    graphql-subscriptions: ^2.0.0
+    graphql-ws: ^5.9.1
   languageName: unknown
   linkType: soft
 
@@ -9892,6 +9895,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cluster-key-slot@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "cluster-key-slot@npm:1.1.0"
+  checksum: e72a437ba57f79f8435bf8ea689d0a13aed7e9628738c545af09a77199bc50986ecff05840c34303f41cf1837e8e9aa49709455a7313b7ed200090cca4aae57a
+  languageName: node
+  linkType: hard
+
 "co@npm:^4.6.0":
   version: 4.6.0
   resolution: "co@npm:4.6.0"
@@ -11158,6 +11168,13 @@ __metadata:
   version: 1.0.0
   resolution: "delegates@npm:1.0.0"
   checksum: ba05874b91148e1db4bf254750c042bf2215febd23a6d3cda2e64896aef79745fbd4b9996488bd3cafb39ce19dbce0fd6e3b6665275638befffe1c9b312b91b5
+  languageName: node
+  linkType: hard
+
+"denque@npm:^1.1.0":
+  version: 1.5.1
+  resolution: "denque@npm:1.5.1"
+  checksum: 9e6fc1a63e1c9ded38325290302fef40e5ad28471ad8c66d68eaea623ef847bd25fc75a7c3f47396206dc967922615999066470a364e1786f2758d61337872b7
   languageName: node
   linkType: hard
 
@@ -14147,6 +14164,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"graphql-redis-subscriptions@npm:^2.4.2":
+  version: 2.4.2
+  resolution: "graphql-redis-subscriptions@npm:2.4.2"
+  dependencies:
+    ioredis: ^4.17.3
+    iterall: ^1.3.0
+  peerDependencies:
+    graphql-subscriptions: ^1.0.0 || ^2.0.0
+  dependenciesMeta:
+    ioredis:
+      optional: true
+  checksum: 1494e5e7e821e63b85a7875c917569777c97c65f123aba493a88a2af894a6bcbd6fea392e913e148d005416146e6abfbe7c01fe36ba398be1959ae68fa332722
+  languageName: node
+  linkType: hard
+
 "graphql-request@npm:^4.0.0":
   version: 4.2.0
   resolution: "graphql-request@npm:4.2.0"
@@ -14171,6 +14203,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"graphql-subscriptions@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "graphql-subscriptions@npm:2.0.0"
+  dependencies:
+    iterall: ^1.3.0
+  peerDependencies:
+    graphql: ^15.7.2 || ^16.0.0
+  checksum: d48559de5d76a9e5bca882be1b52b779f270039f9e7b2210c005128b08b4dca100d3ee37a5c00862b668f17208c43737ab10322565f30bfabf477a25e76f254e
+  languageName: node
+  linkType: hard
+
 "graphql-tag@npm:2.12.6, graphql-tag@npm:^2.11.0, graphql-tag@npm:^2.12.6":
   version: 2.12.6
   resolution: "graphql-tag@npm:2.12.6"
@@ -14188,6 +14231,15 @@ __metadata:
   peerDependencies:
     graphql: ">=0.11 <=16"
   checksum: f474ec50ebbd67ac14f998d08b37f10cecc157ad86213f3bc0d5e460a0dfac6c1d490c858a0584ef4e0c89a213d99e201a4b47d3dfe85615e339e075fa78cc2b
+  languageName: node
+  linkType: hard
+
+"graphql-ws@npm:^5.9.1":
+  version: 5.9.1
+  resolution: "graphql-ws@npm:5.9.1"
+  peerDependencies:
+    graphql: ">=0.11 <=16"
+  checksum: eadb95b0fa891ec24233d62cda4e588414a8625d1b93d737f608ef6667c9b4640af05757e9531b8ba9676b111c9734990cea0d2438d9bc0014a93eb2bb20853f
   languageName: node
   linkType: hard
 
@@ -15088,6 +15140,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ioredis@npm:^4.17.3":
+  version: 4.28.5
+  resolution: "ioredis@npm:4.28.5"
+  dependencies:
+    cluster-key-slot: ^1.1.0
+    debug: ^4.3.1
+    denque: ^1.1.0
+    lodash.defaults: ^4.2.0
+    lodash.flatten: ^4.4.0
+    lodash.isarguments: ^3.1.0
+    p-map: ^2.1.0
+    redis-commands: 1.7.0
+    redis-errors: ^1.2.0
+    redis-parser: ^3.0.0
+    standard-as-callback: ^2.1.0
+  checksum: 6fd12957d2906f83d8aa662ba78d084df16dc7c1a0e6e18c512302ac94339dcd5936d2e7cd6f89e9e7b511e3cf96617ca2fdea63aa4679bfdf48aa2be441ad76
+  languageName: node
+  linkType: hard
+
 "ip@npm:^1.1.5":
   version: 1.1.8
   resolution: "ip@npm:1.1.8"
@@ -15872,6 +15943,13 @@ __metadata:
     html-escaper: ^2.0.0
     istanbul-lib-report: ^3.0.0
   checksum: 061e765a509c7347331b63596ecc7bc2326e6bf6c10bdae0609541fb8757c8942543f5e95130f00233b07a5760f44a3e7a8de0ccc55f098b04b1002629e7a0c4
+  languageName: node
+  linkType: hard
+
+"iterall@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "iterall@npm:1.3.0"
+  checksum: 40de624e5fe937c4c0e511981b91caea9ff2142bfc0316cccc8506eaa03aa253820cc17c5bc5f0a98706c7268a373e5ebee9af9a0c8a359730cf7c05938b57b5
   languageName: node
   linkType: hard
 
@@ -17247,6 +17325,13 @@ __metadata:
   version: 4.3.0
   resolution: "lodash.includes@npm:4.3.0"
   checksum: 7ca498b9b75bf602d04e48c0adb842dfc7d90f77bcb2a91a2b2be34a723ad24bc1c8b3683ec6b2552a90f216c723cdea530ddb11a3320e08fa38265703978f4b
+  languageName: node
+  linkType: hard
+
+"lodash.isarguments@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "lodash.isarguments@npm:3.1.0"
+  checksum: 5e8f95ba10975900a3920fb039a3f89a5a79359a1b5565e4e5b4310ed6ebe64011e31d402e34f577eca983a1fc01ff86c926e3cbe602e1ddfc858fdd353e62d8
   languageName: node
   linkType: hard
 
@@ -19021,7 +19106,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"p-map@npm:^2.0.0":
+"p-map@npm:^2.0.0, p-map@npm:^2.1.0":
   version: 2.1.0
   resolution: "p-map@npm:2.1.0"
   checksum: 735dae87badd4737a2dd582b6d8f93e49a1b79eabbc9815a4d63a528d5e3523e978e127a21d784cccb637010e32103a40d2aaa3ab23ae60250b1a820ca752043
@@ -20898,6 +20983,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"redis-commands@npm:1.7.0":
+  version: 1.7.0
+  resolution: "redis-commands@npm:1.7.0"
+  checksum: c78b46d8d6e811f422961878538c57048a451ab56760d3f1657a7c8f29aaae42cc23890f75655556a59ec67611022e18cb443d2976e6c55036934bfe783aa60e
+  languageName: node
+  linkType: hard
+
+"redis-errors@npm:^1.0.0, redis-errors@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "redis-errors@npm:1.2.0"
+  checksum: 5b316736e9f532d91a35bff631335137a4f974927bb2fb42bf8c2f18879173a211787db8ac4c3fde8f75ed6233eb0888e55d52510b5620e30d69d7d719c8b8a7
+  languageName: node
+  linkType: hard
+
+"redis-parser@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "redis-parser@npm:3.0.0"
+  dependencies:
+    redis-errors: ^1.0.0
+  checksum: ee16ac4c7b2a60b1f42a2cdaee22b005bd4453eb2d0588b8a4939718997ae269da717434da5d570fe0b05030466eeb3f902a58cf2e8e1ca058bf6c9c596f632f
+  languageName: node
+  linkType: hard
+
 "refractor@npm:^3.1.0":
   version: 3.6.0
   resolution: "refractor@npm:3.6.0"
@@ -22462,6 +22570,13 @@ __metadata:
     as-table: ^1.0.36
     get-source: ^2.0.12
   checksum: e17357d0a532d303138899b910ab660572009a1f4cde1cbf73b99416957a2378e6e1c791b3c31b043cf7c5f37647da1dd114e66c9203f23c65b34f783665405b
+  languageName: node
+  linkType: hard
+
+"standard-as-callback@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "standard-as-callback@npm:2.1.0"
+  checksum: 012677236e3d3fdc5689d29e64ea8a599331c4babe86956bf92fc5e127d53f85411c5536ee0079c52c43beb0026b5ce7aa1d834dd35dd026e82a15d1bcaead1f
   languageName: node
   linkType: hard
 

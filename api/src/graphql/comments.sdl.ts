@@ -27,11 +27,16 @@ export const schema = gql`
     mutation: MutationType!
     node: Comment!
   }
+
+  type SubscriptionPayload {
+    data: CommentSubscriptionResponse
+  }
+
   input CommentSubscriptionInput {
     snippetId: Int!
   }
   type Subscription {
-    commentAdded(input: CommentSubscriptionInput!): CommentSubscriptionResponse!
+    snippetComments(input: CommentSubscriptionInput!): SubscriptionPayload!
   }
   input CommentOrderByInput {
     createdAt: CommentSort

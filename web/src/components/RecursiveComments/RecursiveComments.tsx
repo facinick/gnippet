@@ -42,6 +42,12 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => {
   }
 })
 
+const NestedCommentBox = styled(Box)<BoxProps>(({ theme }) => {
+  return {
+    width: `100%`,
+  }
+})
+
 type AuthorUsername = { author: Pick<GQL_Comment['author'], 'username'> }
 
 type CommentData = Pick<
@@ -75,7 +81,7 @@ export const RecursiveComments = ({ comment, snippetId }: Props) => {
       {hasChildComments && (
         <Stack direction={'row'}>
           <StyledBox />
-          <div>{nestedComments}</div>
+          <NestedCommentBox>{nestedComments}</NestedCommentBox>
         </Stack>
       )}
     </Comment>
