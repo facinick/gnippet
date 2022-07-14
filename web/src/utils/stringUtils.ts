@@ -112,3 +112,12 @@ export const readingTimeInMinutes = (text: string) => {
 
   return time
 }
+
+export const isLessThan24HourAgo = (date: number): boolean => {
+  // 👇️                    hour  min  sec  milliseconds
+  const twentyFourHrInMs = 24 * 60 * 60 * 1000
+
+  const twentyFourHoursAgo = Date.now() - twentyFourHrInMs
+
+  return date > twentyFourHoursAgo
+}

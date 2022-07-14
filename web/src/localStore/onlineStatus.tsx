@@ -13,3 +13,13 @@ export const onlineStatusVar = makeVar<OnlineStatus>(
 export const goOnline = () => onlineStatusVar(true)
 
 export const goOffline = () => onlineStatusVar(false)
+
+export const setNetworkListeners = () => {
+  window.addEventListener('online', goOnline)
+  window.addEventListener('offline', goOffline)
+}
+
+export const clearNetworkListeners = () => {
+  window.removeEventListener('online', goOnline)
+  window.removeEventListener('offline', goOffline)
+}

@@ -38,7 +38,7 @@ export const Empty = ({
 
   return (
     <>
-      <TagSearchAndAdd disable={disable} setTags={setTags} />
+      <TagSearchAndAdd disable={disable} ref={childRef} setTags={setTags} />
     </>
   )
 }
@@ -53,7 +53,7 @@ export const Success = ({
   setTagsRef: (ref) => void
   disable: boolean
 }) => {
-  const childRef = useRef()
+  const childRef = useRef<typeof TagSearchAndAdd>()
 
   useEffect(() => {
     if (childRef?.current) {

@@ -16,7 +16,9 @@ import { QUERY as SnippetsQuery } from 'src/components/SnippetsCell/SnippetsCell
 import TagsCell from 'src/components/TagsCell'
 import { QUERY as TagsQuery } from 'src/components/TagsCell/TagsCell'
 import { ITEMS_PER_PAGE, sortByVar } from 'src/localStore/homeFeedSortBy'
+import LottieAnimation from 'src/lottie/Animation'
 import { TagsSearchObject } from '../TagSearchAndAdd/TagSearchAndAdd'
+import confettiAnimation from 'src/lottie/assets/confetti-spread.json'
 
 const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   color: theme.palette.containerPrimary.contrastText,
@@ -54,12 +56,14 @@ interface Props {
   authorId: number
   authorUsername: string
   pageId?: number
+  onSubmit?: () => void
 }
 
-const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
+const SnippetForm = ({ authorId, pageId, authorUsername, onSubmit }: Props) => {
   const sortBy = useReactiveVar(sortByVar)
 
   const formRef = useRef<HTMLFormElement>()
+  const confettiAnimationRef = useRef<LottieAnimation>()
   const [tagsRef, setTagsRef] = useState()
   const bodyRef = useRef<HTMLInputElement>()
   const imageRef = useRef<HTMLImageElement>()
@@ -173,6 +177,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
 
   const [createSnippet, { loading, error }] = useMutation(CREATE, {
     onCompleted: () => {
+      onSubmit?.()
       toast.success('Snippet Created!')
     },
     update(cache, { data: { createSnippet } }) {
@@ -228,7 +233,7 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
     },
   })
 
-  const onSubmit = async () => {
+  const _onSubmit = async () => {
     setSubmitting(true)
     setValidating(true)
     const isValid = await areInputsValid()
@@ -250,12 +255,8 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
     imageRef.current.removeAttribute('src')
   }
 
-  const hideImagePreview = !(imageUrl && imageUrlIsValid)
-
-  // const { readingTime, wordsCount } = useReadingTime({ref: bodyRef})
-
   return (
-    <Form ref={formRef} onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
+    <Form ref={formRef} onSubmit={_onSubmit} config={{ mode: 'onBlur' }}>
       <FormError error={error} />
       <Stack direction="column" spacing={1}>
         <StyledTextField
@@ -332,7 +333,6 @@ const SnippetForm = ({ authorId, pageId, authorUsername }: Props) => {
           <i>
             <Typography variant="caption">as @{authorUsername}</Typography>
           </i>
-          <div>{/* {wordsCount} */}</div>
         </Stack>
       </Stack>
     </Form>

@@ -1,45 +1,41 @@
+import './index.css'
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
-import { StyledEngineProvider } from '@mui/material/styles'
-import { AuthProvider } from '@redwoodjs/auth'
-import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
-import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 import { useEffect } from 'react'
-import { cache } from 'src/localStore/cache'
-import FatalErrorPage from 'src/pages/FatalErrorPage'
+import { AuthProvider } from '@redwoodjs/auth'
+import { StyledEngineProvider } from '@mui/material/styles'
+import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
+import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import Routes from 'src/Routes'
-import './index.css'
-import { goOffline, goOnline } from './localStore/onlineStatus'
+import { cache } from 'src/localStore/cache'
 import ThemeProvider from './theme/ThemeProvider'
+import FatalErrorPage from 'src/pages/FatalErrorPage'
+import { clearNetworkListeners, setNetworkListeners } from './localStore/onlineStatus'
 
 const App = () => {
   useEffect(() => {
-    window.addEventListener('online', goOnline)
-    window.addEventListener('offline', goOffline)
-
+    setNetworkListeners()
     return () => {
-      window.removeEventListener('online', goOnline)
-      window.removeEventListener('offline', goOffline)
+      clearNetworkListeners()
     }
   }, [])
 
   return (
-    // @ts-ignore
-    <FatalErrorBoundary page={FatalErrorPage}>
-      <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-        <AuthProvider type="dbAuth">
-          <StyledEngineProvider injectFirst>
-            <ThemeProvider>
-              <RedwoodApolloProvider graphQLClientConfig={{ cache }}>
-                <Routes />
-              </RedwoodApolloProvider>
-            </ThemeProvider>
-          </StyledEngineProvider>
-        </AuthProvider>
-      </RedwoodProvider>
-    </FatalErrorBoundary>
+      <FatalErrorBoundary page={FatalErrorPage}>
+        <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
+          <AuthProvider type="dbAuth">
+            <StyledEngineProvider injectFirst>
+              <ThemeProvider>
+                <RedwoodApolloProvider graphQLClientConfig={{ cache }}>
+                  <Routes />
+                </RedwoodApolloProvider>
+              </ThemeProvider>
+            </StyledEngineProvider>
+          </AuthProvider>
+        </RedwoodProvider>
+      </FatalErrorBoundary>
   )
 }
 

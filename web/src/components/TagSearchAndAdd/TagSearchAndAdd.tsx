@@ -50,7 +50,11 @@ const StyledTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   },
 }))
 
-const TagSearchAndAdd = forwardRef(({ setTags, disable }: Props, ref) => {
+interface Ref {
+  reset: () => void
+}
+
+const TagSearchAndAdd = forwardRef<Ref, Props>(({ setTags, disable }: Props, ref) => {
   const autoCompleteRef = useRef()
   const [localTags, setLocalTags] = useState<
     Array<TagSearchId & TagSearchName>
@@ -80,16 +84,12 @@ const TagSearchAndAdd = forwardRef(({ setTags, disable }: Props, ref) => {
   }
 
   const reset = () => {
-    console.log(`done`)
     clearSelected()
     setTags([])
   }
 
   useImperativeHandle(ref, () => ({
-    reset() {
-      console.log(`calling resest`)
-      reset()
-    },
+    reset,
   }))
 
   useEffect(() => {

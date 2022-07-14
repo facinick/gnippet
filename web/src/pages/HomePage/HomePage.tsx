@@ -10,12 +10,13 @@ import {
   Accordion,
   AccordionDetails,
   AccordionProps,
-  AccordionSummary
+  AccordionSummary,
+  Box
 } from '@mui/material'
 import Stack from '@mui/material/Stack'
 import { styled } from '@mui/material/styles'
 import { navigate, useLocation } from '@redwoodjs/router'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import {
   DEFAULT_HOME_FEEED_SORT_BY,
   HomeFeedSortBy,
@@ -26,6 +27,8 @@ import {
 } from 'src/localStore/homeFeedSortBy'
 import { polkav2 } from 'src/styles/backgrounds'
 import { USER_BOOKMARKS_QUERY, USER_VOTES_QUERY } from '../../graphql/queries'
+import LottieAnimation from 'src/lottie/Animation'
+import confettiAnimation from 'src/lottie/assets/confetti-spread.json'
 
 const CreateSnippetAccordian = styled(Accordion)<AccordionProps>(
   ({ theme }) => ({
@@ -50,6 +53,7 @@ const getRequestedOrderBy = (pathname: string): HomeFeedSortBy => {
 }
 
 const HomePage = ({ page = 0 }: { page?: number }) => {
+  const confettiAnimationRef = useRef<typeof LottieAnimation>()
   const { isAuthenticated, currentUser } = useAuth()
   const { pathname } = useLocation()
   const skip = page * ITEMS_PER_PAGE
@@ -87,6 +91,10 @@ const HomePage = ({ page = 0 }: { page?: number }) => {
     }
   }, [isAuthenticated])
 
+  const onSnippetCreated = () => {
+    confettiAnimationRef?.current.replay()
+  }
+
   return (
     <>
       <MetaTags title="Home" description="Home page" />
@@ -102,7 +110,24 @@ const HomePage = ({ page = 0 }: { page?: number }) => {
                 <SnippetForm
                   authorUsername={currentUser?.username}
                   authorId={currentUser?.id}
+                  onSubmit={onSnippetCreated}
                 />
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    top: 0,
+                    pointerEvents: 'none',
+                  }}
+                >
+                  <LottieAnimation
+                    ref={confettiAnimationRef}
+                    autoplay={false}
+                    loop={false}
+                    animationDataJSON={confettiAnimation}
+                  />
+                </Box>
               </AccordionDetails>
             </CreateSnippetAccordian>
           )}

@@ -1,11 +1,14 @@
-import { LinkProps, TypographyProps } from '@mui/material'
+import { TrendingUpOutlined } from '@mui/icons-material'
+import { Box, LinkProps, TypographyProps } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import Stack from '@mui/material/Stack'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
+import LottieAnimation from 'src/lottie/Animation'
 import {
+  isLessThan24HourAgo,
   readingTimeInMinutes,
   truncate as returnTruncatedText
 } from 'src/utils/stringUtils'
@@ -26,6 +29,7 @@ import Space from '../Space/Space'
 import Username from '../Username/Username'
 import ViewCount from '../ViewCount/ViewCount'
 import Voting from '../Voting/Voting'
+import newAnimation from 'src/lottie/assets/new-four.json'
 
 type SnippetData = Pick<
   Snippet,
@@ -107,6 +111,8 @@ const SnippetUi = ({
   const showNumberOfComments = comments.length > 0 && !showCommentsHeader
   const rendertags = tags.length > 0
 
+  const isNewPost = isLessThan24HourAgo(new Date(createdAt).getTime())
+
   return (
     <article key={id}>
       <Stack style={{ overflowWrap: 'break-word' }} spacing={2}>
@@ -121,6 +127,23 @@ const SnippetUi = ({
               <SnippetTitleLink to={routes.snippet({ id: id })}>
                 {title}
               </SnippetTitleLink>
+              {isNewPost &&
+              <Box
+              sx={{
+                display: 'inline-block',
+                width: '80px',
+                height: '40px',
+                position: 'relative',
+                padding: '3px 0px',
+                top: '15px'
+              }}
+              >
+                <LottieAnimation
+                  autoplay={true}
+                  loop={true}
+                  animationDataJSON={newAnimation}
+                />
+              </Box>}
               <CopySnippetUrl id={id} />
             </SnippetTitleText>
           </Stack>
@@ -185,7 +208,7 @@ const SnippetUi = ({
             score={score}
           />
           {isAuthenticated && (
-            <Bookmark size={'large'}  entity={'SNIPPET'} snippetId={id} />
+            <Bookmark size={'large'} entity={'SNIPPET'} snippetId={id} />
           )}
           {showReadingTimeBottom && (
             <ReadingTime timeInMinutes={readingTimeInMinutes(body)} />

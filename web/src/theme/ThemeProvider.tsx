@@ -40,7 +40,6 @@ export default function ToggleColorMode(props: ThemeProviderProps) {
   )
 
   useEffect(() => {
-    console.log(prefersDarkMode)
     ThemeStorage.getInstance().setMode(prefersDarkMode ? 'dark' : 'light')
     setMode(prefersDarkMode ? 'dark' : 'light')
   }, [prefersDarkMode])
