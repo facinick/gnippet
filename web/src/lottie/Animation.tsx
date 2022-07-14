@@ -64,7 +64,7 @@ const LottieAnimation = forwardRef<Ref, Props>(
       rendererSettings: {
         preserveAspectRatio: 'xMidYMid slice',
       },
-      isClickToPauseDisabled: false,
+      isClickToPauseDisabled: true,
     }
 
     return (

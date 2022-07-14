@@ -135,7 +135,8 @@ const SnippetUi = ({
                 height: '40px',
                 position: 'relative',
                 padding: '3px 0px',
-                top: '11px'
+                top: '11px',
+                pointerEvents: 'none',
               }}
               >
                 <LottieAnimation
