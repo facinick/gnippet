@@ -29,7 +29,7 @@ import Space from '../Space/Space'
 import Username from '../Username/Username'
 import ViewCount from '../ViewCount/ViewCount'
 import Voting from '../Voting/Voting'
-import newAnimation from 'src/lottie/assets/new-four.json'
+import newAnimation from 'src/lottie/assets/new-three.json'
 
 type SnippetData = Pick<
   Snippet,
@@ -111,8 +111,7 @@ const SnippetUi = ({
   const showNumberOfComments = comments.length > 0 && !showCommentsHeader
   const rendertags = tags.length > 0
 
-  const isNewPost = isLessThan24HourAgo(new Date(createdAt).getTime())
-
+  const isNewPost = false
   return (
     <article key={id}>
       <Stack style={{ overflowWrap: 'break-word' }} spacing={2}>
