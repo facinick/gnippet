@@ -10,10 +10,15 @@
 - create posts
 - comment on posts, comment on comments
 - vote posts and comments
+- bookmark posts and comments
+- view bookmarked posts and comments in profile
+- view voted posts and comments in profile
+- view created posts and comments in profile
 - count approximately unique visits on posts
 - create posts with pictures
 - add tags, view posts by tags
 - sort post by votes (no. of upvotes - no. of downvotes), activity (no. of comments) and time (recent)
+- reading time for posts
 
 ## Tech
 
