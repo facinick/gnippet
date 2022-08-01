@@ -41,6 +41,10 @@
 - MUI 5
 - Lottie Animation
 
+## Prisma schema ERD
+
+![gnippet-prisma-erd](https://user-images.githubusercontent.com/12322728/182235092-18c0d750-2659-46c3-a325-cf1db9a6b441.svg)
+
 ## Upcoming 
 
 - Notifications (notify users when their posts are voted and commented on in real time)
