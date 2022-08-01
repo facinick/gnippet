@@ -1,6 +1,6 @@
 # Gnippet 
 
-> ReadMe is under development, but you can check the demo and browse the code. (obviously)
+> ReadMe is under development, but you can check the demo and browse the code. (obviously). Documentation for setting up DB, seeding, installing modules, building app and serving the app is pending.
 
 ## Purpose
 
