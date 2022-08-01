@@ -45,7 +45,7 @@
 - MUI 5
 - Lottie Animation
 
-## Prisma schema ERD
+## Prisma schema ERD (might not be accurate, created using https://prisma-erd.simonknott.de/)
 
 ![gnippet-prisma-erd](https://user-images.githubusercontent.com/12322728/182235092-18c0d750-2659-46c3-a325-cf1db9a6b441.svg)
 
