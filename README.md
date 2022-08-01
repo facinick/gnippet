@@ -4,21 +4,23 @@
 
 ## Features 🚀
 
-- 👤 authentication (signup, signin) using JWT
-- 🎨 themes (red, blue, black, default, green)
-- 🌙 night mode and day mode for every theme
-- ✍️ create posts
-- ✍️ comment on posts, comment on comments
-- 👍 vote posts and comments
-- 🔖 bookmark posts and comments
-- 👀 view bookmarked posts and comments in profile
-- 👀 view voted posts and comments in profile
-- 👀 view created posts and comments in profile
-- 🧮 count approximately unique visits on posts
-- 🖼️ create posts with pictures
-- #️⃣ add tags, view posts by tags
-- 🗂️ sort post by votes (no. of upvotes - no. of downvotes), activity (no. of comments) and time (recent)
-- ⏱️ reading time for posts
+- 👤 Authentication (signup, signin) using JWT
+- 🎨 Themes (red, blue, black, default, green)
+- 🌙 Night mode and day mode for every theme
+- ✍️ Create posts
+- ✍️ Comment on posts, comment on comments
+- 👍 Vote posts and comments *(upvote or downvote)*
+- 🔖 Bookmark posts and comments
+- 👀 View bookmarked posts and comments in profile
+- 👀 View voted posts and comments in profile
+- 👀 View created posts and comments in profile
+- 🔎 Search Users and Tags on Home page
+- 🧮 Count approximately unique visits on posts
+- 🖼️ Create posts with pictures
+- #️⃣ Add tags while creating posts
+- 👀 View posts by tags
+- 🗂️ Sort post by votes *(no. of upvotes - no. of downvotes)*, activity *(no. of comments)* and time *(recent)*
+- ⏱️ Reading time for posts
 
 ## Low level features
 
@@ -29,6 +31,8 @@
 - Remote state management with apollo
 - Updating Apollo cache upon query and mutation completion
 - DB Modelling of users, posts, pages, comments, votes, tags, bookmarks, post visitors demoing various entity relationships (one-one, one-many, many-many, many-one)
+- Responsiveness
+- Search autocomplete feature
 
 ## Tech
 
