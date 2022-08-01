@@ -20,6 +20,16 @@
 - 🗂️ sort post by votes (no. of upvotes - no. of downvotes), activity (no. of comments) and time (recent)
 - ⏱️ reading time for posts
 
+## Low level features
+
+- Skip / Take pagination for posts on Home page
+- Cursor based paination for posts on Tags page
+- Global state management with apollo
+- Local state management with react hooks
+- Remote state management with apollo
+- Updating Apollo cache upon query and mutation completion
+- DB Modelling of users, posts, pages, comments, votes, tags, bookmarks, post visitors demoing various entity relationships (one-one, one-many, many-many, many-one)
+
 ## Tech
 
 - GraphQL
@@ -33,6 +43,7 @@
 
 ## Upcoming 
 
+- Notifications (notify users when their posts are voted and commented on in real time)
 - Show Lottie animation for new posts
 - Rich Text Editor
 - PWA
