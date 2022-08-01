@@ -2,6 +2,10 @@
 
 > ReadMe is under development, but you can check the demo and browse the code. (obviously)
 
+## Purpose
+
+To learn and share with other begineers who can learn or can help me learn. Also to use it as my personal blog to post random things that come to my head.
+
 ## Features 🚀
 
 - 👤 Authentication (signup, signin) using JWT
@@ -22,7 +26,7 @@
 - 🗂️ Sort post by votes *(no. of upvotes - no. of downvotes)*, activity *(no. of comments)* and time *(recent)*
 - ⏱️ Reading time for posts
 
-## Low level features
+## Low level features 🛺
 
 - Skip / Take pagination for posts on Home page
 - Cursor based paination for posts on Tags page
@@ -45,11 +49,11 @@
 - MUI 5
 - Lottie Animation
 
-## Prisma schema ERD (might not be accurate, created using https://prisma-erd.simonknott.de/)
+## Prisma schema ERD 🗺️ (might not be accurate, created using https://prisma-erd.simonknott.de/)
 
 ![gnippet-prisma-erd](https://user-images.githubusercontent.com/12322728/182235092-18c0d750-2659-46c3-a325-cf1db9a6b441.svg)
 
-## Upcoming 
+## Upcoming 📅
 
 - Notifications (notify users when their posts are voted and commented on in real time)
 - Show Lottie animation for new posts
