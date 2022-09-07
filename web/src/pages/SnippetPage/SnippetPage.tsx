@@ -1,11 +1,10 @@
-import { useLazyQuery, useSubscription } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import Container from '@mui/material/Container'
 import { useAuth } from '@redwoodjs/auth'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { useEffect } from 'react'
 import { generateAndGetIDedFingerprint } from 'src/3rdParty/fingerprint'
 import SnippetCell from 'src/components/SnippetCell'
-import { SNIPPET_COMMENT_SUBSCRIPTION } from 'src/graphql/subscriptions'
 import FingerprintStorage from 'src/utils/fingerprintStorage'
 import { VIEW_COUNT_MUTATION } from '../../graphql/mutations'
 import { USER_BOOKMARKS_QUERY, USER_VOTES_QUERY } from '../../graphql/queries'
@@ -24,20 +23,20 @@ const SnippetPage = ({ id }: Props) => {
   const { isAuthenticated, currentUser } = useAuth()
   const [getLoggedInUserVotesData] = useLazyQuery(USER_VOTES_QUERY)
   const [getLoggedInUserBookmarksData] = useLazyQuery(USER_BOOKMARKS_QUERY)
-  const subscriptionResponse = useSubscription(SNIPPET_COMMENT_SUBSCRIPTION, {
-    variables: {
-      snippetId: id
-    },
-  })
+  // const subscriptionResponse = useSubscription(SNIPPET_COMMENT_SUBSCRIPTION, {
+  //   variables: {
+  //     snippetId: id
+  //   },
+  // })
 
-  const subscriptionData = subscriptionResponse?.data
+  // const subscriptionData = subscriptionResponse?.data
 
-  useEffect(() => {
-    if (subscriptionData) {
-      console.log(`comment added:`)
-      console.log(subscriptionData)
-    }
-  }, [subscriptionData])
+  // useEffect(() => {
+  //   if (subscriptionData) {
+  //     console.log(`comment added:`)
+  //     console.log(subscriptionData)
+  //   }
+  // }, [subscriptionData])
 
   useEffect(() => {
     // check if local storage has fingerprint
