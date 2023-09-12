@@ -60,3 +60,8 @@ To learn and share with other begineers who can learn or can help me learn. Also
 - Rich Text Editor
 - PWA
 - Move architecture to Domain Driven Design
+
+
+NOTICE: All the upcoming, including the current features are and will be implemented in another project: https://github.com/facinick/SpaceMonk , deployment is not currently working. local installation will work.
+
+goal: faster, efficient, more features for a generic social media, so any idiot like me can learn.
