@@ -49,9 +49,7 @@ export const LastUpdated = (): JSX.Element => {
         />
       )}
       {date && (
-        <CreatedAtText>{`Updated ${xDaysAgo(
-          new Date(Number(date) * 1000)
-        )}`}</CreatedAtText>
+        <CreatedAtText>{`Updated 1 year ago`}</CreatedAtText>
       )}
     </Stack>
   )
